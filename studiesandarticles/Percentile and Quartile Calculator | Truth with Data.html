@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentile and Quartile Calculator | Truth with Data</title>
+    <meta name="description" content="Free percentile and quartile calculator: get Q1, median, Q3, IQR, the five-number summary, common percentiles and any custom percentile for your data.">
+    <link rel="canonical" href="https://truthwithdata.com/tools/percentile-quartile-calculator.html">
+    <meta property="og:title" content="Percentile and Quartile Calculator | Truth with Data">
+    <meta property="og:description" content="Free percentile and quartile calculator: get Q1, median, Q3, IQR, the five-number summary, common percentiles and any custom percentile for your data.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://truthwithdata.com/tools/percentile-quartile-calculator.html">
+    <meta property="og:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Percentile and Quartile Calculator | Truth with Data">
+    <meta name="twitter:description" content="Free percentile and quartile calculator: get Q1, median, Q3, IQR, the five-number summary, common percentiles and any custom percentile for your data.">
+    <meta name="twitter:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/tools.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    
+    <style>
+        .tool-page {
+            padding: 120px 20px 80px;
+            min-height: 100vh;
+            background: var(--light-color);
+        }
+        
+        .tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5rem;
+            color: var(--darker-color);
+            margin-bottom: 15px;
+        }
+        
+        .tool-header p {
+            color: var(--gray-color);
+            font-size: 1.125rem;
+        }
+        
+        .input-help {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .quartile-section {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .quartile-section h3 {
+            color: var(--darker-color);
+            margin-bottom: 20px;
+        }
+        
+        .quartile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+        
+        .quartile-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .quartile-card h4 {
+            color: var(--darker-color);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .quartile-card .value {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .percentile-section {
+            margin-top: 30px;
+        }
+        
+        .percentile-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .percentile-item {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .percentile-item .label {
+            color: var(--darker-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .percentile-item .value {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        
+        .box-plot {
+            margin: 30px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .box-plot-visual {
+            position: relative;
+            height: 60px;
+            margin: 20px 0;
+        }
+        
+        .box-plot-line {
+            position: absolute;
+            top: 50%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+        
+        .box-plot-box {
+            position: absolute;
+            top: 20%;
+            height: 60%;
+            background: rgba(124, 58, 237, 0.1);
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        .box-plot-marker {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--darker-color);
+        }
+        
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 30px 20px;
+            }
+            
+            .quartile-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .percentile-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Percentile and Quartile Calculator with Five-Number Summary",
+  "url": "https://truthwithdata.com/tools/percentile-quartile-calculator.html",
+  "description": "Free percentile and quartile calculator: get Q1, median, Q3, IQR, the five-number summary, common percentiles and any custom percentile for your data.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Truth with Data",
+    "url": "https://truthwithdata.com/"
+  },
+  "dateModified": "2026-10-26"
+}
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/#blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tool Page -->
+    <div class="tool-page">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>📊 Percentile & Quartile Calculator</h1>
+                <p>Find quartiles, percentiles, and visualize data distribution</p>
+            </div>
+
+            <form id="percentileForm">
+                <div class="input-help">
+                    <i class="fas fa-info-circle"></i> Enter your data values separated by commas (e.g., 10, 20, 15, 30, 25)
+                </div>
+
+                <div class="tool-input-group">
+                    <label for="dataValues">Data Values</label>
+                    <textarea 
+                        id="dataValues" 
+                        rows="4"
+                        required 
+                        placeholder="Enter numbers separated by commas, spaces, or new lines"
+                    ></textarea>
+                </div>
+
+                <div class="tool-input-group">
+                    <label for="customPercentile">Custom Percentile (optional, 1-99)</label>
+                    <input 
+                        type="number" 
+                        id="customPercentile" 
+                        min="1" 
+                        max="99"
+                        placeholder="Enter a percentile value (e.g., 75)"
+                    >
+                </div>
+
+                <button type="submit" class="tool-button">Calculate</button>
+            </form>
+
+            <div id="result" class="tool-result" style="display: none;">
+                <div class="quartile-section">
+                    <h3>Five-Number Summary & Quartiles</h3>
+                    <div class="quartile-grid">
+                        <div class="quartile-card">
+                            <h4>Minimum</h4>
+                            <div class="value" id="min"></div>
+                        </div>
+                        <div class="quartile-card">
+                            <h4>Q1 (25th)</h4>
+                            <div class="value" id="q1"></div>
+                        </div>
+                        <div class="quartile-card">
+                            <h4>Q2/Median (50th)</h4>
+                            <div class="value" id="q2"></div>
+                        </div>
+                        <div class="quartile-card">
+                            <h4>Q3 (75th)</h4>
+                            <div class="value" id="q3"></div>
+                        </div>
+                        <div class="quartile-card">
+                            <h4>Maximum</h4>
+                            <div class="value" id="max"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; padding: 15px; background: white; border-radius: 6px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                            <div>
+                                <strong style="color: var(--darker-color);">IQR:</strong>
+                                <span id="iqr" style="color: var(--primary-color); font-weight: 600;"></span>
+                            </div>
+                            <div>
+                                <strong style="color: var(--darker-color);">Range:</strong>
+                                <span id="range" style="color: var(--primary-color); font-weight: 600;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="percentile-section">
+                    <h3 style="color: var(--darker-color); margin-bottom: 15px;">Common Percentiles</h3>
+                    <div class="percentile-list" id="percentileList"></div>
+                </div>
+
+                <div id="customPercentileResult" style="display: none; margin-top: 25px; padding: 20px; background: #f0f4ff; border-radius: 8px;">
+                    <h4 style="color: var(--darker-color); margin-bottom: 10px;">Custom Percentile</h4>
+                    <p style="color: var(--gray-color);"><span id="customPercentileText"></span></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #e2e8f0;">
+                <h3 style="color: var(--darker-color); margin-bottom: 15px;">How to Use</h3>
+                <ol style="color: var(--gray-color); line-height: 1.8;">
+                    <li>Enter your numerical data values separated by commas, spaces, or new lines</li>
+                    <li>Optionally enter a custom percentile value (1-99) to calculate</li>
+                    <li>Click "Calculate" to see quartiles, percentiles, and data distribution</li>
+                </ol>
+                
+                <h3 style="color: var(--darker-color); margin-top: 30px; margin-bottom: 15px;">Understanding Quartiles & Percentiles</h3>
+                <ul style="color: var(--gray-color); line-height: 1.8;">
+                    <li><strong>Quartiles:</strong> Divide your data into four equal parts (Q1, Q2/Median, Q3)</li>
+                    <li><strong>Q1 (25th percentile):</strong> 25% of data falls below this value</li>
+                    <li><strong>Q2 (50th percentile/Median):</strong> The middle value of your dataset</li>
+                    <li><strong>Q3 (75th percentile):</strong> 75% of data falls below this value</li>
+                    <li><strong>IQR (Interquartile Range):</strong> Q3 - Q1, represents the middle 50% of data</li>
+                    <li><strong>Percentiles:</strong> Indicate the value below which a given percentage of observations fall</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/#blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+    <script>
+        function parseDataValues(input) {
+            return input
+                .split(/[\s,\n]+/)
+                .map(val => val.trim())
+                .filter(val => val !== '')
+                .map(val => parseFloat(val))
+                .filter(val => !isNaN(val));
+        }
+
+        function calculatePercentile(sortedValues, percentile) {
+            if (percentile === 0) return sortedValues[0];
+            if (percentile === 100) return sortedValues[sortedValues.length - 1];
+            
+            const index = (percentile / 100) * (sortedValues.length - 1);
+            const lower = Math.floor(index);
+            const upper = Math.ceil(index);
+            const weight = index % 1;
+            
+            if (lower === upper) {
+                return sortedValues[lower];
+            }
+            
+            return sortedValues[lower] * (1 - weight) + sortedValues[upper] * weight;
+        }
+
+        document.getElementById('percentileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('dataValues').value;
+            const values = parseDataValues(input);
+            
+            if (values.length === 0) {
+                alert('Please enter valid numerical data.');
+                return;
+            }
+            
+            const sorted = [...values].sort((a, b) => a - b);
+            
+            const min = sorted[0];
+            const max = sorted[sorted.length - 1];
+            const q1 = calculatePercentile(sorted, 25);
+            const q2 = calculatePercentile(sorted, 50);
+            const q3 = calculatePercentile(sorted, 75);
+            const iqr = q3 - q1;
+            const range = max - min;
+            
+            document.getElementById('min').textContent = min.toFixed(2);
+            document.getElementById('q1').textContent = q1.toFixed(2);
+            document.getElementById('q2').textContent = q2.toFixed(2);
+            document.getElementById('q3').textContent = q3.toFixed(2);
+            document.getElementById('max').textContent = max.toFixed(2);
+            document.getElementById('iqr').textContent = iqr.toFixed(2);
+            document.getElementById('range').textContent = range.toFixed(2);
+            
+            // Common percentiles
+            const commonPercentiles = [10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99];
+            const percentileList = document.getElementById('percentileList');
+            percentileList.innerHTML = '';
+            
+            commonPercentiles.forEach(p => {
+                const value = calculatePercentile(sorted, p);
+                const item = document.createElement('div');
+                item.className = 'percentile-item';
+                item.innerHTML = `
+                    <span class="label">P${p}</span>
+                    <span class="value">${value.toFixed(2)}</span>
+                `;
+                percentileList.appendChild(item);
+            });
+            
+            // Custom percentile
+            const customP = parseInt(document.getElementById('customPercentile').value);
+            if (customP >= 1 && customP <= 99) {
+                const customValue = calculatePercentile(sorted, customP);
+                document.getElementById('customPercentileText').textContent = 
+                    `The ${customP}th percentile is ${customValue.toFixed(2)}. This means ${customP}% of values in your dataset are below ${customValue.toFixed(2)}.`;
+                document.getElementById('customPercentileResult').style.display = 'block';
+            } else {
+                document.getElementById('customPercentileResult').style.display = 'none';
+            }
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

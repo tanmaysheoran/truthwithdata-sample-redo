@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can a Model Spot an AI-Written Review? A Detection Case Study</title>
+    <meta name="description" content="Detecting AI-written reviews from nine chat models: 86% caught at a 1% false-flag rate, but a 2019-style detector caught just 1%. Methods, live demo and code.">
+    <link rel="canonical" href="https://truthwithdata.com/case-studies/detecting-ai-written-reviews.html">
+    <meta property="og:title" content="Can a Model Spot an AI-Written Review? A Detection Case Study">
+    <meta property="og:description" content="Detecting AI-written reviews from nine chat models: 86% caught at a 1% false-flag rate, but a 2019-style detector caught just 1%. Methods, live demo and code.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://truthwithdata.com/case-studies/detecting-ai-written-reviews.html">
+    <meta property="og:image" content="https://truthwithdata.com/case-studies/og/detecting-ai-written-reviews.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Can a Model Spot an AI-Written Review? A Detection Case Study">
+    <meta name="twitter:description" content="Detecting AI-written reviews from nine chat models: 86% caught at a 1% false-flag rate, but a 2019-style detector caught just 1%. Methods, live demo and code.">
+    <meta name="twitter:image" content="https://truthwithdata.com/case-studies/og/detecting-ai-written-reviews.png">
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    <link rel="stylesheet" href="../css/case-studies.css?v=1.11">
+    <meta property="article:published_time" content="2026-11-01">
+    <meta property="article:modified_time" content="2026-11-01">
+    <meta property="article:author" content="https://truthwithdata.com/about.html">
+    <meta property="article:section" content="Case studies">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://truthwithdata.com/case-studies/detecting-ai-written-reviews.html#article",
+      "headline": "Can a model spot an AI-written review?",
+      "description": "Detecting AI-written reviews from nine chat models: 86% caught at a 1% false-flag rate, but a 2019-style detector caught just 1%. Methods, live demo and code.",
+      "image": "https://truthwithdata.com/case-studies/og/detecting-ai-written-reviews.png",
+      "datePublished": "2026-11-01",
+      "dateModified": "2026-11-01",
+      "inLanguage": "en-GB",
+      "articleSection": "Case studies",
+      "keywords": "Machine learning, NLP, Trust and safety, Model evaluation, Explainable AI",
+      "mainEntityOfPage": "https://truthwithdata.com/case-studies/detecting-ai-written-reviews.html",
+      "author": {
+        "@id": "https://truthwithdata.com/about.html#vishal-sharma"
+      },
+      "publisher": {
+        "@id": "https://truthwithdata.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://truthwithdata.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Case studies",
+          "item": "https://truthwithdata.com/case-studies.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Detecting AI-written reviews",
+          "item": "https://truthwithdata.com/case-studies/detecting-ai-written-reviews.html"
+        }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://truthwithdata.com/#organization",
+      "name": "Truth with Data",
+      "url": "https://truthwithdata.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://truthwithdata.com/TWD_Logo.png"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://truthwithdata.com/about.html#vishal-sharma",
+      "name": "Vishal Sharma",
+      "url": "https://truthwithdata.com/about.html"
+    }
+  ]
+}
+    </script>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/blog'>Blog</a></li>
+                <li><a class='nav-link active' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="cs-hero">
+        <div class="cs-hero-inner">
+            <nav class="cs-crumbs" aria-label="Breadcrumb"><a href='/'>Home</a> &rsaquo; <a href='/case-studies'>Case studies</a> &rsaquo; Detecting AI-written reviews</nav>
+            <div class="cs-eyebrow"><i class="fas fa-robot"></i> Case study &middot; Machine learning · NLP</div>
+            <h1>Can a model spot an AI-written review?</h1>
+            <p class="cs-dek">We trained detectors on 8,036 short reviews, half written by people and half by nine chat models from Gemini&nbsp;1.5 to GPT&#8209;5.2, then tested them the way fake reviews really arrive: from models they had never seen.</p>
+            <div class="cs-chips"><span class="cs-chip">Machine learning</span><span class="cs-chip">NLP</span><span class="cs-chip">Trust and safety</span><span class="cs-chip">Model evaluation</span><span class="cs-chip">Explainable AI</span></div>
+            <div class="cs-hero-meta"><span><i class="fas fa-flask"></i>Independent project on public data</span><span><i class="fas fa-code"></i>Code and data published</span><span><i class="far fa-calendar"></i>Updated 1 November 2026</span></div>
+        </div>
+    </header>
+
+    <section class="cs-metrics" aria-label="Key results">
+            <div class="cs-metric"><div class="cs-metric-value">0.99</div><div class="cs-metric-label">ROC AUC across five-fold cross-validation, with human and AI reviews matched on length and tone</div></div>
+            <div class="cs-metric"><div class="cs-metric-value">86%</div><div class="cs-metric-label">of AI-written reviews caught while wrongly flagging only 1% of genuine reviews</div></div>
+            <div class="cs-metric is-warn"><div class="cs-metric-value">1%</div><div class="cs-metric-label">of today's AI reviews caught by a detector trained on 2019-era GPT-2 fakes</div></div>
+            <div class="cs-metric is-warn"><div class="cs-metric-value">29&ndash;37%</div><div class="cs-metric-label">caught for the three newest models when the detector had never seen them</div></div>
+    </section>
+
+    <main class="cs-layout">
+        <aside class="cs-glance" aria-label="At a glance">
+            <h2>At a glance</h2>
+            <dl>
+                    <dt>Question</dt><dd>Can text alone separate AI-written reviews from human ones, and does it still work when a new model appears?</dd>
+                    <dt>Data</dt><dd>11,380 human Amazon reviews written before 2019, 7,475 reviews from nine chat models, 12,698 GPT-2 reviews</dd>
+                    <dt>Methods</dt><dd>TF-IDF logistic regression, gradient boosting on 24 style features, leave-one-generator-out testing, operating-point analysis</dd>
+                    <dt>Built with</dt><dd>Python, scikit-learn, pandas, matplotlib, JavaScript</dd>
+                    <dt>Deliverables</dt><dd>Three detectors, a stress-test report, and a model that runs in the browser (below)</dd>
+            </dl>
+            <a href="https://calendly.com/truthwithdata/30min" class="btn btn-primary cs-glance-cta" rel="noopener">Discuss a similar project</a>
+            <nav class="cs-toc" aria-label="On this page">
+                    <a href="#question">The question</a>
+                    <a href="#data">The data</a>
+                    <a href="#approach">The approach</a>
+                    <a href="#findings">What we found</a>
+                    <a href="#demo">Try the detector</a>
+                    <a href="#business">What it means for a business</a>
+                    <a href="#limits">Limits</a>
+                    <a href="#engagement">How we would do this for you</a>
+                    <a href="#reproduce">Reproduce it</a>
+            </nav>
+        </aside>
+
+        <article class="cs-body">
+
+            <section class="cs-section" id="question">
+                <h2><span class="cs-num">01</span>The question</h2>
+                <p class="cs-lede">Chat models can write a convincing product review in a second, for free, in any voice. Anyone who runs a marketplace, an app store, a booking site or a brand's review page now has to ask how much of what they publish was written by a machine.</p>
+                <p>Regulators are asking too. Since October 2024 the US Federal Trade Commission's rule on fake reviews has covered AI-generated ones, and in the UK the Digital Markets, Competition and Consumers Act has banned fake reviews since April 2025. UK law expects businesses that publish reviews to take reasonable steps to prevent and remove them.</p>
+                <p>Plenty of tools claim to detect AI text. We wanted to know three things a buyer of those tools should ask: <strong>how accurate can a detector be on short reviews</strong>, <strong>what gives AI reviews away</strong>, and, most importantly, <strong>does a detector keep working when a new model comes out?</strong></p>
+            </section>
+
+            <section class="cs-section" id="data">
+                <h2><span class="cs-num">02</span>The data</h2>
+                <ul>
+                    <li><strong>Human reviews:</strong> the original Amazon reviews in the open dataset of Salminen and colleagues (2022), covering ten product categories from books to pet supplies. They were written before 2019, so before any modern chatbot existed.</li>
+                    <li><strong>Modern AI reviews:</strong> the CRSD dataset (Infinitode, 2026): about 10,100 reviews from nine chat models, including GPT&#8209;4o mini, GPT&#8209;5 mini, GPT&#8209;5.2 Instant, Gemini 1.5, 2.0 and 3 Flash, Grok 4.1 Fast, Llama 3 and Mixtral.</li>
+                    <li><strong>Older AI reviews:</strong> the 20,216 GPT&#8209;2 reviews from the Salminen dataset, the kind of fake that detectors were built for in 2019&ndash;2022.</li>
+                </ul>
+                <p>We kept reviews of 3 to 50 words, the length of most real reviews. After cleaning and removing duplicates that left 11,380 human, 7,475 modern AI and 12,698 GPT&#8209;2 reviews.</p>
+            </section>
+
+            <section class="cs-section" id="approach">
+                <h2><span class="cs-num">03</span>The approach</h2>
+                <p>The easy way to build an impressive detector is to let it cheat. We closed off the shortcuts first.</p>
+                <ol class="cs-steps">
+                    <li><h3>Remove typographic fingerprints</h3><p>Some models put two spaces after a full stop or use curly quotes. We normalised spacing and quotation marks so a model has to learn the language, not the typing.</p></li>
+                    <li><h3>Match like with like</h3><p>AI reviews in the data are more often negative and shorter. We paired human and AI reviews cell by cell on sentiment (from star ratings) and length, giving 4,018 of each. Length and tone carry no signal.</p></li>
+                    <li><h3>Build three detectors</h3><p>A full model on word and character patterns; a style-only model that sees 24 features such as punctuation, sentence length and informal spelling but no vocabulary at all; and a compact 6,000-term model small enough to run in a web browser.</p></li>
+                    <li><h3>Stress-test them like an attacker would</h3><p>Five-fold cross-validation; leave-one-generator-out (train on eight chat models, test on the ninth); a 2019-style detector trained on GPT&#8209;2 and tested on today's models; and every result read at a 1% false-flag rate, because accusing real customers is expensive.</p></li>
+                    <li><h3>Explain and ship</h3><p>We translated the model's signals into plain-English tells and ported the compact model to JavaScript. Its scores match Python's to within 0.00002 on 200 test reviews.</p></li>
+                </ol>
+            </section>
+
+            <section class="cs-section" id="findings">
+                <h2><span class="cs-num">04</span>What we found</h2>
+                <h3>When it has seen the model, detection is very accurate</h3>
+                <div class="cs-table-wrap">
+                    <table class="cs-table">
+                        <thead><tr><th>Detector</th><th>ROC AUC</th><th>Accuracy</th><th>Caught at 1% false flags</th><th>Caught at 5% false flags</th></tr></thead>
+                        <tbody>
+                            <tr class="is-best"><td>Word and character patterns (full)</td><td>0.990</td><td>95.3%</td><td>86%</td><td>95%</td></tr>
+                            <tr><td>Compact model (runs in the browser)</td><td>0.986</td><td>94.2%</td><td>81%</td><td>93%</td></tr>
+                            <tr><td>Style only, no vocabulary</td><td>0.960</td><td>88.9%</td><td>60%</td><td>80%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Five-fold cross-validation on the 8,036 matched reviews. Even the style-only model, which never sees a single word, separates the two groups well: the difference is in how AI writes, not only what it writes about.</p>
+
+                <h3>A detector built for yesterday's fakes is blind to today's</h3>
+                <figure class="cs-figure">
+                    <img src="charts/ai-review-detector-2019-vs-modern-fakes.svg" alt="Bar chart: a detector trained on GPT-2 fakes catches 77% of GPT-2 reviews but 1% of modern chat-model reviews; a detector trained on modern models catches 80% of modern reviews but 2% of GPT-2 reviews." loading="lazy" width="792" height="403">
+                    <figcaption><strong>Figure 1.</strong> Each detector is excellent on the kind of fake it was trained on and almost useless on the other. All four results use the same unseen human reviews and a threshold that wrongly flags 1% of them.</figcaption>
+                </figure>
+                <p class="cs-takeaway">Detectors learn the quirks of the generator they were trained on. A tool can score 98% on its own benchmark and catch almost nothing in production.</p>
+
+                <h3>The newest models are the hardest to catch</h3>
+                <figure class="cs-figure">
+                    <img src="charts/ai-review-detector-unseen-models.svg" alt="Dot plot by chat model of the share of reviews caught at a 1% false-flag rate when the model was in training and when it was held out. Held out: Llama 3 87%, Gemini 1.5 Flash 86%, Gemini 2.0 Flash-Lite 80%, Mixtral 74%, Grok 4.1 Fast 73%, GPT-4o mini 63%, Gemini 3 Flash 37%, GPT-5 mini 35%, GPT-5.2 Instant 29%." loading="lazy" width="792" height="461">
+                    <figcaption><strong>Figure 2.</strong> We trained on eight models and tested on the ninth, nine times over. Older and smaller models stay easy to catch even when new to the detector. GPT&#8209;5.2 Instant, GPT&#8209;5 mini and Gemini 3 Flash, the three newest, drop to 29&ndash;37%.</figcaption>
+                </figure>
+                <p class="cs-takeaway">Every new model release is a new attack. A detector needs fresh examples, retraining and monitoring, not a one-off purchase.</p>
+
+                <h3>What gives AI away</h3>
+                <figure class="cs-figure">
+                    <img src="charts/ai-review-detector-telltale-signs.svg" alt="Dot plot of telltale signs. AI reviews open with The or This 70% of the time versus 10% for humans. Humans more often skip the final full stop (18% vs 1%), use a number (12% vs 1%), use not (13% vs 2%) and use great, good or nice (34% vs 13%)." loading="lazy" width="792" height="446">
+                    <figcaption><strong>Figure 3.</strong> AI reviews read like tidy, complete sentences ("The blender was..."). People write in fragments, skip full stops, quote numbers, hedge with "not", stretch words ("sooo") and reach for plain praise like "great" and "nice".</figcaption>
+                </figure>
+            </section>
+
+            <section class="cs-section" id="demo">
+                <h2><span class="cs-num">05</span>Try the detector</h2>
+                <div class="cs-demo" id="aiReviewDemo">
+                    <h3><i class="fas fa-wand-magic-sparkles"></i> AI-written review detector <span class="cs-live">LIVE</span></h3>
+                    <p>This is the compact model from the table above, running entirely in your browser. Nothing you type is sent anywhere.</p>
+                    <label for="reviewInput">Paste a short review (up to about 50 words works best)</label>
+                    <textarea id="reviewInput" maxlength="1200" placeholder="e.g. Arrived quick, does the job. Cable's a bit short but for the price can't complain"></textarea>
+                    <div class="cs-demo-actions">
+                        <button type="button" data-example="0">Try a polished example</button>
+                        <button type="button" data-example="1">Try a casual example</button>
+                        <button type="button" data-example="2">Try a tricky example</button>
+                        <button type="button" id="reviewClear">Clear</button>
+                    </div>
+                    <div class="cs-demo-out" id="reviewOut" aria-live="polite">
+                        <p class="cs-demo-note" style="margin:0 !important">Start typing to see the score update.</p>
+                    </div>
+                    <p class="cs-demo-note">A demonstration model trained on short English product reviews. It will be wrong on some reviews and is not evidence that any particular person used AI. Please do not use it to accuse anyone.</p>
+                </div>
+            </section>
+
+            <section class="cs-section" id="business">
+                <h2><span class="cs-num">06</span>What it means for a business</h2>
+                <div class="cs-value-grid">
+                    <div class="cs-value"><i class="fas fa-filter"></i><h3>Triage, not verdicts</h3><p>At a 1% false-flag rate the model sends most AI reviews to a moderation queue and leaves 99% of genuine customers alone. People make the final call.</p></div>
+                    <div class="cs-value"><i class="fas fa-sliders"></i><h3>Set the threshold by cost</h3><p>The right cut-off depends on what a wrongly removed review costs you against a fake that stays up. We read every result at 1% and 5% for that reason.</p></div>
+                    <div class="cs-value"><i class="fas fa-rotate"></i><h3>Budget for retraining</h3><p>The share caught fell from 90% to 35% when GPT&#8209;5 mini was new to the detector. Plan quarterly retraining on fresh labelled examples and watch the score distribution for drift.</p></div>
+                    <div class="cs-value"><i class="fas fa-layer-group"></i><h3>Text is one signal of several</h3><p>Combine it with account age, purchase verification and posting bursts. A fraudster can edit the text; it is much harder to fake the behaviour.</p></div>
+                </div>
+            </section>
+
+            <section class="cs-section" id="limits">
+                <h2><span class="cs-num">07</span>Limits</h2>
+                <div class="cs-callout is-limits">
+                    <h3><i class="fas fa-triangle-exclamation"></i> Read the numbers as a best case for simple fakes</h3>
+                    <ul>
+                        <li>The modern AI reviews came from generic prompts ("write a positive review for a product, be descriptive and human-like"). A fraudster who prompts for a specific product, adds typos or edits the output will be harder to catch.</li>
+                        <li>The AI reviews cover products, films and venues, while the human reviews are all Amazon products, so some words such as "movie" or "event" help the full model for the wrong reason. The style-only model, which uses no vocabulary, still reaches 0.96 AUC, so topic is not the main signal.</li>
+                        <li>English only, reviews of 50 words or fewer, and human reviews from one platform written before 2019.</li>
+                        <li>Some models have few reviews after matching (110 for Llama 3, 134 for GPT&#8209;5.2 Instant). Figure 2 shows 95% intervals.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="cs-section" id="engagement">
+                <h2><span class="cs-num">08</span>How we would do this for you</h2>
+                <div class="cs-engage">
+                    <div class="cs-engage-step"><div class="cs-when">Week 1</div><h3>Measure the problem</h3><p>Label a sample of your reviews or user content, estimate how much is machine-written, and agree what a false flag costs.</p></div>
+                    <div class="cs-engage-step"><div class="cs-when">Weeks 2&ndash;3</div><h3>Build and stress-test</h3><p>Train on your data plus the newest public models, add behavioural signals, and test on generators held out from training.</p></div>
+                    <div class="cs-engage-step"><div class="cs-when">Week 4</div><h3>Deploy and monitor</h3><p>Batch scoring or an API, a drift dashboard, and a retraining playbook your team can run.</p></div>
+                </div>
+            </section>
+
+            <section class="cs-section" id="reproduce">
+                <h2><span class="cs-num">09</span>Reproduce it</h2>
+                <p>The analysis script downloads both public datasets, rebuilds the matched set and reruns every test. A full run takes about a minute on a laptop.</p>
+                <div class="cs-stack"><span>Python 3</span><span>scikit-learn</span><span>pandas</span><span>NumPy</span><span>SciPy</span><span>matplotlib</span><span>JavaScript</span></div>
+                <div class="cs-links">
+                    <a class="btn btn-secondary" href="../data/ai-written-review-detector-analysis.py"><i class="fas fa-code"></i>Analysis script</a>
+                    <a class="btn btn-secondary" href="../data/ai-written-review-detector-by-generator.csv"><i class="fas fa-table"></i>Results by model (CSV)</a>
+                    <a class="btn btn-outline" href="https://github.com/truthwithdata/analysis/tree/main/ai-written-review-detector" rel="noopener"><i class="fab fa-github"></i>Code on GitHub</a>
+                </div>
+                <p style="margin-top:18px;font-size:0.95rem;color:#64748b">Data: Salminen, J. et al. (2022), &ldquo;Creating and detecting fake reviews of online products&rdquo;, <em>Journal of Retailing and Consumer Services</em> 64; CRSD, Customer Review Sentiment Dataset (Infinitode, 2026), MIT-style licence.</p>
+            </section>
+
+            <p class="cs-disclosure"><i class="fas fa-circle-info"></i><span>This is an independent project built on public data to show how we work. It is not client work, and no client data was used. Figures are reproducible from the published code.</span></p>
+        </article>
+    </main>
+
+    <section class="cs-cta" aria-labelledby="cta-title">
+        <div class="cs-cta-inner">
+            <div>
+                <h2 id="cta-title">Worried about fake reviews, spam or AI-generated content on your platform?</h2>
+                <p>We can measure how much of it you have, build a detector on your own data, and set the threshold by what a false accusation costs you.</p>
+            </div>
+            <div class="cs-cta-actions">
+                <a href="https://calendly.com/truthwithdata/30min" class="btn btn-light" rel="noopener"><i class="fas fa-calendar-check"></i>&nbsp; Book a free 30-minute call</a>
+                <a class='btn btn-ghost' href='/#contact'>Send a message</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-more" aria-labelledby="more-title">
+        <h2 id="more-title">More case studies</h2>
+        <div class="cs-grid">
+                <a class='cs-card' href='/case-studies/rent-vs-buy-decision-model'>
+                    <div class="cs-card-top">
+                        <div class="cs-card-kicker">Simulation · Financial modelling</div>
+                        <div class="cs-card-metric"><strong>1.4&ndash;30+</strong><span>years for buying to beat renting, depending on place and prices</span></div>
+                    </div>
+                    <div class="cs-card-body">
+                        <h3>Is renting really &ldquo;dead money&rdquo;? A decision model tested against 21 years of history</h3>
+                        <p>A month-by-month simulation of a six-figure decision, a 2005&ndash;2026 backtest, sensitivity to rates and prices, and a calculator anyone can use.</p>
+                        <div class="cs-card-tags"><span>Simulation</span><span>Financial modelling</span><span>Backtesting</span><span>Sensitivity analysis</span><span>Python and R</span></div>
+                        <span class="cs-card-link">Read the case study<i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a class='cs-card' href='/case-studies/ai-and-jobs-causal-analysis'>
+                    <div class="cs-card-top">
+                        <div class="cs-card-kicker">Causal inference · Econometrics</div>
+                        <div class="cs-card-metric"><strong>r = 0.01</strong><span>correlation between AI exposure and job change, 2019&ndash;2025</span></div>
+                    </div>
+                    <div class="cs-card-body">
+                        <h3>Is AI taking jobs? Testing the claim on 722 occupations</h3>
+                        <p>Linking AI usage data to employment, controlling for confounders, and a placebo test that shows the headline &ldquo;effect&rdquo; was there before ChatGPT.</p>
+                        <div class="cs-card-tags"><span>Causal inference</span><span>Regression</span><span>Placebo test</span><span>Data linkage</span><span>Labour market</span></div>
+                        <span class="cs-card-link">Read the case study<i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+        </div>
+    </section>
+
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+    <script src="../js/ai-review-detector.js?v=1.11"></script>
+    <script>
+    (function () {
+        var input = document.getElementById('reviewInput'), out = document.getElementById('reviewOut');
+        if (!input || !out || !window.AIReviewDetector) return;
+        var examples = [
+            "The blender exceeded my expectations. The motor is powerful, the jug is easy to clean, and it handles frozen fruit without any trouble. A fantastic addition to my kitchen.",
+            "works fine for the price. bit loud tho and the lid is a pain to get off but i'd buy again",
+            "Good kettle. Boils fast and the light is a nice touch, but the handle gets warm after a few uses."
+        ];
+        var model = null, loading = null, timer = null;
+        function load() {
+            if (!loading) loading = fetch('models/ai-review-model.json').then(function (r) { return r.json(); })
+                .then(function (m) { model = AIReviewDetector.prepare(m); return model; });
+            return loading;
+        }
+        function esc(s) { return s.replace(/[&<>"]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[c]; }); }
+        function render() {
+            var text = input.value.trim();
+            if (!text) { out.innerHTML = '<p class="cs-demo-note" style="margin:0 !important">Start typing to see the score update.</p>'; return; }
+            load().then(function (m) {
+                var r = AIReviewDetector.score(text, m), pct = Math.round(r.p * 100);
+                var verdict, sub;
+                if (r.words < 4) { verdict = 'Too short to judge'; sub = 'Add a few more words.'; }
+                else if (r.p >= m.threshold_1pct_fpr) { verdict = 'Reads as AI-written'; sub = 'Above the cut-off that flags only 1% of genuine reviews.'; }
+                else if (r.p >= m.threshold_5pct_fpr) { verdict = 'Leans AI-written'; sub = 'Would be flagged at a 5% false-flag setting, but not at 1%.'; }
+                else if (r.p >= 0.35) { verdict = 'Mixed signals'; sub = 'Not enough to flag.'; }
+                else { verdict = 'Reads as human-written'; sub = 'Below every flagging threshold.'; }
+                var ai = r.contributions.filter(function (c) { return c.weight > 0; }).slice(0, 6);
+                var hu = r.contributions.filter(function (c) { return c.weight < 0; }).slice(0, 6);
+                var chips = ai.map(function (c) { return '<span class="to-ai">' + esc(c.term) + '</span>'; }).join('') +
+                            hu.map(function (c) { return '<span class="to-human">' + esc(c.term) + '</span>'; }).join('');
+                var left = Math.min(98, Math.max(2, pct));
+                out.innerHTML = '<div class="cs-verdict">' + verdict + ' &middot; ' + pct + '% AI score<small>' + sub + '</small></div>' +
+                    '<div class="cs-meter" role="img" aria-label="AI score ' + pct + ' percent"><span class="cs-meter-pin" style="left:' + left + '%"></span></div>' +
+                    '<div class="cs-meter-scale"><span>Human-like</span><span>AI-like</span></div>' +
+                    (text === examples[2] ? '<p class="cs-demo-note">This is the kind of tidy review a careful person might write, and the model still flags it. False alarms like this are why a detector should feed a review queue, not make the final call.</p>' : '') +
+                    (chips ? '<div class="cs-why">Words and phrases that moved the score (<span style="color:#93c5fd">blue</span> towards AI, grey towards human):<div class="cs-why-chips">' + chips + '</div></div>' : '');
+            }).catch(function () { out.innerHTML = '<p class="cs-demo-note" style="margin:0 !important">The model could not be loaded. Please refresh the page.</p>'; });
+        }
+        input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(render, 180); });
+        document.querySelectorAll('#aiReviewDemo [data-example]').forEach(function (b) {
+            b.addEventListener('click', function () { input.value = examples[+b.getAttribute('data-example')]; render(); });
+        });
+        document.getElementById('reviewClear').addEventListener('click', function () { input.value = ''; render(); input.focus(); });
+        input.addEventListener('focus', load, { once: true });
+    })();
+    </script>
+</body>
+</html>

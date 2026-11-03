@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Free UK rent vs buy calculator: break-even year, net wealth over time and a plain-English verdict, pre-filled with July 2026 average prices and rents for every region. Includes stamp duty, LBTT and LTT. Runs in your browser." name="description"/>
+<meta content="rent vs buy calculator UK, is it better to rent or buy, rent or buy break even calculator, renting dead money calculator, stamp duty first time buyer calculator" name="keywords"/>
+<meta content="Truth with Data" name="author"/>
+<meta content="Rent vs Buy Calculator (UK) | Truth with Data" property="og:title"/>
+<meta content="When does buying beat renting where you live? Regional presets from official July 2026 data, every assumption editable." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://truthwithdata.com/tools/rent-vs-buy-calculator.html" property="og:url"/>
+<meta content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Truth with Data" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png" name="twitter:image"/>
+<link href="https://truthwithdata.com/tools/rent-vs-buy-calculator.html" rel="canonical"/>
+<title>Rent vs Buy Calculator (UK): When Does Buying Beat Renting? | Truth with Data</title>
+<link href="../favicon.ico?v=2" rel="icon" sizes="any"/>
+<link href="../favicon-48x48.png?v=2" rel="icon" sizes="48x48" type="image/png"/>
+<link href="../favicon-192x192.png?v=2" rel="icon" sizes="192x192" type="image/png"/>
+<link href="../apple-touch-icon.png?v=2" rel="apple-touch-icon"/>
+<!-- AdSense:start -->
+<meta content="ca-pub-2836545666986892" name="google-adsense-account"/>
+
+<!-- AdSense:end -->
+
+
+
+
+
+
+
+
+<style>
+        .tool-page { padding-top: 100px; min-height: 100vh; }
+        .tool-hero { background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); padding: 60px 20px 50px; text-align: center; position: relative; overflow: hidden; }
+        .tool-hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%); }
+        .tool-hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+        .tool-hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2;
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .tool-hero p { font-size: 1.15rem; color: var(--gray-color); line-height: 1.6; }
+        .tool-body { max-width: 960px; margin: 0 auto; padding: 50px 20px 60px; }
+        .tool-panel { background: white; border-radius: 12px; padding: 30px; box-shadow: var(--shadow-md); margin-bottom: 30px; }
+        .tool-panel h2 { font-size: 1.25rem; color: var(--darker-color); margin-bottom: 4px; }
+        .panel-sub { color: var(--gray-color); font-size: 0.92rem; margin-bottom: 18px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px 22px; }
+        .form-grid .tool-input-group { margin-bottom: 14px; }
+        .tool-input-group .hint { display: block; font-size: 0.8rem; color: var(--gray-color); margin-top: 5px; line-height: 1.45; }
+        .tool-input-group input.invalid { border-color: var(--error-color); }
+        .check-row { display: flex; gap: 10px; align-items: center; margin-top: 30px; font-weight: 600; color: var(--dark-color); }
+        .check-row input { width: 18px; height: 18px; }
+        details.advanced { margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 14px; }
+        details.advanced summary { cursor: pointer; font-weight: 600; color: var(--primary-color); margin-bottom: 14px; }
+        .preset-note { font-size: 0.85rem; color: var(--gray-color); background: var(--light-color); border-radius: 8px; padding: 10px 14px; margin: 4px 0 18px; }
+        .error-text { color: var(--error-color); font-weight: 600; margin: 10px 0; display: none; }
+        #results { display: none; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 6px 0 22px; }
+        .metric { background: var(--light-color); border-radius: 10px; padding: 18px; border-left: 4px solid var(--primary-color); }
+        .metric .m-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-color); font-weight: 600; }
+        .metric .m-value { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); margin: 6px 0 2px; line-height: 1.1; }
+        .metric .m-sub { font-size: 0.85rem; color: var(--gray-color); }
+        .metric.neutral { border-left-color: #94a3b8; }
+        .metric.neutral .m-value { color: var(--dark-color); }
+        .verdict-box { border-radius: 10px; padding: 20px 22px; margin: 10px 0 24px; border-left: 4px solid; }
+        .verdict-box h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .verdict-box p { margin: 0; line-height: 1.6; }
+        .verdict-box.v-buy { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #2563eb; color: #1e3a8a; }
+        .verdict-box.v-rent { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color: #d97706; color: #78350f; }
+        .chart-wrap svg { width: 100%; height: auto; font-family: Inter, 'Segoe UI', Arial, sans-serif; }
+        .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.88rem; color: var(--dark-color); margin: 4px 0 8px; }
+        .legend span::before { content: ''; display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; }
+        .legend .lb::before { background: #2563eb; } .legend .lr::before { background: #d97706; }
+        .fine-print { font-size: 0.85rem; color: var(--gray-color); line-height: 1.6; }
+        .info-box { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #2563eb; padding: 20px; margin: 25px 0; border-radius: 8px; }
+        .info-box h4 { margin: 0 0 10px 0; color: #1e40af; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .info-box p, .info-box li { color: #1e3a8a; line-height: 1.6; }
+        .info-box p { margin: 0 0 10px; }
+        .info-box ul { margin: 0; padding-left: 20px; }
+        .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 20px; margin: 25px 0; border-radius: 8px; }
+        .warning-box h4 { margin: 0 0 10px 0; color: #92400e; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .warning-box p { margin: 0; color: #78350f; line-height: 1.6; }
+        .article-cta { text-align: center; margin: 24px 0 6px; }
+        .affiliate-slot { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 18px 20px; margin: 25px 0; color: var(--gray-color); font-size: 0.92rem; }
+        .floating-back-button { position: fixed; bottom: 30px; left: 30px; width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-xl); z-index: 999; display: flex; align-items: center; justify-content: center; }
+        @media (max-width: 768px) {
+            .tool-hero h1 { font-size: 1.9rem; }
+            .tool-panel { padding: 20px; }
+            .floating-back-button { width: 50px; height: 50px; bottom: 20px; left: 20px; font-size: 1.3rem; }
+        }
+    </style>
+<style>*{box-sizing:border-box}html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:white!important;color:#15202c;font-family:Arial,sans-serif;line-height:1.65}body{overflow-x:hidden}h1{font-size:25px!important;line-height:1.3!important;letter-spacing:-.035em}h2{font-size:21px!important;line-height:1.4}h3{font-size:17px!important}p{font-size:14px}.tool-page{min-height:0!important;height:auto!important;max-width:none!important;margin:0!important;padding:0!important}.tool-container{max-width:none!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important}.tool-page>h1,.tool-page>.tool-subtitle{display:none}input,textarea,select{max-width:100%;font:inherit;border-radius:0!important;border:1px solid #c6d0df;padding:12px!important}textarea{width:100%;min-height:125px}button,.calculate-btn,.btn{font:inherit;border-radius:0!important;background:#2055eb!important;color:#fff!important;padding:11px 18px!important;border:0!important;cursor:pointer}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e0e6ef}img,canvas,svg{max-width:100%}.tool-actions,.tool-header,.breadcrumb,.newsletter-band,.tool-related,.report-panel{display:none!important}a{color:#2055eb}label{font-size:13px;font-weight:600}#dependency-status{background:#fff7e5;border:1px solid #e6ce99;padding:15px;font-size:13px;margin-bottom:20px}.tool-layout{grid-template-columns:1fr!important}.tool-grid{gap:20px!important}.info-box,.result-card,.stat-card{border-radius:0!important;box-shadow:none!important}.rvb-results{min-width:0}@media(max-width:600px){.calculator-grid,.input-grid,.tool-columns,.results-grid{grid-template-columns:1fr!important}}</style></head>
+<body><p hidden="" id="dependency-status">This tool needs its original model/data scripts. Connect to the internet and reload to load them.</p>
+
+<div class="tool-page">
+<button class="floating-back-button" onclick="window.history.back()" title="Go Back"><i class="fas fa-arrow-left"></i></button>
+<section class="tool-hero">
+<div class="tool-hero-content">
+<h1>Rent vs Buy Calculator (UK)</h1>
+<p>When does buying a home beat renting the same home and investing the difference? Pick your region for official average prices and rents, change anything you like, and see the break-even year. Everything runs in your browser; nothing you type is sent anywhere.</p>
+</div>
+</section>
+<div class="tool-body">
+<div class="warning-box" style="margin-top:0">
+<h4><i class="fas fa-scale-balanced"></i> For information only, not financial advice</h4>
+<p>This calculator compares two simplified scenarios using the assumptions you enter. It does not know your income, credit record, tax position or what a lender will offer you, and nobody knows future house prices, rents or interest rates. Speak to a regulated mortgage adviser or financial adviser before making a decision.</p>
+</div>
+<form class="tool-panel" id="rvbForm" novalidate="">
+<h2>1. The home</h2>
+<p class="panel-sub">Presets are the average price (HM Land Registry, July 2026) and average monthly private rent (ONS, July 2026) for the region and property type.</p>
+<div class="form-grid">
+<div class="tool-input-group">
+<label for="region">Region</label>
+<select id="region"></select>
+</div>
+<div class="tool-input-group">
+<label for="ptype">Property type</label>
+<select id="ptype">
+<option value="all">All property types</option>
+<option value="terraced">Terraced house</option>
+<option value="semi">Semi-detached house</option>
+<option value="detached">Detached house</option>
+<option value="flat">Flat or maisonette</option>
+</select>
+</div>
+<div class="tool-input-group">
+<label for="price">Property price (£)</label>
+<input id="price" inputmode="numeric" min="20000" step="1000" type="number"/>
+<span class="hint">What you would pay to buy the home.</span>
+</div>
+<div class="tool-input-group">
+<label for="rent">Monthly rent for the same home (£)</label>
+<input id="rent" inputmode="numeric" min="100" step="10" type="number"/>
+<span class="hint">What it would cost to rent a comparable home. This, relative to the price, drives the result.</span>
+</div>
+</div>
+<div class="preset-note" id="presetNote"></div>
+<h2>2. The mortgage</h2>
+<p class="panel-sub">Default rates are the Bank of England's average quoted 2-year fixed rates for September 2026.</p>
+<div class="form-grid">
+<div class="tool-input-group">
+<label for="depositPct">Deposit (% of price)</label>
+<input id="depositPct" max="100" min="0" step="1" type="number" value="10"/>
+<span class="hint">The renter invests this sum instead. Rate default switches to the 75% LTV rate at 25% or more.</span>
+</div>
+<div class="tool-input-group">
+<label for="rate">Mortgage rate (% a year)</label>
+<input id="rate" max="20" min="0" step="0.01" type="number"/>
+<span class="hint">Applied for the whole period; a product fee is charged each time you re-fix (every 2 years).</span>
+</div>
+<div class="tool-input-group">
+<label for="term">Mortgage term (years)</label>
+<input id="term" max="40" min="5" step="1" type="number"/>
+<span class="hint">Capital repayment mortgage. Repayments build equity, so they are not counted as a cost.</span>
+</div>
+<div class="tool-input-group">
+<label for="nation">Tax rules</label>
+<select id="nation">
+<option value="england">England: Stamp Duty Land Tax</option>
+<option value="ni">Northern Ireland: Stamp Duty Land Tax</option>
+<option value="scotland">Scotland: LBTT</option>
+<option value="wales">Wales: Land Transaction Tax</option>
+</select>
+<label class="check-row" style="margin-top:10px"><input checked="" id="ftb" type="checkbox"/> First-time buyer</label>
+<span class="hint">Rates in force October 2026. Wales has no first-time buyer relief.</span>
+</div>
+</div>
+<h2>3. The future</h2>
+<p class="panel-sub">Defaults are England's average over July 2005 to July 2026. These three inputs matter most; try changing them.</p>
+<div class="form-grid">
+<div class="tool-input-group">
+<label for="years">Years you expect to stay</label>
+<input id="years" max="30" min="1" step="1" type="number" value="5"/>
+<span class="hint">You sell (or stop renting) after this many years.</span>
+</div>
+<div class="tool-input-group">
+<label for="priceGrowth">House-price growth (% a year)</label>
+<input id="priceGrowth" max="15" min="-10" step="0.1" type="number"/>
+<span class="hint">The single most important assumption. 2005-26 average: 3.0%.</span>
+</div>
+<div class="tool-input-group">
+<label for="rentGrowth">Rent growth (% a year)</label>
+<input id="rentGrowth" max="15" min="-10" step="0.1" type="number"/>
+<span class="hint">Rent is reset once a year. 2005-26 average: 3.0%.</span>
+</div>
+<div class="tool-input-group">
+<label for="ret">Investment return (% a year)</label>
+<input id="ret" max="15" min="-5" step="0.1" type="number"/>
+<span class="hint">What the renter earns on the deposit and monthly savings, tax-free in an ISA. 5% is the FCA's intermediate projection rate.</span>
+</div>
+</div>
+<details class="advanced">
+<summary>Running costs and fees (pre-filled, editable)</summary>
+<div class="form-grid">
+<div class="tool-input-group">
+<label for="maintPct">Maintenance (% of value a year)</label>
+<input id="maintPct" max="5" min="0" step="0.1" type="number"/>
+<span class="hint">1% is a common rule of thumb for houses; 0.5% for flats, where the service charge covers communal repairs.</span>
+</div>
+<div class="tool-input-group">
+<label for="runningCosts">Insurance and service charge (£ a year)</label>
+<input id="runningCosts" min="0" step="10" type="number"/>
+<span class="hint">Houses: buildings insurance (ABI average £306). Flats: service charge (Hamptons: £2,405; London £2,801). Grows 2% a year.</span>
+</div>
+<div class="tool-input-group">
+<label for="buyFees">Buying fees (£)</label>
+<input id="buyFees" min="0" step="10" type="number"/>
+<span class="hint">Conveyancing plus mortgage product fee. Stamp duty and a survey are added automatically.</span>
+</div>
+<div class="tool-input-group">
+<label for="sellPct">Estate agent fee when selling (%)</label>
+<input id="sellPct" max="10" min="0" step="0.01" type="number"/>
+<span class="hint">Including VAT. HomeOwners Alliance 2026 average: 1.42%.</span>
+</div>
+<div class="tool-input-group">
+<label for="sellFixed">Legal fees when selling (£)</label>
+<input id="sellFixed" min="0" step="10" type="number"/>
+</div>
+</div>
+</details>
+<div class="error-text" id="formError" role="alert"></div>
+<button class="tool-button" id="calcBtn" type="submit"><i class="fas fa-calculator"></i> Compare renting and buying</button>
+</form>
+<div aria-live="polite" class="tool-panel" id="results">
+<div class="metric-grid">
+<div class="metric"><div class="m-label">Break-even</div><div class="m-value" id="rBreakeven"></div><div class="m-sub" id="rBreakevenSub"></div></div>
+<div class="metric neutral"><div class="m-label">When you move</div><div class="m-value" id="rGap"></div><div class="m-sub" id="rGapSub"></div></div>
+<div class="metric neutral"><div class="m-label">Cash needed up front</div><div class="m-value" id="rUpfront"></div><div class="m-sub" id="rUpfrontSub"></div></div>
+</div>
+<div class="verdict-box" id="verdict"><h3 id="verdictTitle"></h3><p id="verdictText"></p></div>
+<h3 style="font-size:1.05rem;color:var(--darker-color);margin-bottom:4px">Net wealth over 30 years</h3>
+<div class="legend"><span class="lb">Buyer: home value minus mortgage and selling costs, plus savings</span><span class="lr">Renter: investments</span></div>
+<div class="chart-wrap" id="chart"></div>
+<p class="fine-print">Amounts are in future pounds (not adjusted for inflation). The dot marks break-even. Both households spend the same amount each month: whoever's housing costs less invests the difference.</p>
+<div class="article-cta">
+<a class="btn btn-primary" href="https://truthwithdata.com/blog/is-renting-dead-money-uk" rel="noopener noreferrer" target="_blank"><i class="fas fa-book-open"></i> Read the analysis: is renting really dead money?</a>
+<a class="btn btn-secondary" href="#report"><i class="fas fa-file-pdf"></i> Get your full PDF report</a>
+</div>
+</div>
+<!-- Personalised PDF report (paid): built by js/rent-vs-buy-report.js, typeset by netlify/functions/report.mjs -->
+<div id="report"></div>
+<!-- AFFILIATE PLACEHOLDER (calculator): e.g. mortgage broker or ISA platform. Keep the disclosure line visible when filled in. -->
+<div class="affiliate-slot" id="affiliate-slot-calculator">
+<p><strong>Affiliate placeholder</strong> — partner link to be added.</p>
+<p class="fine-print" style="margin:6px 0 0"><em>Disclosure: some links on this page may be affiliate links. If you use them we may earn a commission, at no extra cost to you. It never affects our analysis or the calculator's results.</em></p>
+</div>
+<!-- END AFFILIATE PLACEHOLDER -->
+<div class="info-box">
+<h4><i class="fas fa-circle-info"></i> How the calculator works</h4>
+<p>Two households want the same home. The <strong>buyer</strong> pays a deposit, stamp duty (or LBTT/LTT), conveyancing, a survey and a mortgage product fee, then pays the mortgage, maintenance, insurance (or a service charge for a flat) and a new product fee every two years. The <strong>renter</strong> pays rent and invests the deposit and the buyer's upfront costs. Each month, whichever household has the lower housing bill invests the difference, so both have spent exactly the same.</p>
+<p>When the buyer sells, they pay an estate agent and solicitor. The break-even year is the first month in which the buyer's net wealth (home value, minus the mortgage still owed, minus selling costs, plus any savings) is at least the renter's.</p>
+<ul>
+<li>Capital repayments are not a cost: they come back as equity when you sell.</li>
+<li>Mortgage interest, maintenance, insurance, fees and stamp duty are just as unrecoverable as rent. Only house-price growth offsets them.</li>
+<li>Investment growth is assumed tax-free (an ISA). Gains on your main home are free of capital gains tax.</li>
+<li>The rate stays fixed at the level you enter. In reality you re-fix at whatever the market offers.</li>
+</ul>
+</div>
+<!-- ADSENSE: tool page unit -->
+<!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+<!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+<!-- END ADSENSE -->
+<p class="fine-print" style="text-align:center">Data: HM Land Registry UK House Price Index (July 2026); ONS Price Index of Private Rents (21 October 2026 release); Bank of England quoted household interest rates (September 2026); HMRC, Revenue Scotland and Welsh Revenue Authority tax rates. Contains public sector information licensed under the Open Government Licence v3.0. Full methodology, code and data are in <a href="https://truthwithdata.com/blog/is-renting-dead-money-uk" rel="noopener noreferrer" target="_blank">the article</a>.</p>
+</div>
+</div>
+<!-- Newsletter:start -->
+
+<!-- Newsletter:end -->
+
+
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/rent-vs-buy-data.js?v=1.11"></script>
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/rent-vs-buy-model.js?v=1.11"></script>
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/rent-vs-buy-calculator.js?v=1.11"></script>
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/config.js?v=1.11"></script>
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/currency.js?v=1.11"></script>
+
+
+<script>let lastSentHeight=0;function notifyHeight(){const height=Math.ceil(document.body.getBoundingClientRect().height);if(Math.abs(height-lastSentHeight)>2){lastSentHeight=height;parent.postMessage({type:'twd-tool-height',height},'*')}}window.addEventListener('load',notifyHeight);if(typeof ResizeObserver!=='undefined')new ResizeObserver(notifyHeight).observe(document.body);</script></body>
+</html>

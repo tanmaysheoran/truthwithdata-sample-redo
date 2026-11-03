@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correlation Calculator (Pearson and Spearman) | Truth with Data</title>
+    <meta name="description" content="Free correlation calculator: paste two variables to get Pearson&#x27;s r and Spearman&#x27;s rank correlation, with a guide to interpreting strength and direction.">
+    <link rel="canonical" href="https://truthwithdata.com/tools/correlation-calculator.html">
+    <meta property="og:title" content="Correlation Calculator (Pearson and Spearman) | Truth with Data">
+    <meta property="og:description" content="Free correlation calculator: paste two variables to get Pearson&#x27;s r and Spearman&#x27;s rank correlation, with a guide to interpreting strength and direction.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://truthwithdata.com/tools/correlation-calculator.html">
+    <meta property="og:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Correlation Calculator (Pearson and Spearman) | Truth with Data">
+    <meta name="twitter:description" content="Free correlation calculator: paste two variables to get Pearson&#x27;s r and Spearman&#x27;s rank correlation, with a guide to interpreting strength and direction.">
+    <meta name="twitter:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/tools.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    
+    <style>
+        .tool-page {
+            padding: 120px 20px 80px;
+            min-height: 100vh;
+            background: var(--light-color);
+        }
+        
+        .tool-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5rem;
+            color: var(--darker-color);
+            margin-bottom: 15px;
+        }
+        
+        .tool-header p {
+            color: var(--gray-color);
+            font-size: 1.125rem;
+        }
+        
+        .input-help {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result-card h4 {
+            color: var(--darker-color);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-card .value {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .result-card .interpretation {
+            color: var(--gray-color);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .strength-indicator {
+            margin-top: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+        
+        .strength-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .interpretation-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .interpretation-box h4 {
+            color: var(--darker-color);
+            margin-bottom: 10px;
+        }
+        
+        .interpretation-box p {
+            color: var(--gray-color);
+            line-height: 1.8;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 30px 20px;
+            }
+            
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Correlation Coefficient Calculator (Pearson and Spearman)",
+  "url": "https://truthwithdata.com/tools/correlation-calculator.html",
+  "description": "Free correlation calculator: paste two variables to get Pearson's r and Spearman's rank correlation, with a guide to interpreting strength and direction.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Truth with Data",
+    "url": "https://truthwithdata.com/"
+  },
+  "dateModified": "2026-10-26"
+}
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/#blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tool Page -->
+    <div class="tool-page">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>📈 Correlation Coefficient Calculator</h1>
+                <p>Calculate Pearson and Spearman correlation between two variables</p>
+            </div>
+
+            <form id="correlationForm">
+                <div class="input-help">
+                    <i class="fas fa-info-circle"></i> Enter paired data values for two variables. Each variable should have the same number of values.
+                </div>
+
+                <div class="input-row">
+                    <div class="tool-input-group">
+                        <label for="variable1">Variable X (comma-separated)</label>
+                        <textarea 
+                            id="variable1" 
+                            rows="5"
+                            required 
+                            placeholder="e.g., 10, 20, 30, 40, 50"
+                        ></textarea>
+                    </div>
+                    
+                    <div class="tool-input-group">
+                        <label for="variable2">Variable Y (comma-separated)</label>
+                        <textarea 
+                            id="variable2" 
+                            rows="5"
+                            required 
+                            placeholder="e.g., 15, 25, 35, 45, 55"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="tool-button">Calculate Correlation</button>
+            </form>
+
+            <div id="result" class="tool-result" style="display: none;">
+                <h3>Results</h3>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h4>Pearson Correlation (r)</h4>
+                        <div class="value" id="pearsonValue"></div>
+                        <div class="interpretation">
+                            <strong>Strength:</strong> <span id="pearsonStrength"></span>
+                        </div>
+                        <div class="strength-indicator">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="pearsonBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <h4>Spearman Correlation (ρ)</h4>
+                        <div class="value" id="spearmanValue"></div>
+                        <div class="interpretation">
+                            <strong>Strength:</strong> <span id="spearmanStrength"></span>
+                        </div>
+                        <div class="strength-indicator">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="spearmanBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interpretation-box">
+                    <h4>Interpretation</h4>
+                    <p id="interpretationText"></p>
+                    <p style="margin-top: 15px;"><strong>Sample size:</strong> <span id="sampleSize"></span> paired observations</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #e2e8f0;">
+                <h3 style="color: var(--darker-color); margin-bottom: 15px;">How to Use</h3>
+                <ol style="color: var(--gray-color); line-height: 1.8;">
+                    <li>Enter values for Variable X (separated by commas, spaces, or new lines)</li>
+                    <li>Enter corresponding values for Variable Y in the same order</li>
+                    <li>Ensure both variables have the same number of values</li>
+                    <li>Click "Calculate Correlation" to see both Pearson and Spearman correlations</li>
+                </ol>
+                
+                <h3 style="color: var(--darker-color); margin-top: 30px; margin-bottom: 15px;">Understanding Correlation</h3>
+                <p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 15px;">
+                    Correlation measures the strength and direction of the relationship between two variables.
+                </p>
+                <ul style="color: var(--gray-color); line-height: 1.8;">
+                    <li><strong>Pearson (r):</strong> Measures linear relationship between variables. Best for normally distributed continuous data.</li>
+                    <li><strong>Spearman (ρ):</strong> Measures monotonic relationship using ranks. Better for non-linear relationships or ordinal data.</li>
+                    <li><strong>Range:</strong> Both coefficients range from -1 to +1</li>
+                    <li><strong>+1:</strong> Perfect positive correlation (as X increases, Y increases)</li>
+                    <li><strong>0:</strong> No correlation</li>
+                    <li><strong>-1:</strong> Perfect negative correlation (as X increases, Y decreases)</li>
+                </ul>
+                
+                <h3 style="color: var(--darker-color); margin-top: 30px; margin-bottom: 15px;">Interpretation Guide</h3>
+                <ul style="color: var(--gray-color); line-height: 1.8;">
+                    <li><strong>0.00 - 0.19:</strong> Very weak correlation</li>
+                    <li><strong>0.20 - 0.39:</strong> Weak correlation</li>
+                    <li><strong>0.40 - 0.59:</strong> Moderate correlation</li>
+                    <li><strong>0.60 - 0.79:</strong> Strong correlation</li>
+                    <li><strong>0.80 - 1.00:</strong> Very strong correlation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/#blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+    <script>
+        function parseDataValues(input) {
+            return input
+                .split(/[\s,\n]+/)
+                .map(val => val.trim())
+                .filter(val => val !== '')
+                .map(val => parseFloat(val))
+                .filter(val => !isNaN(val));
+        }
+
+        function calculateMean(values) {
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function calculatePearsonCorrelation(x, y) {
+            const n = x.length;
+            const meanX = calculateMean(x);
+            const meanY = calculateMean(y);
+            
+            let numerator = 0;
+            let sumSquaredX = 0;
+            let sumSquaredY = 0;
+            
+            for (let i = 0; i < n; i++) {
+                const deltaX = x[i] - meanX;
+                const deltaY = y[i] - meanY;
+                numerator += deltaX * deltaY;
+                sumSquaredX += deltaX * deltaX;
+                sumSquaredY += deltaY * deltaY;
+            }
+            
+            const denominator = Math.sqrt(sumSquaredX * sumSquaredY);
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+
+        function getRanks(values) {
+            const sorted = values.map((val, idx) => ({ val, idx }))
+                .sort((a, b) => a.val - b.val);
+            
+            const ranks = new Array(values.length);
+            let i = 0;
+            
+            while (i < sorted.length) {
+                let j = i;
+                // Find all elements with the same value
+                while (j < sorted.length && sorted[j].val === sorted[i].val) {
+                    j++;
+                }
+                // Assign average rank to all equal elements
+                const avgRank = (i + j + 1) / 2;
+                for (let k = i; k < j; k++) {
+                    ranks[sorted[k].idx] = avgRank;
+                }
+                i = j;
+            }
+            
+            return ranks;
+        }
+
+        function calculateSpearmanCorrelation(x, y) {
+            const ranksX = getRanks(x);
+            const ranksY = getRanks(y);
+            return calculatePearsonCorrelation(ranksX, ranksY);
+        }
+
+        function getCorrelationStrength(r) {
+            const absR = Math.abs(r);
+            if (absR >= 0.80) return 'Very Strong';
+            if (absR >= 0.60) return 'Strong';
+            if (absR >= 0.40) return 'Moderate';
+            if (absR >= 0.20) return 'Weak';
+            return 'Very Weak';
+        }
+
+        function getCorrelationColor(r) {
+            const absR = Math.abs(r);
+            if (absR >= 0.70) return '#10b981'; // green
+            if (absR >= 0.50) return '#3b82f6'; // blue
+            if (absR >= 0.30) return '#f59e0b'; // orange
+            return '#ef4444'; // red
+        }
+
+        document.getElementById('correlationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const input1 = document.getElementById('variable1').value;
+            const input2 = document.getElementById('variable2').value;
+            
+            const x = parseDataValues(input1);
+            const y = parseDataValues(input2);
+            
+            if (x.length === 0 || y.length === 0) {
+                alert('Please enter valid numerical data for both variables.');
+                return;
+            }
+            
+            if (x.length !== y.length) {
+                alert('Both variables must have the same number of values.');
+                return;
+            }
+            
+            if (x.length < 2) {
+                alert('Please enter at least 2 paired observations.');
+                return;
+            }
+            
+            const pearson = calculatePearsonCorrelation(x, y);
+            const spearman = calculateSpearmanCorrelation(x, y);
+            
+            const pearsonStrength = getCorrelationStrength(pearson);
+            const spearmanStrength = getCorrelationStrength(spearman);
+            
+            document.getElementById('pearsonValue').textContent = pearson.toFixed(4);
+            document.getElementById('spearmanValue').textContent = spearman.toFixed(4);
+            document.getElementById('pearsonStrength').textContent = pearsonStrength;
+            document.getElementById('spearmanStrength').textContent = spearmanStrength;
+            document.getElementById('sampleSize').textContent = x.length;
+            
+            // Set strength bars
+            const pearsonBar = document.getElementById('pearsonBar');
+            const spearmanBar = document.getElementById('spearmanBar');
+            
+            pearsonBar.style.width = (Math.abs(pearson) * 100) + '%';
+            pearsonBar.style.background = getCorrelationColor(pearson);
+            
+            spearmanBar.style.width = (Math.abs(spearman) * 100) + '%';
+            spearmanBar.style.background = getCorrelationColor(spearman);
+            
+            // Interpretation
+            let interpretation = '';
+            const direction = pearson > 0 ? 'positive' : pearson < 0 ? 'negative' : 'no';
+            
+            interpretation += `The Pearson correlation coefficient (r = ${pearson.toFixed(4)}) indicates a ${pearsonStrength.toLowerCase()} ${direction} linear relationship between the two variables. `;
+            
+            if (Math.abs(pearson - spearman) > 0.1) {
+                interpretation += `The Spearman correlation (ρ = ${spearman.toFixed(4)}) differs from Pearson, suggesting the relationship may be non-linear or influenced by outliers. `;
+            } else {
+                interpretation += `The Spearman correlation (ρ = ${spearman.toFixed(4)}) is similar to Pearson, suggesting a consistent relationship pattern. `;
+            }
+            
+            if (Math.abs(pearson) > 0.7) {
+                interpretation += 'This strong correlation suggests the variables are closely related.';
+            } else if (Math.abs(pearson) > 0.4) {
+                interpretation += 'This moderate correlation suggests a noticeable but not overwhelming relationship.';
+            } else {
+                interpretation += 'This weak correlation suggests limited linear relationship between the variables.';
+            }
+            
+            document.getElementById('interpretationText').textContent = interpretation;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

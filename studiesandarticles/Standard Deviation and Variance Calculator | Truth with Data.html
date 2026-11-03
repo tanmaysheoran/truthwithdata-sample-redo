@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standard Deviation and Variance Calculator | Truth with Data</title>
+    <meta name="description" content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning.">
+    <link rel="canonical" href="https://truthwithdata.com/tools/std-dev-variance-calculator.html">
+    <meta property="og:title" content="Standard Deviation and Variance Calculator | Truth with Data">
+    <meta property="og:description" content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://truthwithdata.com/tools/std-dev-variance-calculator.html">
+    <meta property="og:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Standard Deviation and Variance Calculator | Truth with Data">
+    <meta name="twitter:description" content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning.">
+    <meta name="twitter:image" content="https://truthwithdata.com/og-default-1200x630.png">
+    
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/tools.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    
+    <style>
+        .tool-page {
+            padding: 120px 20px 80px;
+            min-height: 100vh;
+            background: var(--light-color);
+        }
+        
+        .tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5rem;
+            color: var(--darker-color);
+            margin-bottom: 15px;
+        }
+        
+        .tool-header p {
+            color: var(--gray-color);
+            font-size: 1.125rem;
+        }
+        
+        .input-help {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .toggle-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--darker-color);
+            font-weight: 500;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result-card h4 {
+            color: var(--darker-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-card .value {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .result-card .subtext {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 30px 20px;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .toggle-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Standard Deviation and Variance Calculator",
+  "url": "https://truthwithdata.com/tools/std-dev-variance-calculator.html",
+  "description": "Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "GBP"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Truth with Data",
+    "url": "https://truthwithdata.com/"
+  },
+  "dateModified": "2026-10-26"
+}
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/#blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Tool Page -->
+    <div class="tool-page">
+        <div class="tool-container">
+            <div class="tool-header">
+                <h1>📈 Standard Deviation & Variance Calculator</h1>
+                <p>Measure the spread and variability in your dataset</p>
+            </div>
+
+            <form id="varianceForm">
+                <div class="input-help">
+                    <i class="fas fa-info-circle"></i> Enter your data values separated by commas (e.g., 10, 20, 15, 30, 25)
+                </div>
+
+                <div class="tool-input-group">
+                    <label for="dataValues">Data Values</label>
+                    <textarea 
+                        id="dataValues" 
+                        rows="4"
+                        required 
+                        placeholder="Enter numbers separated by commas, spaces, or new lines"
+                    ></textarea>
+                </div>
+
+                <div class="toggle-group">
+                    <label>
+                        <input type="radio" name="dataType" value="population" checked>
+                        Population
+                    </label>
+                    <label>
+                        <input type="radio" name="dataType" value="sample">
+                        Sample
+                    </label>
+                </div>
+
+                <button type="submit" class="tool-button">Calculate</button>
+            </form>
+
+            <div id="result" class="tool-result" style="display: none;">
+                <h3>Results</h3>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h4>Count (n)</h4>
+                        <div class="value" id="count"></div>
+                    </div>
+                    <div class="result-card">
+                        <h4>Mean</h4>
+                        <div class="value" id="mean"></div>
+                    </div>
+                    <div class="result-card">
+                        <h4>Variance</h4>
+                        <div class="value" id="variance"></div>
+                        <div class="subtext" id="varianceFormula"></div>
+                    </div>
+                    <div class="result-card">
+                        <h4>Standard Deviation</h4>
+                        <div class="value" id="stdDev"></div>
+                        <div class="subtext" id="stdDevFormula"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #f0f4ff; border-radius: 8px;">
+                    <h4 style="color: var(--darker-color); margin-bottom: 10px;">Interpretation</h4>
+                    <p style="color: var(--gray-color); line-height: 1.6;" id="interpretation"></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #e2e8f0;">
+                <h3 style="color: var(--darker-color); margin-bottom: 15px;">How to Use</h3>
+                <ol style="color: var(--gray-color); line-height: 1.8;">
+                    <li>Enter your numerical data values separated by commas, spaces, or new lines</li>
+                    <li>Select whether your data represents a population or sample</li>
+                    <li>Click "Calculate" to see variance and standard deviation</li>
+                </ol>
+                
+                <h3 style="color: var(--darker-color); margin-top: 30px; margin-bottom: 15px;">Understanding Variance & Standard Deviation</h3>
+                <p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 15px;">
+                    <strong>Variance</strong> measures how far data points are spread from the mean. It's calculated by averaging the squared differences from the mean.
+                </p>
+                <p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 15px;">
+                    <strong>Standard Deviation</strong> is the square root of variance and is in the same units as your data, making it easier to interpret.
+                </p>
+                <ul style="color: var(--gray-color); line-height: 1.8;">
+                    <li><strong>Population:</strong> Use when you have data for the entire group (divide by n)</li>
+                    <li><strong>Sample:</strong> Use when you have data from a subset (divide by n-1)</li>
+                    <li>Lower values indicate data points are close to the mean</li>
+                    <li>Higher values indicate data points are spread out over a wider range</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/#blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+    <script>
+        function parseDataValues(input) {
+            return input
+                .split(/[\s,\n]+/)
+                .map(val => val.trim())
+                .filter(val => val !== '')
+                .map(val => parseFloat(val))
+                .filter(val => !isNaN(val));
+        }
+
+        function calculateMean(values) {
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function calculateVariance(values, isPopulation) {
+            const mean = calculateMean(values);
+            const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
+            const sum = squaredDiffs.reduce((a, b) => a + b, 0);
+            const divisor = isPopulation ? values.length : values.length - 1;
+            return sum / divisor;
+        }
+
+        document.getElementById('varianceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('dataValues').value;
+            const values = parseDataValues(input);
+            
+            if (values.length === 0) {
+                alert('Please enter valid numerical data.');
+                return;
+            }
+            
+            if (values.length === 1) {
+                alert('Please enter at least 2 data points to calculate variance.');
+                return;
+            }
+            
+            const isPopulation = document.querySelector('input[name="dataType"]:checked').value === 'population';
+            const dataTypeText = isPopulation ? 'Population' : 'Sample';
+            
+            const count = values.length;
+            const mean = calculateMean(values);
+            const variance = calculateVariance(values, isPopulation);
+            const stdDev = Math.sqrt(variance);
+            
+            document.getElementById('count').textContent = count;
+            document.getElementById('mean').textContent = mean.toFixed(4);
+            document.getElementById('variance').textContent = variance.toFixed(4);
+            document.getElementById('stdDev').textContent = stdDev.toFixed(4);
+            
+            const divisor = isPopulation ? 'n' : 'n-1';
+            document.getElementById('varianceFormula').textContent = `σ² (${dataTypeText})`;
+            document.getElementById('stdDevFormula').textContent = `σ (${dataTypeText})`;
+            
+            // Interpretation
+            const cvPercent = (stdDev / Math.abs(mean) * 100).toFixed(2);
+            let interpretation = `Your data has a standard deviation of ${stdDev.toFixed(4)}. `;
+            
+            if (cvPercent < 15) {
+                interpretation += 'This indicates relatively low variability - your data points are fairly consistent and close to the mean.';
+            } else if (cvPercent < 30) {
+                interpretation += 'This indicates moderate variability in your dataset.';
+            } else {
+                interpretation += 'This indicates high variability - your data points are quite spread out from the mean.';
+            }
+            
+            interpretation += ` The coefficient of variation is ${cvPercent}%.`;
+            
+            document.getElementById('interpretation').textContent = interpretation;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+</body>
+</html>

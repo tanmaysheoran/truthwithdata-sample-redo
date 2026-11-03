@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Standard Deviation and Variance Calculator | Truth with Data</title>
+<meta content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning." name="description"/>
+<link href="https://truthwithdata.com/tools/std-dev-variance-calculator.html" rel="canonical"/>
+<meta content="Standard Deviation and Variance Calculator | Truth with Data" property="og:title"/>
+<meta content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://truthwithdata.com/tools/std-dev-variance-calculator.html" property="og:url"/>
+<meta content="https://truthwithdata.com/og-default-1200x630.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Truth with Data" property="og:site_name"/>
+<meta content="en_GB" property="og:locale"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Standard Deviation and Variance Calculator | Truth with Data" name="twitter:title"/>
+<meta content="Free standard deviation and variance calculator: paste your data to get sample and population variance and standard deviation, with step-by-step meaning." name="twitter:description"/>
+<meta content="https://truthwithdata.com/og-default-1200x630.png" name="twitter:image"/>
+<link href="../favicon.ico?v=2" rel="icon" sizes="any"/>
+<link href="../favicon-48x48.png?v=2" rel="icon" sizes="48x48" type="image/png"/>
+<link href="../favicon-192x192.png?v=2" rel="icon" sizes="192x192" type="image/png"/>
+<link href="../apple-touch-icon.png?v=2" rel="apple-touch-icon"/>
+<!-- AdSense:start -->
+<meta content="ca-pub-2836545666986892" name="google-adsense-account"/>
+
+<!-- AdSense:end -->
+
+
+
+
+
+
+<style>
+        .tool-page {
+            padding: 120px 20px 80px;
+            min-height: 100vh;
+            background: var(--light-color);
+        }
+        
+        .tool-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .tool-header h1 {
+            font-size: 2.5rem;
+            color: var(--darker-color);
+            margin-bottom: 15px;
+        }
+        
+        .tool-header p {
+            color: var(--gray-color);
+            font-size: 1.125rem;
+        }
+        
+        .input-help {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .toggle-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            color: var(--darker-color);
+            font-weight: 500;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .result-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .result-card h4 {
+            color: var(--darker-color);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .result-card .value {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .result-card .subtext {
+            color: var(--gray-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .tool-container {
+                padding: 30px 20px;
+            }
+            
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .toggle-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+
+<style>*{box-sizing:border-box}html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:white!important;color:#15202c;font-family:Arial,sans-serif;line-height:1.65}body{overflow-x:hidden}h1{font-size:25px!important;line-height:1.3!important;letter-spacing:-.035em}h2{font-size:21px!important;line-height:1.4}h3{font-size:17px!important}p{font-size:14px}.tool-page{min-height:0!important;height:auto!important;max-width:none!important;margin:0!important;padding:0!important}.tool-container{max-width:none!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important}.tool-page>h1,.tool-page>.tool-subtitle{display:none}input,textarea,select{max-width:100%;font:inherit;border-radius:0!important;border:1px solid #c6d0df;padding:12px!important}textarea{width:100%;min-height:125px}button,.calculate-btn,.btn{font:inherit;border-radius:0!important;background:#2055eb!important;color:#fff!important;padding:11px 18px!important;border:0!important;cursor:pointer}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e0e6ef}img,canvas,svg{max-width:100%}.tool-actions,.tool-header,.breadcrumb,.newsletter-band,.tool-related,.report-panel{display:none!important}a{color:#2055eb}label{font-size:13px;font-weight:600}#dependency-status{background:#fff7e5;border:1px solid #e6ce99;padding:15px;font-size:13px;margin-bottom:20px}.tool-layout{grid-template-columns:1fr!important}.tool-grid{gap:20px!important}.info-box,.result-card,.stat-card{border-radius:0!important;box-shadow:none!important}.rvb-results{min-width:0}@media(max-width:600px){.calculator-grid,.input-grid,.tool-columns,.results-grid{grid-template-columns:1fr!important}}</style></head>
+<body><p hidden="" id="dependency-status">This tool needs its original model/data scripts. Connect to the internet and reload to load them.</p>
+<!-- Navigation -->
+
+<!-- Tool Page -->
+<div class="tool-page">
+<div class="tool-container">
+
+<form id="varianceForm">
+<div class="input-help">
+<i class="fas fa-info-circle"></i> Enter your data values separated by commas (e.g., 10, 20, 15, 30, 25)
+                </div>
+<div class="tool-input-group">
+<label for="dataValues">Data Values</label>
+<textarea id="dataValues" placeholder="Enter numbers separated by commas, spaces, or new lines" required="" rows="4"></textarea>
+</div>
+<div class="toggle-group">
+<label>
+<input checked="" name="dataType" type="radio" value="population"/>
+                        Population
+                    </label>
+<label>
+<input name="dataType" type="radio" value="sample"/>
+                        Sample
+                    </label>
+</div>
+<button class="tool-button" type="submit">Calculate</button>
+</form>
+<div class="tool-result" id="result" style="display: none;">
+<h3>Results</h3>
+<div class="result-grid">
+<div class="result-card">
+<h4>Count (n)</h4>
+<div class="value" id="count"></div>
+</div>
+<div class="result-card">
+<h4>Mean</h4>
+<div class="value" id="mean"></div>
+</div>
+<div class="result-card">
+<h4>Variance</h4>
+<div class="value" id="variance"></div>
+<div class="subtext" id="varianceFormula"></div>
+</div>
+<div class="result-card">
+<h4>Standard Deviation</h4>
+<div class="value" id="stdDev"></div>
+<div class="subtext" id="stdDevFormula"></div>
+</div>
+</div>
+<div style="margin-top: 30px; padding: 20px; background: #f0f4ff; border-radius: 8px;">
+<h4 style="color: var(--darker-color); margin-bottom: 10px;">Interpretation</h4>
+<p id="interpretation" style="color: var(--gray-color); line-height: 1.6;"></p>
+</div>
+</div>
+<div style="margin-top: 40px; padding-top: 40px; border-top: 1px solid #e2e8f0;">
+<h3 style="color: var(--darker-color); margin-bottom: 15px;">How to Use</h3>
+<ol style="color: var(--gray-color); line-height: 1.8;">
+<li>Enter your numerical data values separated by commas, spaces, or new lines</li>
+<li>Select whether your data represents a population or sample</li>
+<li>Click "Calculate" to see variance and standard deviation</li>
+</ol>
+<h3 style="color: var(--darker-color); margin-top: 30px; margin-bottom: 15px;">Understanding Variance &amp; Standard Deviation</h3>
+<p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 15px;">
+<strong>Variance</strong> measures how far data points are spread from the mean. It's calculated by averaging the squared differences from the mean.
+                </p>
+<p style="color: var(--gray-color); line-height: 1.8; margin-bottom: 15px;">
+<strong>Standard Deviation</strong> is the square root of variance and is in the same units as your data, making it easier to interpret.
+                </p>
+<ul style="color: var(--gray-color); line-height: 1.8;">
+<li><strong>Population:</strong> Use when you have data for the entire group (divide by n)</li>
+<li><strong>Sample:</strong> Use when you have data from a subset (divide by n-1)</li>
+<li>Lower values indicate data points are close to the mean</li>
+<li>Higher values indicate data points are spread out over a wider range</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<!-- Newsletter:start -->
+
+<!-- Newsletter:end -->
+
+
+<script>
+        function parseDataValues(input) {
+            return input
+                .split(/[\s,\n]+/)
+                .map(val => val.trim())
+                .filter(val => val !== '')
+                .map(val => parseFloat(val))
+                .filter(val => !isNaN(val));
+        }
+
+        function calculateMean(values) {
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function calculateVariance(values, isPopulation) {
+            const mean = calculateMean(values);
+            const squaredDiffs = values.map(val => Math.pow(val - mean, 2));
+            const sum = squaredDiffs.reduce((a, b) => a + b, 0);
+            const divisor = isPopulation ? values.length : values.length - 1;
+            return sum / divisor;
+        }
+
+        document.getElementById('varianceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('dataValues').value;
+            const values = parseDataValues(input);
+            
+            if (values.length === 0) {
+                alert('Please enter valid numerical data.');
+                return;
+            }
+            
+            if (values.length === 1) {
+                alert('Please enter at least 2 data points to calculate variance.');
+                return;
+            }
+            
+            const isPopulation = document.querySelector('input[name="dataType"]:checked').value === 'population';
+            const dataTypeText = isPopulation ? 'Population' : 'Sample';
+            
+            const count = values.length;
+            const mean = calculateMean(values);
+            const variance = calculateVariance(values, isPopulation);
+            const stdDev = Math.sqrt(variance);
+            
+            document.getElementById('count').textContent = count;
+            document.getElementById('mean').textContent = mean.toFixed(4);
+            document.getElementById('variance').textContent = variance.toFixed(4);
+            document.getElementById('stdDev').textContent = stdDev.toFixed(4);
+            
+            const divisor = isPopulation ? 'n' : 'n-1';
+            document.getElementById('varianceFormula').textContent = `σ² (${dataTypeText})`;
+            document.getElementById('stdDevFormula').textContent = `σ (${dataTypeText})`;
+            
+            // Interpretation
+            const cvPercent = (stdDev / Math.abs(mean) * 100).toFixed(2);
+            let interpretation = `Your data has a standard deviation of ${stdDev.toFixed(4)}. `;
+            
+            if (cvPercent < 15) {
+                interpretation += 'This indicates relatively low variability - your data points are fairly consistent and close to the mean.';
+            } else if (cvPercent < 30) {
+                interpretation += 'This indicates moderate variability in your dataset.';
+            } else {
+                interpretation += 'This indicates high variability - your data points are quite spread out from the mean.';
+            }
+            
+            interpretation += ` The coefficient of variation is ${cvPercent}%.`;
+            
+            document.getElementById('interpretation').textContent = interpretation;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    </script>
+<script>let lastSentHeight=0;function notifyHeight(){const height=Math.ceil(document.body.getBoundingClientRect().height);if(Math.abs(height-lastSentHeight)>2){lastSentHeight=height;parent.postMessage({type:'twd-tool-height',height},'*')}}window.addEventListener('load',notifyHeight);if(typeof ResizeObserver!=='undefined')new ResizeObserver(notifyHeight).observe(document.body);</script></body>
+</html>

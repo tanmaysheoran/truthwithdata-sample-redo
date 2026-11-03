@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A/B Testing Peeking: A 100,000-Test Simulation Case Study</title>
+    <meta name="description" content="100,000 simulated A/B tests: daily peeking turns a 5% false-winner rate into 25%. A sequential boundary keeps it at 5% and stops real winners sooner.">
+    <link rel="canonical" href="https://truthwithdata.com/case-studies/ab-testing-peeking-simulation.html">
+    <meta property="og:title" content="A/B Testing Peeking: A 100,000-Test Simulation Case Study">
+    <meta property="og:description" content="100,000 simulated A/B tests: daily peeking turns a 5% false-winner rate into 25%. A sequential boundary keeps it at 5% and stops real winners sooner.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://truthwithdata.com/case-studies/ab-testing-peeking-simulation.html">
+    <meta property="og:image" content="https://truthwithdata.com/case-studies/og/ab-testing-peeking-simulation.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="og:locale" content="en_GB">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A/B Testing Peeking: A 100,000-Test Simulation Case Study">
+    <meta name="twitter:description" content="100,000 simulated A/B tests: daily peeking turns a 5% false-winner rate into 25%. A sequential boundary keeps it at 5% and stops real winners sooner.">
+    <meta name="twitter:image" content="https://truthwithdata.com/case-studies/og/ab-testing-peeking-simulation.png">
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    <link rel="stylesheet" href="../css/case-studies.css?v=1.11">
+    <meta property="article:published_time" content="2026-11-01">
+    <meta property="article:modified_time" content="2026-11-01">
+    <meta property="article:author" content="https://truthwithdata.com/about.html">
+    <meta property="article:section" content="Case studies">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://truthwithdata.com/case-studies/ab-testing-peeking-simulation.html#article",
+      "headline": "Your A/B test “winner” may be noise: what 100,000 simulated tests show",
+      "description": "100,000 simulated A/B tests: daily peeking turns a 5% false-winner rate into 25%. A sequential boundary keeps it at 5% and stops real winners sooner.",
+      "image": "https://truthwithdata.com/case-studies/og/ab-testing-peeking-simulation.png",
+      "datePublished": "2026-11-01",
+      "dateModified": "2026-11-01",
+      "inLanguage": "en-GB",
+      "articleSection": "Case studies",
+      "keywords": "Experimentation, A/B testing, Monte Carlo simulation, Sequential testing, Statistics",
+      "mainEntityOfPage": "https://truthwithdata.com/case-studies/ab-testing-peeking-simulation.html",
+      "author": {
+        "@id": "https://truthwithdata.com/about.html#vishal-sharma"
+      },
+      "publisher": {
+        "@id": "https://truthwithdata.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://truthwithdata.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Case studies",
+          "item": "https://truthwithdata.com/case-studies.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "A/B testing: the peeking problem",
+          "item": "https://truthwithdata.com/case-studies/ab-testing-peeking-simulation.html"
+        }
+      ]
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://truthwithdata.com/#organization",
+      "name": "Truth with Data",
+      "url": "https://truthwithdata.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://truthwithdata.com/TWD_Logo.png"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://truthwithdata.com/about.html#vishal-sharma",
+      "name": "Vishal Sharma",
+      "url": "https://truthwithdata.com/about.html"
+    }
+  ]
+}
+    </script>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/blog'>Blog</a></li>
+                <li><a class='nav-link active' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="cs-hero">
+        <div class="cs-hero-inner">
+            <nav class="cs-crumbs" aria-label="Breadcrumb"><a href='/'>Home</a> &rsaquo; <a href='/case-studies'>Case studies</a> &rsaquo; A/B testing: the peeking problem</nav>
+            <div class="cs-eyebrow"><i class="fas fa-flask-vial"></i> Case study &middot; Experimentation · Monte Carlo</div>
+            <h1>Your A/B test &ldquo;winner&rdquo; may be noise: what 100,000 simulated tests show</h1>
+            <p class="cs-dek">Checking an experiment every day and stopping at the first significant result feels efficient. We simulated 100,000 experiments and read each one under six stopping plans to measure what it costs, then tested the fix.</p>
+            <div class="cs-chips"><span class="cs-chip">Experimentation</span><span class="cs-chip">A/B testing</span><span class="cs-chip">Monte Carlo simulation</span><span class="cs-chip">Sequential testing</span><span class="cs-chip">Statistics</span></div>
+            <div class="cs-hero-meta"><span><i class="fas fa-flask"></i>Independent project on public data</span><span><i class="fas fa-code"></i>Code and data published</span><span><i class="far fa-calendar"></i>Updated 1 November 2026</span></div>
+        </div>
+    </header>
+
+    <section class="cs-metrics" aria-label="Key results">
+            <div class="cs-metric is-warn"><div class="cs-metric-value">24.6%</div><div class="cs-metric-label">of no-difference tests declare a winner when checked daily, five times the 5% promised</div></div>
+            <div class="cs-metric"><div class="cs-metric-value">5.0%</div><div class="cs-metric-label">with a sequential boundary, even when looking every day</div></div>
+            <div class="cs-metric"><div class="cs-metric-value">&minus;2<small>pts</small></div><div class="cs-metric-label">power cost of the fix: 59% vs 61% for a real 10% lift</div></div>
+            <div class="cs-metric"><div class="cs-metric-value">3.2<small>days</small></div><div class="cs-metric-label">sooner, on average, to stop a test with a real 10% lift</div></div>
+    </section>
+
+    <main class="cs-layout">
+        <aside class="cs-glance" aria-label="At a glance">
+            <h2>At a glance</h2>
+            <dl>
+                    <dt>Question</dt><dd>How often does checking an A/B test early produce a false winner, and what fixes it?</dd>
+                    <dt>Data</dt><dd>Simulated experiments: 1,000 visitors per arm per day for 20 days, 5% baseline conversion, 50,000 tests per plan</dd>
+                    <dt>Methods</dt><dd>Monte Carlo simulation, two-proportion z-tests, Pocock and O'Brien-Fleming boundaries calibrated by simulation</dd>
+                    <dt>Built with</dt><dd>Python, NumPy, SciPy, pandas, matplotlib</dd>
+                    <dt>Deliverables</dt><dd>A simulation report, two charts, reusable code and a <a href='/tools/sample-size-calculator'>sample size calculator</a></dd>
+            </dl>
+            <a href="https://calendly.com/truthwithdata/30min" class="btn btn-primary cs-glance-cta" rel="noopener">Discuss a similar project</a>
+            <nav class="cs-toc" aria-label="On this page">
+                    <a href="#question">The question</a>
+                    <a href="#approach">The approach</a>
+                    <a href="#findings">What we found</a>
+                    <a href="#business">What it means for your team</a>
+                    <a href="#limits">Limits</a>
+                    <a href="#engagement">How we would do this for you</a>
+                    <a href="#reproduce">Reproduce it</a>
+            </nav>
+        </aside>
+
+        <article class="cs-body">
+
+            <section class="cs-section" id="question">
+                <h2><span class="cs-num">01</span>The question</h2>
+                <p class="cs-lede">A p-value threshold of 0.05 promises that, if a change does nothing, you will wrongly call it a winner only 5% of the time. That promise holds only if you look once, at the sample size you planned.</p>
+                <p>In practice dashboards update live, stakeholders ask for early reads, and tests get stopped the moment they hit significance. We wanted to put a number on what that habit costs, and show a fix that still lets teams look whenever they like.</p>
+            </section>
+
+            <section class="cs-section" id="approach">
+                <h2><span class="cs-num">02</span>The approach</h2>
+                <ol class="cs-steps">
+                    <li><h3>Simulate tests where nothing changed</h3><p>A/A tests: both versions convert at exactly 5%, 1,000 visitors each per day for 20 days. Any &ldquo;winner&rdquo; is a false one.</p></li>
+                    <li><h3>Simulate tests where something did</h3><p>A/B tests with a real 10% relative lift (5.0% to 5.5%), to measure power and how quickly each plan calls a true winner.</p></li>
+                    <li><h3>Compare six stopping plans</h3><p>Look once at day 20, weekly, every two days, daily, and daily with two sequential boundaries. The same 50,000 A/A and 50,000 A/B tests are read under every plan.</p></li>
+                    <li><h3>Calibrate the fix by simulation</h3><p>We tuned Pocock (the same bar at every look) and O'Brien-Fleming (strict early, relaxed late) boundaries so exactly 5% of A/A tests ever cross them in 20 daily looks.</p></li>
+                </ol>
+            </section>
+
+            <section class="cs-section" id="findings">
+                <h2><span class="cs-num">03</span>What we found</h2>
+                <figure class="cs-figure">
+                    <img src="charts/ab-test-peeking-false-winners-by-plan.svg" alt="Bar chart of false-winner rates: once at day 20 4.9%, weekly 10.4%, every 2 days 19.2%, daily 24.6%, daily with O'Brien-Fleming boundary 5.0%, daily with Pocock boundary 5.0%." loading="lazy" width="828" height="432">
+                    <figcaption><strong>Figure 1.</strong> Looking weekly doubles the false-winner rate; looking daily multiplies it by five. Both sequential boundaries bring it back to 5% while still allowing a look every day.</figcaption>
+                </figure>
+                <figure class="cs-figure">
+                    <img src="charts/ab-test-peeking-sequential-boundaries.svg" alt="Line chart of three simulated A/A tests against three stopping boundaries. One test crosses z = 1.96 on day 3 and fades by day 20; it stays below the O'Brien-Fleming and Pocock boundaries." loading="lazy" width="828" height="432">
+                    <figcaption><strong>Figure 2.</strong> Why it happens. Random noise wanders above the 1.96 line early in a test, when samples are small, then fades. A sequential boundary sets a higher bar early on, when noise is loudest.</figcaption>
+                </figure>
+                <div class="cs-table-wrap">
+                    <table class="cs-table">
+                        <thead><tr><th>Plan</th><th>False winners</th><th>Power (real 10% lift)</th><th>Average days to stop</th></tr></thead>
+                        <tbody>
+                            <tr><td>Look once at day 20</td><td>4.9%</td><td>61%</td><td>20.0</td></tr>
+                            <tr><td>Look daily, stop at p &lt; 0.05</td><td>24.6%</td><td>74%</td><td>11.0</td></tr>
+                            <tr class="is-best"><td>Daily with O'Brien-Fleming boundary</td><td>5.0%</td><td>59%</td><td>16.8</td></tr>
+                            <tr><td>Daily with Pocock boundary</td><td>5.0%</td><td>46%</td><td>15.8</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>Daily peeking looks more &ldquo;powerful&rdquo; only because it calls more of everything, including five times as many false winners. The O'Brien-Fleming boundary keeps the error rate honest, gives up just two points of power, and stops tests with a real effect 3.2 days sooner on average.</p>
+                <p class="cs-takeaway">You can look at your experiments every day. You just need a stopping rule designed for it.</p>
+            </section>
+
+            <section class="cs-section" id="business">
+                <h2><span class="cs-num">04</span>What it means for your team</h2>
+                <div class="cs-value-grid">
+                    <div class="cs-value"><i class="fas fa-bug"></i><h3>Fewer phantom wins</h3><p>A team running 40 tests a year in which nothing really works would ship about 10 false winners with daily peeking, and about 2 with a sequential boundary.</p></div>
+                    <div class="cs-value"><i class="fas fa-gauge-high"></i><h3>Faster real decisions</h3><p>Real winners are called days earlier on average, so traffic moves on to the next idea sooner.</p></div>
+                    <div class="cs-value"><i class="fas fa-handshake"></i><h3>Results people trust</h3><p>When product, marketing and finance agree on the stopping rule up front, nobody argues about early reads.</p></div>
+                    <div class="cs-value"><i class="fas fa-magnifying-glass"></i><h3>Audit the past</h3><p>Re-analysing completed tests with the right boundary shows which past "wins" were probably noise.</p></div>
+                </div>
+            </section>
+
+            <section class="cs-section" id="limits">
+                <h2><span class="cs-num">05</span>Limits</h2>
+                <div class="cs-callout is-limits">
+                    <h3><i class="fas fa-triangle-exclamation"></i> Simplifications</h3>
+                    <ul>
+                        <li>Traffic and conversion are constant from day to day. Real tests have weekday cycles and novelty effects, which make early looks even less reliable.</li>
+                        <li>One metric and two arms. Several metrics or variants raise the false-winner rate further unless corrected.</li>
+                        <li>The exact numbers depend on traffic, baseline rate and lift; the code lets you rerun them for yours.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="cs-section" id="engagement">
+                <h2><span class="cs-num">06</span>How we would do this for you</h2>
+                <div class="cs-engage">
+                    <div class="cs-engage-step"><div class="cs-when">Week 1</div><h3>Audit</h3><p>Review how tests are designed, monitored and stopped, and re-analyse a sample of past results.</p></div>
+                    <div class="cs-engage-step"><div class="cs-when">Week 2</div><h3>Design</h3><p>Sample sizes, a sequential stopping rule calibrated to your traffic, and guardrail metrics.</p></div>
+                    <div class="cs-engage-step"><div class="cs-when">Week 3</div><h3>Embed</h3><p>A test-readout template or dashboard that applies the rule automatically, and a session with your team.</p></div>
+                </div>
+            </section>
+
+            <section class="cs-section" id="reproduce">
+                <h2><span class="cs-num">07</span>Reproduce it</h2>
+                <p>The simulation runs in about three seconds and takes your own traffic, baseline and lift as parameters.</p>
+                <div class="cs-stack"><span>Python 3</span><span>NumPy</span><span>SciPy</span><span>pandas</span><span>matplotlib</span></div>
+                <div class="cs-links">
+                    <a class='btn btn-primary' href='/tools/sample-size-calculator'><i class="fas fa-calculator"></i>Sample size calculator</a>
+                    <a class='btn btn-secondary' href='/blog/statistical-significance-ab-testing'><i class="fas fa-newspaper"></i>A/B testing guide</a>
+                    <a class="btn btn-outline" href="https://github.com/truthwithdata/analysis/tree/main/ab-testing-peeking" rel="noopener"><i class="fab fa-github"></i>Code on GitHub</a>
+                </div>
+            </section>
+
+            <p class="cs-disclosure"><i class="fas fa-circle-info"></i><span>This is an independent project built on public data to show how we work. It is not client work, and no client data was used. Figures are reproducible from the published code.</span></p>
+        </article>
+    </main>
+
+    <section class="cs-cta" aria-labelledby="cta-title">
+        <div class="cs-cta-inner">
+            <div>
+                <h2 id="cta-title">Running experiments and not sure you can trust the winners?</h2>
+                <p>We audit testing programmes, set sample sizes and stopping rules, and re-analyse past tests to find the winners that were noise.</p>
+            </div>
+            <div class="cs-cta-actions">
+                <a href="https://calendly.com/truthwithdata/30min" class="btn btn-light" rel="noopener"><i class="fas fa-calendar-check"></i>&nbsp; Book a free 30-minute call</a>
+                <a class='btn btn-ghost' href='/#contact'>Send a message</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cs-more" aria-labelledby="more-title">
+        <h2 id="more-title">More case studies</h2>
+        <div class="cs-grid">
+                <a class='cs-card' href='/case-studies/detecting-ai-written-reviews'>
+                    <div class="cs-card-top">
+                        <div class="cs-card-kicker">Machine learning · NLP</div>
+                        <div class="cs-card-metric"><strong>1%</strong><span>of today's AI reviews caught by a detector trained on 2019's fakes</span></div>
+                    </div>
+                    <div class="cs-card-body">
+                        <h3>Can a model spot an AI-written review?</h3>
+                        <p>A detector that catches 86% of AI reviews while wrongly flagging 1% of genuine ones, the blind spot that makes older detectors useless, and a live demo you can try.</p>
+                        <div class="cs-card-tags"><span>Machine learning</span><span>NLP</span><span>Trust and safety</span><span>Model evaluation</span><span>Explainable AI</span></div>
+                        <span class="cs-card-link">Read the case study<i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+                <a class='cs-card' href='/case-studies/rent-vs-buy-decision-model'>
+                    <div class="cs-card-top">
+                        <div class="cs-card-kicker">Simulation · Financial modelling</div>
+                        <div class="cs-card-metric"><strong>1.4&ndash;30+</strong><span>years for buying to beat renting, depending on place and prices</span></div>
+                    </div>
+                    <div class="cs-card-body">
+                        <h3>Is renting really &ldquo;dead money&rdquo;? A decision model tested against 21 years of history</h3>
+                        <p>A month-by-month simulation of a six-figure decision, a 2005&ndash;2026 backtest, sensitivity to rates and prices, and a calculator anyone can use.</p>
+                        <div class="cs-card-tags"><span>Simulation</span><span>Financial modelling</span><span>Backtesting</span><span>Sensitivity analysis</span><span>Python and R</span></div>
+                        <span class="cs-card-link">Read the case study<i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </a>
+        </div>
+    </section>
+
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+</body>
+</html>

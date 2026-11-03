@@ -1,0 +1,11 @@
+{
+  "name": "truthwithdata-sample-redo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A contemporary editorial redesign for Truth with Data.",
+  "scripts": {
+    "dev": "python3 -m http.server 8080 --bind 127.0.0.1",
+    "test": "node --check grainient.js && node --check currency.js && node --check app.js && node --check article-content.js && node scripts/verify.cjs && node scripts/verify-background.cjs && node scripts/verify-currency.cjs",
+    "build": "node scripts/build.cjs"
+  }
+}

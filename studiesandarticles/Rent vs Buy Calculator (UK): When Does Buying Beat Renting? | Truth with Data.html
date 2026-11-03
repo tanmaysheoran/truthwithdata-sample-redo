@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free UK rent vs buy calculator: break-even year, net wealth over time and a plain-English verdict, pre-filled with July 2026 average prices and rents for every region. Includes stamp duty, LBTT and LTT. Runs in your browser.">
+    <meta name="keywords" content="rent vs buy calculator UK, is it better to rent or buy, rent or buy break even calculator, renting dead money calculator, stamp duty first time buyer calculator">
+    <meta name="author" content="Truth with Data">
+    <meta property="og:title" content="Rent vs Buy Calculator (UK) | Truth with Data">
+    <meta property="og:description" content="When does buying beat renting where you live? Regional presets from official July 2026 data, every assumption editable.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://truthwithdata.com/tools/rent-vs-buy-calculator.html">
+    <meta property="og:image" content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png">
+    <link rel="canonical" href="https://truthwithdata.com/tools/rent-vs-buy-calculator.html">
+    <title>Rent vs Buy Calculator (UK): When Does Buying Beat Renting? | Truth with Data</title>
+
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/tools.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+    <link rel="stylesheet" href="../css/reports.css?v=1.11">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "dateModified": "2026-10-23",
+      "name": "Rent vs Buy Calculator (UK)",
+      "url": "https://truthwithdata.com/tools/rent-vs-buy-calculator.html",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires JavaScript",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP"},
+      "description": "Compare the full cost of buying and renting the same home in any UK region: break-even year, net wealth over 30 years and a plain-English verdict. Presets from HM Land Registry, ONS and Bank of England data.",
+      "author": {"@type": "Organization", "name": "Truth with Data", "url": "https://truthwithdata.com"},
+      "isBasedOn": "https://truthwithdata.com/blog/is-renting-dead-money-uk.html"
+    }
+    </script>
+
+    <style>
+        .tool-page { padding-top: 100px; min-height: 100vh; }
+        .tool-hero { background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%); padding: 60px 20px 50px; text-align: center; position: relative; overflow: hidden; }
+        .tool-hero::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%); }
+        .tool-hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+        .tool-hero h1 { font-size: 2.6rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2;
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .tool-hero p { font-size: 1.15rem; color: var(--gray-color); line-height: 1.6; }
+        .tool-body { max-width: 960px; margin: 0 auto; padding: 50px 20px 60px; }
+        .tool-panel { background: white; border-radius: 12px; padding: 30px; box-shadow: var(--shadow-md); margin-bottom: 30px; }
+        .tool-panel h2 { font-size: 1.25rem; color: var(--darker-color); margin-bottom: 4px; }
+        .panel-sub { color: var(--gray-color); font-size: 0.92rem; margin-bottom: 18px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px 22px; }
+        .form-grid .tool-input-group { margin-bottom: 14px; }
+        .tool-input-group .hint { display: block; font-size: 0.8rem; color: var(--gray-color); margin-top: 5px; line-height: 1.45; }
+        .tool-input-group input.invalid { border-color: var(--error-color); }
+        .check-row { display: flex; gap: 10px; align-items: center; margin-top: 30px; font-weight: 600; color: var(--dark-color); }
+        .check-row input { width: 18px; height: 18px; }
+        details.advanced { margin-top: 10px; border-top: 1px solid #e2e8f0; padding-top: 14px; }
+        details.advanced summary { cursor: pointer; font-weight: 600; color: var(--primary-color); margin-bottom: 14px; }
+        .preset-note { font-size: 0.85rem; color: var(--gray-color); background: var(--light-color); border-radius: 8px; padding: 10px 14px; margin: 4px 0 18px; }
+        .error-text { color: var(--error-color); font-weight: 600; margin: 10px 0; display: none; }
+        #results { display: none; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 6px 0 22px; }
+        .metric { background: var(--light-color); border-radius: 10px; padding: 18px; border-left: 4px solid var(--primary-color); }
+        .metric .m-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-color); font-weight: 600; }
+        .metric .m-value { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); margin: 6px 0 2px; line-height: 1.1; }
+        .metric .m-sub { font-size: 0.85rem; color: var(--gray-color); }
+        .metric.neutral { border-left-color: #94a3b8; }
+        .metric.neutral .m-value { color: var(--dark-color); }
+        .verdict-box { border-radius: 10px; padding: 20px 22px; margin: 10px 0 24px; border-left: 4px solid; }
+        .verdict-box h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .verdict-box p { margin: 0; line-height: 1.6; }
+        .verdict-box.v-buy { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #2563eb; color: #1e3a8a; }
+        .verdict-box.v-rent { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color: #d97706; color: #78350f; }
+        .chart-wrap svg { width: 100%; height: auto; font-family: Inter, 'Segoe UI', Arial, sans-serif; }
+        .legend { display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.88rem; color: var(--dark-color); margin: 4px 0 8px; }
+        .legend span::before { content: ''; display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; }
+        .legend .lb::before { background: #2563eb; } .legend .lr::before { background: #d97706; }
+        .fine-print { font-size: 0.85rem; color: var(--gray-color); line-height: 1.6; }
+        .info-box { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #2563eb; padding: 20px; margin: 25px 0; border-radius: 8px; }
+        .info-box h4 { margin: 0 0 10px 0; color: #1e40af; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .info-box p, .info-box li { color: #1e3a8a; line-height: 1.6; }
+        .info-box p { margin: 0 0 10px; }
+        .info-box ul { margin: 0; padding-left: 20px; }
+        .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 20px; margin: 25px 0; border-radius: 8px; }
+        .warning-box h4 { margin: 0 0 10px 0; color: #92400e; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .warning-box p { margin: 0; color: #78350f; line-height: 1.6; }
+        .article-cta { text-align: center; margin: 24px 0 6px; }
+        .affiliate-slot { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 18px 20px; margin: 25px 0; color: var(--gray-color); font-size: 0.92rem; }
+        .floating-back-button { position: fixed; bottom: 30px; left: 30px; width: 56px; height: 56px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white; border: none; border-radius: 50%; font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-xl); z-index: 999; display: flex; align-items: center; justify-content: center; }
+        @media (max-width: 768px) {
+            .tool-hero h1 { font-size: 1.9rem; }
+            .tool-panel { padding: 20px; }
+            .floating-back-button { width: 50px; height: 50px; bottom: 20px; left: 20px; font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo"><a href='/'><img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo"></a></div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link' href='/blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link active' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <div class="tool-page">
+        <button onclick="window.history.back()" class="floating-back-button" title="Go Back"><i class="fas fa-arrow-left"></i></button>
+
+        <section class="tool-hero">
+            <div class="tool-hero-content">
+                <h1>Rent vs Buy Calculator (UK)</h1>
+                <p>When does buying a home beat renting the same home and investing the difference? Pick your region for official average prices and rents, change anything you like, and see the break-even year. Everything runs in your browser; nothing you type is sent anywhere.</p>
+            </div>
+        </section>
+
+        <div class="tool-body">
+            <div class="warning-box" style="margin-top:0">
+                <h4><i class="fas fa-scale-balanced"></i> For information only, not financial advice</h4>
+                <p>This calculator compares two simplified scenarios using the assumptions you enter. It does not know your income, credit record, tax position or what a lender will offer you, and nobody knows future house prices, rents or interest rates. Speak to a regulated mortgage adviser or financial adviser before making a decision.</p>
+            </div>
+
+            <form class="tool-panel" id="rvbForm" novalidate>
+                <h2>1. The home</h2>
+                <p class="panel-sub">Presets are the average price (HM Land Registry, July 2026) and average monthly private rent (ONS, July 2026) for the region and property type.</p>
+                <div class="form-grid">
+                    <div class="tool-input-group">
+                        <label for="region">Region</label>
+                        <select id="region"></select>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="ptype">Property type</label>
+                        <select id="ptype">
+                            <option value="all">All property types</option>
+                            <option value="terraced">Terraced house</option>
+                            <option value="semi">Semi-detached house</option>
+                            <option value="detached">Detached house</option>
+                            <option value="flat">Flat or maisonette</option>
+                        </select>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="price">Property price (£)</label>
+                        <input type="number" id="price" min="20000" step="1000" inputmode="numeric">
+                        <span class="hint">What you would pay to buy the home.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="rent">Monthly rent for the same home (£)</label>
+                        <input type="number" id="rent" min="100" step="10" inputmode="numeric">
+                        <span class="hint">What it would cost to rent a comparable home. This, relative to the price, drives the result.</span>
+                    </div>
+                </div>
+                <div class="preset-note" id="presetNote"></div>
+
+                <h2>2. The mortgage</h2>
+                <p class="panel-sub">Default rates are the Bank of England's average quoted 2-year fixed rates for September 2026.</p>
+                <div class="form-grid">
+                    <div class="tool-input-group">
+                        <label for="depositPct">Deposit (% of price)</label>
+                        <input type="number" id="depositPct" value="10" min="0" max="100" step="1">
+                        <span class="hint">The renter invests this sum instead. Rate default switches to the 75% LTV rate at 25% or more.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="rate">Mortgage rate (% a year)</label>
+                        <input type="number" id="rate" min="0" max="20" step="0.01">
+                        <span class="hint">Applied for the whole period; a product fee is charged each time you re-fix (every 2 years).</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="term">Mortgage term (years)</label>
+                        <input type="number" id="term" min="5" max="40" step="1">
+                        <span class="hint">Capital repayment mortgage. Repayments build equity, so they are not counted as a cost.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="nation">Tax rules</label>
+                        <select id="nation">
+                            <option value="england">England: Stamp Duty Land Tax</option>
+                            <option value="ni">Northern Ireland: Stamp Duty Land Tax</option>
+                            <option value="scotland">Scotland: LBTT</option>
+                            <option value="wales">Wales: Land Transaction Tax</option>
+                        </select>
+                        <label class="check-row" style="margin-top:10px"><input type="checkbox" id="ftb" checked> First-time buyer</label>
+                        <span class="hint">Rates in force October 2026. Wales has no first-time buyer relief.</span>
+                    </div>
+                </div>
+
+                <h2>3. The future</h2>
+                <p class="panel-sub">Defaults are England's average over July 2005 to July 2026. These three inputs matter most; try changing them.</p>
+                <div class="form-grid">
+                    <div class="tool-input-group">
+                        <label for="years">Years you expect to stay</label>
+                        <input type="number" id="years" value="5" min="1" max="30" step="1">
+                        <span class="hint">You sell (or stop renting) after this many years.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="priceGrowth">House-price growth (% a year)</label>
+                        <input type="number" id="priceGrowth" min="-10" max="15" step="0.1">
+                        <span class="hint">The single most important assumption. 2005-26 average: 3.0%.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="rentGrowth">Rent growth (% a year)</label>
+                        <input type="number" id="rentGrowth" min="-10" max="15" step="0.1">
+                        <span class="hint">Rent is reset once a year. 2005-26 average: 3.0%.</span>
+                    </div>
+                    <div class="tool-input-group">
+                        <label for="ret">Investment return (% a year)</label>
+                        <input type="number" id="ret" min="-5" max="15" step="0.1">
+                        <span class="hint">What the renter earns on the deposit and monthly savings, tax-free in an ISA. 5% is the FCA's intermediate projection rate.</span>
+                    </div>
+                </div>
+
+                <details class="advanced">
+                    <summary>Running costs and fees (pre-filled, editable)</summary>
+                    <div class="form-grid">
+                        <div class="tool-input-group">
+                            <label for="maintPct">Maintenance (% of value a year)</label>
+                            <input type="number" id="maintPct" min="0" max="5" step="0.1">
+                            <span class="hint">1% is a common rule of thumb for houses; 0.5% for flats, where the service charge covers communal repairs.</span>
+                        </div>
+                        <div class="tool-input-group">
+                            <label for="runningCosts">Insurance and service charge (£ a year)</label>
+                            <input type="number" id="runningCosts" min="0" step="10">
+                            <span class="hint">Houses: buildings insurance (ABI average £306). Flats: service charge (Hamptons: £2,405; London £2,801). Grows 2% a year.</span>
+                        </div>
+                        <div class="tool-input-group">
+                            <label for="buyFees">Buying fees (£)</label>
+                            <input type="number" id="buyFees" min="0" step="10">
+                            <span class="hint">Conveyancing plus mortgage product fee. Stamp duty and a survey are added automatically.</span>
+                        </div>
+                        <div class="tool-input-group">
+                            <label for="sellPct">Estate agent fee when selling (%)</label>
+                            <input type="number" id="sellPct" min="0" max="10" step="0.01">
+                            <span class="hint">Including VAT. HomeOwners Alliance 2026 average: 1.42%.</span>
+                        </div>
+                        <div class="tool-input-group">
+                            <label for="sellFixed">Legal fees when selling (£)</label>
+                            <input type="number" id="sellFixed" min="0" step="10">
+                        </div>
+                    </div>
+                </details>
+
+                <div id="formError" class="error-text" role="alert"></div>
+                <button type="submit" class="tool-button" id="calcBtn"><i class="fas fa-calculator"></i> Compare renting and buying</button>
+            </form>
+
+            <div id="results" class="tool-panel" aria-live="polite">
+                <div class="metric-grid">
+                    <div class="metric"><div class="m-label">Break-even</div><div class="m-value" id="rBreakeven"></div><div class="m-sub" id="rBreakevenSub"></div></div>
+                    <div class="metric neutral"><div class="m-label">When you move</div><div class="m-value" id="rGap"></div><div class="m-sub" id="rGapSub"></div></div>
+                    <div class="metric neutral"><div class="m-label">Cash needed up front</div><div class="m-value" id="rUpfront"></div><div class="m-sub" id="rUpfrontSub"></div></div>
+                </div>
+                <div id="verdict" class="verdict-box"><h3 id="verdictTitle"></h3><p id="verdictText"></p></div>
+                <h3 style="font-size:1.05rem;color:var(--darker-color);margin-bottom:4px">Net wealth over 30 years</h3>
+                <div class="legend"><span class="lb">Buyer: home value minus mortgage and selling costs, plus savings</span><span class="lr">Renter: investments</span></div>
+                <div class="chart-wrap" id="chart"></div>
+                <p class="fine-print">Amounts are in future pounds (not adjusted for inflation). The dot marks break-even. Both households spend the same amount each month: whoever's housing costs less invests the difference.</p>
+                <div class="article-cta">
+                    <a class='btn btn-primary' href='/blog/is-renting-dead-money-uk'><i class="fas fa-book-open"></i> Read the analysis: is renting really dead money?</a>
+                    <a href="#report" class="btn btn-secondary"><i class="fas fa-file-pdf"></i> Get your full PDF report</a>
+                </div>
+            </div>
+
+            <!-- Personalised PDF report (paid): built by js/rent-vs-buy-report.js, typeset by netlify/functions/report.mjs -->
+            <div id="report"></div>
+
+            <!-- AFFILIATE PLACEHOLDER (calculator): e.g. mortgage broker or ISA platform. Keep the disclosure line visible when filled in. -->
+            <div class="affiliate-slot" id="affiliate-slot-calculator">
+                <p><strong>Affiliate placeholder</strong> &mdash; partner link to be added.</p>
+                <p class="fine-print" style="margin:6px 0 0"><em>Disclosure: some links on this page may be affiliate links. If you use them we may earn a commission, at no extra cost to you. It never affects our analysis or the calculator's results.</em></p>
+            </div>
+            <!-- END AFFILIATE PLACEHOLDER -->
+
+            <div class="info-box">
+                <h4><i class="fas fa-circle-info"></i> How the calculator works</h4>
+                <p>Two households want the same home. The <strong>buyer</strong> pays a deposit, stamp duty (or LBTT/LTT), conveyancing, a survey and a mortgage product fee, then pays the mortgage, maintenance, insurance (or a service charge for a flat) and a new product fee every two years. The <strong>renter</strong> pays rent and invests the deposit and the buyer's upfront costs. Each month, whichever household has the lower housing bill invests the difference, so both have spent exactly the same.</p>
+                <p>When the buyer sells, they pay an estate agent and solicitor. The break-even year is the first month in which the buyer's net wealth (home value, minus the mortgage still owed, minus selling costs, plus any savings) is at least the renter's.</p>
+                <ul>
+                    <li>Capital repayments are not a cost: they come back as equity when you sell.</li>
+                    <li>Mortgage interest, maintenance, insurance, fees and stamp duty are just as unrecoverable as rent. Only house-price growth offsets them.</li>
+                    <li>Investment growth is assumed tax-free (an ISA). Gains on your main home are free of capital gains tax.</li>
+                    <li>The rate stays fixed at the level you enter. In reality you re-fix at whatever the market offers.</li>
+                </ul>
+            </div>
+
+            <!-- ADSENSE: tool page unit -->
+            <!-- <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX" data-ad-format="auto" data-full-width-responsive="true"></ins> -->
+            <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+            <!-- END ADSENSE -->
+
+            <p class="fine-print" style="text-align:center">Data: HM Land Registry UK House Price Index (July 2026); ONS Price Index of Private Rents (21 October 2026 release); Bank of England quoted household interest rates (September 2026); HMRC, Revenue Scotland and Welsh Revenue Authority tax rates. Contains public sector information licensed under the Open Government Licence v3.0. Full methodology, code and data are in <a href='/blog/is-renting-dead-money-uk'>the article</a>.</p>
+        </div>
+    </div>
+
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js?v=1.11"></script>
+    <script src="../js/rent-vs-buy-data.js?v=1.11"></script>
+    <script src="../js/rent-vs-buy-model.js?v=1.11"></script>
+    <script src="../js/rent-vs-buy-calculator.js?v=1.11"></script>
+    <script src="../js/config.js?v=1.11"></script>
+    <script src="../js/currency.js?v=1.11"></script>
+    <script src="../js/report-download.js?v=1.11"></script>
+    <script src="../js/rent-vs-buy-report.js?v=1.11"></script>
+</body>
+</html>

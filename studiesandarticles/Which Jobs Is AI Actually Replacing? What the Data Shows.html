@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="We matched AI exposure scores to US employment for 722 occupations. Exposure explains about 1% of job changes 2019-2025; only a few roles show real losses.">
+    <meta name="keywords" content="which jobs is AI actually replacing, AI job displacement data by occupation, AI exposure score by job, is AI causing job losses evidence, AI replacing jobs statistics, Anthropic Economic Index, BLS OEWS">
+    <meta name="author" content="Vishal Sharma">
+    <meta property="og:title" content="Which Jobs Is AI Actually Replacing? What the Data Shows">
+    <meta property="og:description" content="722 occupations, six years of US employment data, one placebo test. AI exposure explains about 1% of the change in jobs. Here is where displacement is real and where it isn't.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing.html">
+    <meta property="og:image" content="https://truthwithdata.com/blog/charts/ai-jobs-og-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Which jobs is AI actually replacing? AI exposure vs employment change across 722 US occupations.">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="article:published_time" content="2026-09-17">
+    <meta property="article:section" content="Data Journalism">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Which Jobs Is AI Actually Replacing? What the Data Shows">
+    <meta name="twitter:description" content="AI exposure explains about 1% of the change in US employment across 722 occupations, 2019-2025. Original analysis with data, code and a lookup tool.">
+    <meta name="twitter:image" content="https://truthwithdata.com/blog/charts/ai-jobs-og-1200x630.png">
+    <link rel="canonical" href="https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing.html">
+    <title>Which Jobs Is AI Actually Replacing? What the Data Shows</title>
+
+    <!-- Fonts -->
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/blog.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Article",
+          "@id": "https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing.html#article",
+          "headline": "Which Jobs Is AI Actually Replacing? What the Data Shows",
+          "alternativeHeadline": "AI exposure explains about 1% of the change in US employment across 722 occupations, 2019-2025",
+          "description": "Original analysis matching Anthropic Economic Index AI exposure scores to BLS employment for 722 US occupations, with controls, a pre-ChatGPT placebo test and a UK supplement.",
+          "image": ["https://truthwithdata.com/blog/charts/ai-jobs-og-1200x630.png", "https://truthwithdata.com/blog/charts/ai-exposure-vs-employment-change-scatter-2019-2025.svg"],
+          "author": {"@type": "Person", "@id": "https://truthwithdata.com/about.html#vishal-sharma", "name": "Vishal Sharma", "url": "https://truthwithdata.com/about.html"},
+          "publisher": {"@type": "Organization", "name": "Truth with Data", "logo": {"@type": "ImageObject", "url": "https://truthwithdata.com/TWD_Logo.png"}},
+          "datePublished": "2026-09-17",
+          "dateModified": "2026-09-17",
+          "mainEntityOfPage": "https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing.html",
+          "keywords": ["which jobs is AI actually replacing", "AI job displacement data by occupation", "AI exposure score by job", "is AI causing job losses evidence"],
+          "isBasedOn": ["https://huggingface.co/datasets/Anthropic/EconomicIndex", "https://www.bls.gov/oes/", "https://github.com/AIOE-Data/AIOE", "https://github.com/jdingel/DingelNeiman-workathome"],
+          "about": [{"@type": "Thing", "name": "Artificial intelligence and employment"}, {"@type": "Thing", "name": "Labour economics"}]
+        },
+        {
+          "@type": "Dataset",
+          "@id": "https://truthwithdata.com/data/ai-exposure-employment-change-by-occupation.csv",
+          "name": "AI exposure and employment change by US occupation, 2015-2025",
+          "description": "787 harmonised US occupations (SOC 2018) with Anthropic Economic Index observed AI exposure, Felten AIOE, Dingel-Neiman teleworkability, BLS OEWS employment for May 2019 and May 2025, the 2015-2019 pre-trend, and median wages.",
+          "url": "https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing.html",
+          "license": "https://creativecommons.org/licenses/by/4.0/",
+          "creator": {"@type": "Organization", "name": "Truth with Data"},
+          "temporalCoverage": "2015-05/2025-05",
+          "spatialCoverage": "United States",
+          "keywords": ["AI exposure", "occupational employment", "BLS OEWS", "Anthropic Economic Index"],
+          "distribution": [
+            {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://truthwithdata.com/data/ai-exposure-employment-change-by-occupation.csv"},
+            {"@type": "DataDownload", "encodingFormat": "text/csv", "contentUrl": "https://truthwithdata.com/data/ai-exposure-employment-change-2015-2019-2025-coarse.csv"}
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {"@type": "Question", "name": "Which jobs are most likely to be replaced by AI?",
+             "acceptedAnswer": {"@type": "Answer", "text": "On Anthropic's observed-exposure measure the most exposed US occupations are computer programmers (75% of tasks show LLM use), customer service representatives (70%), data entry keyers (67%), medical records specialists and market research analysts (65%). But exposure is not replacement: market research analysts grew 33% between 2019 and 2025 and software developers grew 33%, while computer programmers fell 54% (they were already down 31% before ChatGPT)."}},
+            {"@type": "Question", "name": "Is AI actually causing job losses right now?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Not measurably at the level of whole occupations, as of May 2025. Across 722 US occupations the correlation between AI exposure and employment change from 2019 to 2025 is r = 0.01 (p = 0.79), and the same relationship existed before ChatGPT. The one robust signal is a small slowdown in growth among smaller, exposed clerical and support occupations."}},
+            {"@type": "Question", "name": "How many jobs has AI replaced so far?",
+             "acceptedAnswer": {"@type": "Answer", "text": "There is no reliable count. Occupations with high AI exposure (score of 0.30 or more) employed 28.2 million Americans in 2019 and 28.6 million in 2025, a 1.2% rise, versus 5.9% growth for all occupations. The gap is about 1.3 million jobs, but occupations with zero exposure under-performed by a similar amount, so the gap cannot be attributed to AI."}},
+            {"@type": "Question", "name": "What jobs are safe from AI?",
+             "acceptedAnswer": {"@type": "Answer", "text": "More than half of US occupations (392 of 722) show no observed LLM use at all, mostly physical, care and trade jobs such as nurses, electricians, drivers and construction workers. But zero exposure did not mean growth: 57% of these occupations also shrank between 2019 and 2025. Safety from AI and job security are different things."}},
+            {"@type": "Question", "name": "Will AI replace software developers?",
+             "acceptedAnswer": {"@type": "Answer", "text": "Software developers are among the most AI-exposed occupations (31% of tasks show LLM use), yet US employment of software developers rose 33% between May 2019 and May 2025, close to its pre-ChatGPT growth rate. The related but much smaller occupation of computer programmers fell 54%, continuing a decline that began years earlier."}}
+          ]
+        }
+      ]
+    }
+    </script>
+
+    <style>
+        /* Code Block Styling */
+        .code-container {
+            position: relative;
+            margin: 25px 0;
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+        }
+
+        .code-language {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .copy-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .copy-button.copied {
+            background: #059669;
+        }
+
+        .code-container pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            background: transparent;
+        }
+
+        .code-container code {
+            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Tab styling for code examples */
+        .code-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 25px 0 0 0;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .code-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .code-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .code-tab:hover {
+            color: #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-box h4 {
+            margin: 0 0 10px 0;
+            color: #1e40af;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1e3a8a;
+            line-height: 1.6;
+        }
+
+        .info-box p + p { margin-top: 10px; }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #92400e;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box p {
+            margin: 0;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #059669;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #065f46;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-box p {
+            margin: 0;
+            color: #064e3b;
+            line-height: 1.6;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        .comparison-table td.num, .comparison-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        /* Article extras */
+        .answer-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 28px 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .answer-box .answer-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #93c5fd; font-weight: 700; margin-bottom: 8px; }
+        .answer-box .answer-big { font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .answer-box p { color: #dbeafe; margin: 0; font-size: 1.02rem; }
+        .answer-box a { color: white; font-weight: 600; }
+
+        .key-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin: 25px 0; }
+        .key-stat { background: var(--light-color); border-radius: 10px; padding: 16px 18px; border-left: 4px solid var(--primary-color); }
+        .key-stat .ks-value { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); line-height: 1.1; }
+        .key-stat .ks-label { font-size: 0.85rem; color: var(--gray-color); margin-top: 6px; line-height: 1.4; }
+
+        .article-content figure { margin: 30px 0; }
+        .article-content figure img { width: 100%; height: auto; margin: 0; }
+        .article-content figcaption { font-size: 0.88rem; color: var(--gray-color); margin-top: 10px; line-height: 1.5; }
+
+        .toc { background: var(--light-color); border-radius: 10px; padding: 20px 26px; margin: 25px 0; font-size: 0.98rem; }
+        .toc h4 { margin: 0 0 8px; color: var(--darker-color); font-size: 1rem; }
+        .toc ol { margin: 0; padding-left: 22px; }
+        .toc li { margin-bottom: 4px; }
+        .toc a { color: var(--primary-color); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+
+        .tool-cta {
+            display: flex; gap: 20px; align-items: center; background: white; border: 2px solid var(--primary-color);
+            border-radius: 12px; padding: 22px 26px; margin: 30px 0; flex-wrap: wrap;
+        }
+        .tool-cta .tool-cta-icon {
+            width: 60px; height: 60px; flex: 0 0 60px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: white;
+        }
+        .tool-cta .tool-cta-text { flex: 1 1 300px; }
+        .tool-cta h4 { margin: 0 0 6px; color: var(--darker-color); font-size: 1.15rem; }
+        .tool-cta p { margin: 0; color: var(--gray-color); font-size: 0.95rem; }
+
+        .faq-item { border-bottom: 1px solid #e2e8f0; padding: 18px 0; }
+        .faq-item h3 { margin: 0 0 8px; font-size: 1.15rem; }
+        .faq-item p { margin: 0; }
+
+        .sources { font-size: 0.9rem; color: var(--gray-color); }
+        .sources li { margin-bottom: 8px; }
+        .sources a { color: var(--primary-color); word-break: break-word; }
+
+        .article-content .callout-num { font-weight: 700; color: var(--darker-color); }
+
+        @media (max-width: 768px) {
+            .answer-box .answer-big { font-size: 1.5rem; }
+            .comparison-table { font-size: 0.85rem; }
+            .comparison-table th, .comparison-table td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link active' href='/blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Header -->
+    <div class="article-header">
+        <h1 class="article-title">Which Jobs Is AI Actually Replacing? What the Data Shows</h1>
+
+        <div class="article-meta">
+            <span class="blog-tag">Data Journalism</span>
+            <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                September 17, 2026
+            </span>
+            <span class="blog-date">
+                <i class="far fa-clock"></i>
+                16 min read
+            </span>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <p>
+            Every week brings a new list of "jobs AI will replace." Almost none of those lists check whether the jobs on them are actually disappearing. So we did. We took the best available measure of where large language models are <em>already</em> doing work, matched it to official US employment counts for 722 occupations, and asked a simple question: six years on from 2019, and nearly three years on from ChatGPT, do the jobs most exposed to AI have fewer people in them?
+        </p>
+
+        <div class="answer-box">
+            <div class="answer-label">The short answer</div>
+            <div class="answer-big">No, not yet, and not in the way the headlines say.</div>
+            <p>AI exposure explains about 1% of the variation in how US occupations grew or shrank between May 2019 and May 2025. The most exposed occupation groups (business, finance, computing) grew fastest. The relationship that does exist was already there before ChatGPT launched. Displacement is visible in a short list of clerical and support jobs, most of which were already declining. If you want the number for your own job, <a href='/tools/ai-job-exposure-checker'>use the lookup tool</a>.</p>
+        </div>
+
+        <div class="toc">
+            <h4>In this analysis</h4>
+            <ol>
+                <li><a href="#question">The question, and why the usual answer is wrong</a></li>
+                <li><a href="#data">What the data shows</a></li>
+                <li><a href="#exposure">How AI exposure is measured</a></li>
+                <li><a href="#correlation">The correlation</a></li>
+                <li><a href="#misleading">Why the correlation is probably misleading</a></li>
+                <li><a href="#real">Where the effect is real</a></li>
+                <li><a href="#uk">The UK picture</a></li>
+                <li><a href="#your-job">What this means if it's your job</a></li>
+                <li><a href="#methodology">Methodology, limitations and reproducibility</a></li>
+                <li><a href="#faq">Frequently asked questions</a></li>
+            </ol>
+        </div>
+
+        <h2 id="question">1. The question, and why the usual answer is wrong</h2>
+
+        <p>
+            The usual answer comes from <em>exposure</em> studies: a model or a panel of experts reads the list of tasks in each occupation and scores how many an AI could, in principle, perform. Those studies are useful, and we use two of them below. But "could be done by AI" is a statement about capability, not about payrolls. An occupation can be 70% exposed and still be hiring, because the tasks AI takes over are the ones nobody was paid much for, because demand for the output rose, or because the technology has not been deployed.
+        </p>
+
+        <p>
+            The second usual answer comes from anecdotes: a company announces layoffs and mentions AI in the press release. That is evidence about one firm's messaging, not about the labour market. The only way to answer the question is to count the people employed in each occupation before and after generative AI arrived and see whether the exposed ones moved differently from the rest. That is what this article does, and we committed in advance to publishing the result whichever way it came out.
+        </p>
+
+        <h2 id="data">2. What the data shows</h2>
+
+        <p>
+            Our employment data is the US Bureau of Labor Statistics' Occupational Employment and Wage Statistics (OEWS), which counts wage-and-salary jobs in roughly 830 detailed occupations each May. Total employment rose from <span class="callout-num">146.9 million</span> in May 2019 to <span class="callout-num">155.5 million</span> in May 2025, a gain of 5.9%. The chart below ranks the 22 major occupation groups by their change over that period and colours each bar by how exposed the group is to AI.
+        </p>
+
+        <figure>
+            <img src="charts/ai-jobs-employment-change-by-occupation-group-2019-2025.svg" alt="Horizontal bar chart of US employment change by SOC major group from May 2019 to May 2025, bars coloured by AI observed exposure. Management grew 38.2% and business and financial operations 28.8%, both highly exposed. Office and administrative support fell 9.1% and sales fell 6.6%, also highly exposed. Farming fell 10.2% with almost no exposure. The all-occupations average was 5.9%." loading="lazy" width="1190" height="814">
+            <figcaption>Figure 1. The two most exposed groups after office work, business &amp; finance (exposure 0.28) and computer &amp; mathematical (0.35), grew 28.8% and 15.5%. Office &amp; administrative support (0.34) fell 9.1%, but it had fallen 10.6% in the four years before ChatGPT.</figcaption>
+        </figure>
+
+        <p>
+            Three things stand out. First, the fastest-growing groups are management (+38.2%) and business and financial operations (+28.8%), and both are among the most exposed to AI. Second, the two exposed groups that shrank, office and administrative support (&minus;9.1%) and sales (&minus;6.6%), were already shrinking or flat before 2019: office support lost 10.6% of its jobs between 2015 and 2019. Third, the biggest loser is farming, fishing and forestry (&minus;10.2%), which has almost no AI exposure at all. Across the 22 groups the rank correlation between exposure and growth is +0.19 (p = 0.38): if anything, more exposed groups grew slightly more.
+        </p>
+
+        <p>
+            Major groups hide a lot, though. To see displacement, if it exists, we need to go down to the occupation level.
+        </p>
+
+        <h2 id="exposure">3. How AI exposure is measured</h2>
+
+        <p>
+            We use two exposure measures, chosen because they answer different questions.
+        </p>
+
+        <p>
+            <strong>Observed exposure (Anthropic Economic Index).</strong> Anthropic classifies millions of anonymised Claude conversations and API calls against the roughly 18,000 task statements in the US Department of Labor's O*NET database, then asks, for each occupation, what share of its tasks show meaningful automated use in real work. This is the measure of "is AI actually doing this" rather than "could it". It is demanding: of the 17,998 task statements with a penetration score, <span class="callout-num">92.5% score zero</span>, 7.5% score at least 0.5 and only 1.1% score 1.0. At the occupation level, 392 of our 722 occupations (54%) have an exposure of exactly zero, and the mean is 0.07. The highest scores belong to computer programmers (0.75), customer service representatives (0.70), data entry keyers (0.67), medical records specialists (0.67) and market research analysts (0.65).
+        </p>
+
+        <p>
+            <strong>Theoretical exposure (Felten, Raj and Seamans' AIOE).</strong> Published in 2021, before ChatGPT, this index links ten AI capabilities (image recognition, language modelling, translation and so on) to the 52 abilities O*NET says each occupation needs. It measures what AI <em>could</em> touch, was fixed before the current wave, and so cannot be contaminated by post-2022 usage. We use it as a check on the first measure.
+        </p>
+
+        <div class="info-box">
+            <h4><i class="fas fa-lightbulb"></i> The measure has a bias, and the bias matters</h4>
+            <p>Observed exposure counts where <em>Claude</em> is used. Coding is one of Claude's heaviest uses, so computer occupations may be over-scored relative to, say, call-centre work automated with other vendors' models. We have no way to correct this, which is one reason we run every model twice, once with each measure.</p>
+        </div>
+
+        <!-- ADSENSE: in-article unit 1 (after section 3) -->
+        <!-- <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX"></ins> -->
+        <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        <!-- END ADSENSE 1 -->
+
+        <h2 id="correlation">4. The correlation</h2>
+
+        <p>
+            Figure 2 is the whole argument in one picture. Each bubble is an occupation, sized by its 2019 employment; the horizontal axis is observed AI exposure and the vertical axis is the annualised change in employment from May 2019 to May 2025. The line is an employment-weighted least-squares fit with its 95% confidence band.
+        </p>
+
+        <figure>
+            <img src="charts/ai-exposure-vs-employment-change-scatter-2019-2025.svg" alt="Scatter plot of 722 US occupations: AI observed exposure on the horizontal axis (0 to 0.75) against annualised employment change 2019 to 2025 on the vertical axis. Points are spread widely at every exposure level; the weighted regression line is nearly flat, sloping from about +0.5% to -0.8% per year across the full exposure range, with a confidence band that includes zero. Labelled points include computer programmers (high exposure, -13% per year), customer service representatives (high exposure, -2%), market research analysts (high exposure, +5%) and information security analysts (high exposure, +7%)." loading="lazy" width="954" height="739">
+            <figcaption>Figure 2. Exposure versus employment change for 722 occupations. Pearson r = +0.01, Spearman &rho; = +0.11, employment-weighted r = &minus;0.09. The fitted slope is &minus;1.8 percentage points a year for a move from zero to full exposure (95% CI &minus;4.8 to +1.2, p = 0.25).</figcaption>
+        </figure>
+
+        <p>
+            The numbers behind it:
+        </p>
+
+        <div class="key-stats">
+            <div class="key-stat"><div class="ks-value">r = 0.01</div><div class="ks-label">Pearson correlation, exposure vs employment change (95% CI &minus;0.06 to +0.08, p = 0.79, n = 722)</div></div>
+            <div class="key-stat"><div class="ks-value">&rho; = +0.11</div><div class="ks-label">Spearman rank correlation (p = 0.004). Positive: more exposed occupations were slightly <em>more</em> likely to grow</div></div>
+            <div class="key-stat"><div class="ks-value">&minus;0.23 pp</div><div class="ks-label">Change in annual employment growth per one standard deviation of exposure, employment-weighted (95% CI &minus;0.61 to +0.16, p = 0.25)</div></div>
+            <div class="key-stat"><div class="ks-value">R&sup2; = 0.009</div><div class="ks-label">Share of the variation in employment change explained by exposure alone</div></div>
+        </div>
+
+        <p>
+            Weighting by employment, so that customer service representatives count 2.9 million times and statistical assistants 9,800 times, produces a slightly negative slope; treating every occupation equally produces a slightly positive one. Neither is distinguishable from zero. Among the 330 occupations with non-zero exposure the picture is the same (r = &minus;0.10, p = 0.08), and the top exposure quintile grew 0.3 points a year more slowly than the zero-exposure group, with a bootstrap 95% interval of &minus;1.5 to +1.4. Knowing how exposed an occupation is to AI tells you almost nothing about what happened to its headcount.
+        </p>
+
+        <h2 id="misleading">5. Why the correlation is probably misleading</h2>
+
+        <p>
+            A near-zero raw correlation can still hide a real effect if exposed occupations differ from unexposed ones in ways that also drive employment. They do: exposed jobs are better paid, more often done remotely, and concentrated in white-collar families with their own post-pandemic and interest-rate stories. So we re-ran the regression with controls for log 2019 median wage, Dingel and Neiman's share of the occupation that can be done from home, and fixed effects for the 22 occupation families. Then we did what most articles on this topic never do: we ran the identical models on 2015&ndash;2019, when generative AI did not exist. If exposure "predicts" employment change in a period when it could not have caused it, the post-2019 relationship is a proxy for something else.
+        </p>
+
+        <figure>
+            <img src="charts/ai-exposure-employment-effect-by-specification-placebo.svg" alt="Coefficient plot showing the estimated effect of one standard deviation of AI exposure on annual employment growth across fourteen model specifications with 95% confidence intervals. For 2019 to 2025 the estimates range from -0.48 to +0.06 percentage points; only the model with wage and remote-work controls but no occupation-family fixed effects excludes zero. The placebo models on 2015 to 2019 range from -0.20 to +0.49 and all include zero. The change-in-growth models give -0.48 (weighted) and -0.93 (unweighted); the unweighted one excludes zero. Models using the theoretical Felten AIOE measure are centred on zero." loading="lazy" width="1023" height="833">
+            <figcaption>Figure 3. The coefficient on AI exposure (percentage points of annual growth per +1 SD of exposure) across specifications. HC3 robust standard errors. Blue: 2019&ndash;2025 outcomes. Amber: the same models on 2015&ndash;2019, before ChatGPT.</figcaption>
+        </figure>
+
+        <p>
+            Three results from Figure 3 matter.
+        </p>
+
+        <p>
+            <strong>The one "significant" number does not survive.</strong> Adding wage and remote-work controls turns the slope into &minus;0.48 points a year per standard deviation (95% CI &minus;0.78 to &minus;0.18, p = 0.002). This is the number a motivated author would lead with. It appears because higher-paid occupations grew faster over 2019&ndash;2025 (wage coefficient +1.8 points per log-point, p = 0.003) and exposure is correlated with pay. But add fixed effects for occupation family and it falls to &minus;0.16 (CI &minus;0.50 to +0.18, p = 0.36). The effect lives <em>between</em> families, office work versus computing versus healthcare, not between more and less exposed jobs within a family, and between-family differences are exactly where the pandemic, remote work and interest rates did their damage. Unweighted, the full model gives &minus;0.42 (p = 0.04), shrinking to &minus;0.39 (p = 0.054) after trimming the extreme 1% of outcomes; dropping the "All Other" catch-all codes gives &minus;0.11 (p = 0.50).
+        </p>
+
+        <p>
+            <strong>The placebo reproduces the raw relationship.</strong> The employment-weighted bivariate slope was &minus;0.20 in 2015&ndash;2019 and &minus;0.23 in 2019&ndash;2025: whatever the raw tilt against exposed occupations is, it predates ChatGPT by years. With full controls the placebo coefficient is +0.30 (p = 0.44), unweighted +0.49 (p = 0.10): before the current wave, exposed occupations within a family were growing a little <em>faster</em>. That makes the post-2019 estimate of &minus;0.16 look like a small deceleration rather than nothing, and it is the one thread worth pulling.
+        </p>
+
+        <p>
+            <strong>The change-in-growth test finds something, but it is small and fragile.</strong> The cleanest specification uses each occupation as its own control: the outcome is 2019&ndash;2025 growth minus 2015&ndash;2019 growth, so occupation-specific trends cancel out. Employment-weighted, one standard deviation of exposure is associated with a slowdown of 0.48 points a year (95% CI &minus;1.05 to +0.08, p = 0.095). Unweighted it is &minus;0.93 (CI &minus;1.56 to &minus;0.30, p = 0.004) and survives trimming (&minus;0.72, p = 0.001). A clearer result when every occupation counts equally means the slowdown is concentrated in small exposed occupations, not the big ones that employ most people. And it is specific to <em>observed</em> exposure: the same model with Felten's theoretical measure gives +0.16 (p = 0.77) for the change in growth and +0.06 (p = 0.93) for the level. Where LLMs are actually used, growth slowed a little; where they merely could be used, nothing.
+        </p>
+
+        <figure>
+            <img src="charts/ai-exposure-bins-employment-growth-before-after-chatgpt.svg" alt="Grouped bar chart of employment-weighted annual employment growth by AI exposure bin, comparing 2015 to 2019 with 2019 to 2025. Zero-exposure occupations: +1.3% before, +0.1% after. Exposed quintiles 1 to 5 before: +2.0, +1.8, +1.6, +1.4, +0.4. After: +0.2, +2.3, +1.2, +0.8, -0.2. The top quintile was already the slowest-growing bin before ChatGPT." loading="lazy" width="983" height="627">
+            <figcaption>Figure 4. Annual employment growth by exposure bin. The most exposed quintile (scores 0.29&ndash;0.75) grew 0.4% a year before ChatGPT and shrank 0.2% a year after, a swing of 0.6 points. The zero-exposure bin swung by 1.2 points in the same direction.</figcaption>
+        </figure>
+
+        <p>
+            Figure 4 puts the magnitude in context. The most exposed fifth of occupations went from +0.4% a year to &minus;0.2%. Occupations with <em>no</em> AI exposure went from +1.3% to +0.1%. Growth slowed nearly everywhere after 2019; the exposed occupations simply started from a lower base. Our best estimate of the AI-specific component is a slowdown of roughly half a point a year per standard deviation of exposure: statistically marginal, driven by small occupations, and small next to the churn of an economy that added 8.6 million jobs.
+        </p>
+
+        <h2 id="real">6. Where the effect is real</h2>
+
+        <p>
+            Averages can be flat while specific jobs are hollowed out. Figure 5 shows the 30 most exposed occupations with their growth before and after 2019. Of the 30, <span class="callout-num">21 shrank</span> between 2019 and 2025, 25 grew more slowly than they had in 2015&ndash;2019, and 9 kept growing.
+        </p>
+
+        <figure>
+            <img src="charts/most-ai-exposed-occupations-employment-before-after-chatgpt.svg" alt="Dumbbell chart of the 30 most AI-exposed US occupations, each showing annualised employment change for 2015 to 2019 (amber) and 2019 to 2025 (blue). Computer programmers fell 13% a year after 2019 versus 9% before. Customer service representatives went from +3% to -2%. Market research analysts, information security analysts, financial analysts and HR specialists stayed strongly positive in both periods. Data entry keyers and secretaries shrank at similar rates in both periods." loading="lazy" width="1143" height="1029">
+            <figcaption>Figure 5. The 30 most exposed occupations, sorted by exposure. Amber = 2015&ndash;2019, blue = 2019&ndash;2025. Values beyond &plusmn;12% a year are drawn at the edge and labelled.</figcaption>
+        </figure>
+
+        <p>
+            We sorted every occupation with an exposure score of 0.30 or more (63 occupations, 28.2 million jobs in 2019) into four groups, using two tests: did employment fall by more than 5%, and did growth slow relative to the occupation's own 2015&ndash;2019 trend?
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead>
+                <tr><th>Pattern among occupations with exposure &ge; 0.30</th><th class="num">Occupations</th><th class="num">Jobs in 2019</th><th>Examples (exposure; change 2019&ndash;25; change 2015&ndash;19)</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Shrank, and growth slowed after 2019</td><td class="num">29</td><td class="num">18.1m</td><td>Customer service reps (0.70; &minus;11%; +13%), office clerks (0.45; &minus;17%; +0.4%), receptionists (0.43; &minus;14%; +8%), retail salespersons (0.32; &minus;10%; &minus;6%), bookkeeping clerks (0.31; &minus;9%; &minus;4%), medical transcriptionists (0.64; &minus;26%; &minus;4%), technical writers (0.47; &minus;10%; +2%), interpreters &amp; translators (0.43; &minus;12%; +19%), graphic designers (0.37; &minus;8%; +5%)</td></tr>
+                <tr><td>Shrank, but was already shrinking before ChatGPT</td><td class="num">6</td><td class="num">0.3m</td><td>Data entry keyers (0.67; &minus;20%; &minus;20%), survey researchers (0.43; &minus;17%; &minus;27%), mathematicians (0.42; &minus;23%; &minus;17%)</td></tr>
+                <tr><td>Grew faster than the economy (+5.9%)</td><td class="num">26</td><td class="num">9.7m</td><td>Market research analysts (0.65; +33%; +34%), information security analysts (0.49; +52%; +41%), HR specialists (0.40; +44%; +29%), financial managers (0.39; +28%; +23%), software developers (0.31; +33%; +30%), accountants (0.35; +13%; +4%)</td></tr>
+                <tr><td>Roughly flat</td><td class="num">2</td><td class="num">0.1m</td><td>Astronomers (0.38; +2%), postsecondary business teachers (0.31; &minus;2%)</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <p>
+            The first row is where a displacement story is defensible. Customer service representatives are the single most important case: 2.9 million jobs in 2019, 2.6 million in 2025, a swing from +12.5% in the previous four years to &minus;11%. Anthropic's own reports note that customer-support workflows are among the most common automated uses of its API, and the timing fits. Office clerks (&minus;491,000 jobs) and receptionists (&minus;147,000) follow the same shape, as do several small knowledge occupations: technical writers, interpreters, social science research assistants and graphic designers.
+        </p>
+
+        <p>
+            Computer programmers are the most dramatic decline on the list, from 199,540 to 92,230 (&minus;54%), but also the clearest example of why timing matters: the occupation had already shrunk 31% between 2015 and 2019 as the same work was increasingly titled "software developer". Software developers, the larger occupation doing most of the economy's coding, grew 33% over 2019&ndash;2025, almost exactly their pre-ChatGPT rate. The 29 occupations that shrank and slowed employed 18.1 million people in 2019, but more than half of that is three occupations, retail salespersons, general office clerks and customer service representatives, and retail salespersons (exposure 0.32) were already losing jobs before ChatGPT.
+        </p>
+
+        <div class="warning-box">
+            <h4><i class="fas fa-triangle-exclamation"></i> Consistent with, not proof of</h4>
+            <p>Customer service, clerical and reception work were also hit by pandemic-era automation of a different kind (self-service portals, chat scripts, appointment apps) and by the 2022&ndash;2024 rate rises that ended the hiring boom. An occupation that shrank <em>and</em> slowed <em>and</em> has high exposure passes our screen; it does not pass a causal test, because no comparison group experienced the same shocks without the AI.</p>
+        </div>
+
+        <!-- ADSENSE: in-article unit 2 (after section 6) -->
+        <!-- <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX"></ins> -->
+        <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        <!-- END ADSENSE 2 -->
+
+        <h2 id="uk">7. The UK picture</h2>
+
+        <p>
+            We could not repeat the occupation-level analysis for the UK, and it is worth being explicit about why. The exposure scores are built on US SOC 2018 codes and O*NET tasks. The UK uses SOC 2020, a different classification; the only route between them runs through the international ISCO-08 standard, losing detail at each step, and the ONS's own methodology notes warn that the move from SOC 2010 to SOC 2020 created discontinuities in occupational series. The ONS files we used contain the SOC 2020 correspondence tables but no occupation-by-year employment counts, so the UK check is at industry level, using a theoretical exposure measure (Felten's industry index mapped from NAICS to SIC sections).
+        </p>
+
+        <p>
+            <strong>Vacancies by industry.</strong> ONS VACS02 shows UK vacancies averaging 827,000 in 2019, peaking at 1.24 million in 2022, and averaging 720,000 over the twelve rolling quarters to June&ndash;August 2026: down 42% from the peak and 13% below 2019. All 18 industry sections fell from 2022, and the most AI-exposed fell <em>less</em> than average: financial and insurance &minus;37%, professional, scientific and technical &minus;41%, information and communication &minus;47%, against &minus;55% for accommodation and food. The rank correlation between industry exposure and the 2022&ndash;2026 change in vacancies is +0.26 (p = 0.32, n = 16), the wrong sign for a displacement story and, with 16 data points, not something to lean on either way.
+        </p>
+
+        <figure>
+            <img src="charts/uk-online-job-adverts-by-category-ai-exposed-2020-2024.svg" alt="Six small line charts of the UK online job advert index (February 2020 = 100) from 2020 to October 2024, each showing one category in blue against all industries in grey, with a dashed marker at the ChatGPT launch in November 2022. IT and computing ends at 53, admin and clerical at 62, customer service at 83, marketing at 55, accounting and finance at 68, and healthcare and social care at 60, against 88 for all industries. All categories peaked in 2022 and declined afterwards." loading="lazy" width="989" height="646">
+            <figcaption>Figure 6. ONS/Adzuna online job adverts by category, deduplicated, monthly means of weekly data. AI-exposed categories fell hardest after 2022, but so did healthcare and social care, which has almost no LLM exposure.</figcaption>
+        </figure>
+
+        <p>
+            <strong>Online job adverts.</strong> The ONS/Adzuna series runs to October 2024, indexed to February 2020. It shows a steep post-2022 fall in adverts for IT and computing (to 53), marketing (55), admin and clerical (62) and accounting and finance (68), against 88 for all industries. That looks like an AI signature until you notice healthcare and social care at 60, a category with almost no LLM exposure. UK white-collar hiring collapsed across the board after the 2022 peak; the exposed categories are in the collapse, not singled out by it. One more inconvenient fact from Indeed: UK advertised wages were still growing 4.0% year-on-year in July 2026, faster than the US (2.5%), not what a labour market shedding workers to automation usually looks like.
+        </p>
+
+        <h2 id="your-job">8. What this means if it's your job</h2>
+
+        <p>
+            Three practical readings follow from the numbers.
+        </p>
+
+        <p>
+            <strong>Exposure is not a forecast.</strong> Occupations in the top exposure fifth had a 58% chance of shrinking between 2019 and 2025; occupations with zero exposure, 57%. The base rate of "my occupation got smaller" over a six-year window is high everywhere, and AI exposure barely moves it. What exposure does predict is <em>which tasks in your week will change</em>, a question about your job description, not your employment.
+        </p>
+
+        <p>
+            <strong>The pattern that should worry you is specific.</strong> High exposure, employment already falling, and a deceleration after 2019 that the occupation's own history cannot explain. Customer service representatives, receptionists, general office clerks, medical transcriptionists and technical writers fit it. If your work is mostly the routine text-handling part of one of those occupations, the last three years of data are on the pessimists' side.
+        </p>
+
+        <p>
+            <strong>Exposed and growing is the most common outcome among knowledge jobs.</strong> Software developers, market research analysts, HR specialists, financial analysts, accountants and paralegals (exposure 0.29, +19%) all show heavy LLM use of their tasks and rising headcounts. That is consistent with the technology raising the value of the people who use it while demand for their output keeps growing. It does not guarantee the next six years look like the last six; nothing in observational data can.
+        </p>
+
+        <div class="tool-cta">
+            <div class="tool-cta-icon"><i class="fas fa-magnifying-glass-chart"></i></div>
+            <div class="tool-cta-text">
+                <h4>Check your own occupation</h4>
+                <p>Our free <a href='/tools/ai-job-exposure-checker'>AI Job Exposure Checker</a> looks up any of 787 US occupations (and about 3,000 alternative job titles) and shows its exposure score, its 2019&ndash;2025 employment change, its pre-ChatGPT trend, and what happened to occupations with similar exposure. It runs entirely in your browser.</p>
+            </div>
+            <a class='btn btn-primary' href='/tools/ai-job-exposure-checker'>Open the tool</a>
+        </div>
+
+        <h2 id="methodology">9. Methodology, limitations and reproducibility</h2>
+
+        <h3>Data</h3>
+        <p>
+            <strong>Employment:</strong> BLS OEWS national files, May 2015, 2019 and 2025, detailed occupations. <strong>Observed exposure:</strong> Anthropic Economic Index <code>job_exposure.csv</code> (756 SOC 2018 occupations) and <code>task_penetration.csv</code> (17,998 O*NET tasks). <strong>Theoretical exposure:</strong> Felten, Raj and Seamans (2021) AIOE by occupation and AIIE by industry. <strong>Remote-workability:</strong> Dingel and Neiman (2020). <strong>Crosswalk:</strong> BLS SOC 2010 to 2018 (November 2017). <strong>UK:</strong> ONS VACS02 (September 2026), ONS/Adzuna online job adverts (24 October 2024), ONS SOC 2020 methodology tables. <strong>Wages:</strong> Indeed Hiring Lab posted wage growth, to July 2026.
+        </p>
+
+        <h3>Harmonising occupations</h3>
+        <p>
+            The three OEWS files use three code structures: SOC 2010 in 2015, a BLS "hybrid" in 2019, and SOC 2018 in 2025. Comparing codes naively would count every reclassification as a job gain or loss. We built harmonised groups as connected components of a graph whose edges link (a) the 42 OEWS aggregate codes to the detailed codes they contain and (b) for the placebo only, every SOC 2010 to 2018 crosswalk link; employment is summed within a group in every year. The fine harmonisation (2019 and 2025) yields 787 groups, of which 729 have an exposure score and 722 also a wage, covering 92% of 2019 employment. The coarse harmonisation, which also carries 2015, yields 775 groups (712 in the placebo sample); its largest component chains twelve computer and management codes through Project Management Specialists, carved out of three different 2010 codes. One manual link combines Data Scientists with Computer Occupations, All Other, because the 2019 hybrid file coded most data scientists under the latter (30,810 jobs against 266,160 in 2025). Group exposure is the 2025-employment-weighted mean of member scores.
+        </p>
+
+        <h3>Estimation</h3>
+        <p>
+            The outcome is the annualised change in log employment, (ln E<sub>2025</sub> &minus; ln E<sub>2019</sub>)/6, and analogously for 2015&ndash;2019. Exposure enters standardised (population SD = 0.129) so the two measures are comparable. Headline models are weighted least squares with 2019 employment weights; unweighted versions are reported throughout. Standard errors are HC3-robust. Controls: log 2019 median annual wage (hourly-only occupations converted at 2,080 hours), teleworkability, and 22 major-group fixed effects. The change-in-growth outcome is the 2019&ndash;25 rate minus the 2015&ndash;19 rate. Occupations without an AIOE score are dropped from AIOE models. Bootstrap intervals use 4,000 resamples with a fixed seed. The Python (statsmodels) and R (sandwich/lmtest) implementations agree on every coefficient to four decimal places.
+        </p>
+
+        <h3>Limitations</h3>
+        <ul>
+            <li><strong>The window is contaminated.</strong> 2019&ndash;2025 contains the pandemic, the 2021&ndash;22 hiring surge, the 2022&ndash;24 rate rises and the 2022 change in US tax treatment of software R&amp;D. The placebo and change-in-growth designs address occupation-specific trends, not shocks that hit exposed families in this window. May 2022&ndash;2024 OEWS files would let us isolate the post-ChatGPT period.</li>
+            <li><strong>OEWS is a survey of establishments.</strong> It excludes the self-employed (freelance writers, translators and designers, some of the most exposed workers) and measures jobs, not hours or hiring. A freeze on graduate hiring would appear only slowly.</li>
+            <li><strong>Exposure covers 92% of employment.</strong> Home health and personal care aides (4.3 million), teaching assistants, miscellaneous assemblers and some sales occupations have no score. These are low-exposure jobs, so their absence more likely mutes than exaggerates any relationship.</li>
+            <li><strong>Industry is proxied by occupation family.</strong> A true industry control needs the OEWS industry files; major-group fixed effects absorb family-level shocks but not, say, a retail downturn that hit cashiers and stock clerks alike.</li>
+            <li><strong>May 2025 is early.</strong> Agentic tools and API automation scaled through 2025 and 2026. Everything here describes the first two and a half years after ChatGPT, not the steady state.</li>
+        </ul>
+
+        <h3>Reproduce the headline in a few lines</h3>
+        <p>
+            Download the cleaned dataset (<a href="../data/ai-exposure-employment-change-by-occupation.csv">ai-exposure-employment-change-by-occupation.csv</a>, 787 rows) and the coarse 2015&ndash;2025 panel used for the placebo (<a href="../data/ai-exposure-employment-change-2015-2019-2025-coarse.csv">coarse panel CSV</a>). The snippets below reproduce the correlations, the bivariate weighted model and the full model. The complete pipeline, from the raw BLS, Anthropic, Felten and Dingel&ndash;Neiman files to every specification, the UK supplement and the charts, is in the code bundle: <code>01_build_panel.py</code>, <code>02_analysis.py</code>, <code>03_uk_supplement.py</code>, <code>04_charts.py</code>, <code>05_export.py</code> and <code>analysis.R</code>.
+        </p>
+
+        <div class="code-tabs">
+            <button class="code-tab active" onclick="switchTab(event, 'python-repro')">Python</button>
+            <button class="code-tab" onclick="switchTab(event, 'r-repro')">R</button>
+        </div>
+
+        <div id="python-repro" class="tab-content active">
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-language"><i class="fab fa-python"></i> Python</span>
+                    <button class="copy-button" onclick="copyCode(this)">
+                        <i class="far fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                <pre><code># pip install pandas numpy scipy statsmodels
+import numpy as np, pandas as pd
+import statsmodels.formula.api as smf
+from scipy import stats
+
+df = pd.read_csv("ai-exposure-employment-change-by-occupation.csv", dtype={"major_group": str})
+df = df.dropna(subset=["aei_observed_exposure", "median_annual_wage_2019"]).copy()   # 722 occupations
+
+# Outcome: annualised change in log employment, in percentage points per year
+df["y"] = df["annualised_log_change_2019_2025"] * 100
+# Exposure standardised to 1 SD (population SD), plus controls
+x = df["aei_observed_exposure"]
+df["exposure_sd"] = (x - x.mean()) / x.std(ddof=0)
+df["log_wage"] = np.log(df["median_annual_wage_2019"])
+df["tele"] = df["dingel_neiman_teleworkable"].fillna(df["dingel_neiman_teleworkable"].mean())
+
+print("Pearson r:",  stats.pearsonr(x, df["y"]))        # r = +0.01, p = 0.79
+print("Spearman:",   stats.spearmanr(x, df["y"]))       # rho = +0.11, p = 0.004
+
+w = df["employment_may2019"]
+m1 = smf.wls("y ~ exposure_sd", df, weights=w).fit(cov_type="HC3")
+m4 = smf.wls("y ~ exposure_sd + log_wage + tele + C(major_group)", df, weights=w).fit(cov_type="HC3")
+for name, m in [("bivariate, weighted", m1), ("full model", m4)]:
+    lo, hi = m.conf_int().loc["exposure_sd"]
+    print(f"{name}: {m.params['exposure_sd']:+.2f} pp/yr per SD  [{lo:+.2f}, {hi:+.2f}]  p = {m.pvalues['exposure_sd']:.3f}")
+# bivariate: -0.23 [-0.61, +0.16] p = 0.251 ; full model: -0.16 [-0.50, +0.18] p = 0.360</code></pre>
+            </div>
+        </div>
+
+        <div id="r-repro" class="tab-content">
+            <div class="code-container">
+                <div class="code-header">
+                    <span class="code-language"><i class="fab fa-r-project"></i> R</span>
+                    <button class="copy-button" onclick="copyCode(this)">
+                        <i class="far fa-copy"></i> Copy Code
+                    </button>
+                </div>
+                <pre><code># install.packages(c("sandwich", "lmtest"))
+library(sandwich); library(lmtest)
+
+df &lt;- read.csv("ai-exposure-employment-change-by-occupation.csv", colClasses = c(major_group = "character"))
+df &lt;- df[!is.na(df$aei_observed_exposure) &amp; !is.na(df$median_annual_wage_2019), ]   # 722 occupations
+
+df$y &lt;- df$annualised_log_change_2019_2025 * 100          # pp per year
+x &lt;- df$aei_observed_exposure
+df$exposure_sd &lt;- (x - mean(x)) / sqrt(mean((x - mean(x))^2))   # population SD, as in Python
+df$log_wage &lt;- log(df$median_annual_wage_2019)
+df$tele &lt;- ifelse(is.na(df$dingel_neiman_teleworkable), mean(df$dingel_neiman_teleworkable, na.rm = TRUE), df$dingel_neiman_teleworkable)
+
+cor.test(x, df$y)                                          # r = +0.01, p = 0.79
+cor.test(x, df$y, method = "spearman", exact = FALSE)      # rho = +0.11, p = 0.004
+
+report &lt;- function(m, name) {
+  ct &lt;- coeftest(m, vcov = vcovHC(m, type = "HC3")); ci &lt;- coefci(m, vcov = vcovHC(m, type = "HC3"))
+  cat(sprintf("%s: %+.2f pp/yr per SD  [%+.2f, %+.2f]  p = %.3f\n", name,
+              ct["exposure_sd", 1], ci["exposure_sd", 1], ci["exposure_sd", 2], ct["exposure_sd", 4]))
+}
+report(lm(y ~ exposure_sd, df, weights = employment_may2019), "bivariate, weighted")
+report(lm(y ~ exposure_sd + log_wage + tele + factor(major_group), df, weights = employment_may2019), "full model")
+# bivariate: -0.23 [-0.61, +0.16] p = 0.252 ; full model: -0.16 [-0.50, +0.18] p = 0.360</code></pre>
+            </div>
+        </div>
+
+        <h2 id="conclusion">Conclusion: is AI replacing jobs?</h2>
+
+        <p>
+            <strong>No, not measurably, as of May 2025.</strong> Across 722 US occupations the correlation between how much of a job's work is already done with an LLM and how its headcount changed is 0.01. The one specification that produces a headline-sized negative effect disappears once you compare occupations within the same family, and the raw tilt against exposed occupations is the same size in 2015&ndash;2019 as after ChatGPT. The most exposed groups in the economy, business and finance and computing, added jobs faster than almost anyone else.
+        </p>
+
+        <p>
+            <strong>But "no" has a footnote.</strong> Exposed occupations slowed relative to their own pre-2019 trend by about half a percentage point a year per standard deviation of exposure: marginal when weighted by employment, clearer among small occupations, absent when exposure is measured by capability rather than use. And a specific list of jobs, customer service representatives, general office clerks, receptionists, medical transcriptionists, technical writers, interpreters and graphic designers, shrank after 2019 in a way their own history does not explain. If AI is displacing anyone at scale in this data, it is them, and the total is on the order of a million jobs against a labour market that grew by 8.6 million.
+        </p>
+
+        <div class="info-box">
+            <h4><i class="fas fa-graduation-cap"></i> Key takeaways</h4>
+            <p>AI exposure explains about 1% of the variation in US occupational employment change, 2019&ndash;2025. The relationship is not new, not robust to controls, and small in every specification. Displacement is real but narrow: a handful of clerical and support occupations. Most exposed knowledge jobs grew. Check any occupation with the <a href='/tools/ai-job-exposure-checker'>AI Job Exposure Checker</a>.</p>
+            <p>The method, step by step: <a href='/case-studies/ai-and-jobs-causal-analysis'>AI and jobs causal analysis case study</a>.</p>
+        </div>
+
+        <h2 id="faq">Frequently asked questions</h2>
+
+        <div class="faq-item">
+            <h3>Which jobs are most likely to be replaced by AI?</h3>
+            <p>On Anthropic's observed-exposure measure the most exposed US occupations are computer programmers (75% of tasks show LLM use), customer service representatives (70%), data entry keyers (67%), medical records specialists (67%) and market research analysts (65%). But exposure is not replacement: market research analysts grew 33% between 2019 and 2025 and software developers grew 33%, while computer programmers fell 54%, a decline that was already 31% in the four years before ChatGPT.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is AI actually causing job losses right now?</h3>
+            <p>Not measurably at the level of whole occupations, as of May 2025. Across 722 US occupations the correlation between AI exposure and employment change from 2019 to 2025 is r = 0.01 (p = 0.79), and the same relationship existed before ChatGPT. The one robust signal is a small slowdown in growth among smaller exposed clerical and support occupations, about half a percentage point a year per standard deviation of exposure.</p>
+        </div>
+        <div class="faq-item">
+            <h3>How many jobs has AI replaced so far?</h3>
+            <p>There is no reliable count. Occupations with high AI exposure (score of 0.30 or more) employed 28.2 million Americans in 2019 and 28.6 million in 2025, up 1.2%, versus 5.9% for all occupations. The gap is about 1.3 million jobs, but occupations with zero exposure also under-performed the economy (+2.2%), so most of the gap cannot be attributed to AI.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What jobs are safe from AI?</h3>
+            <p>More than half of US occupations (392 of 722) show no observed LLM use at all, mostly physical, care and trade jobs: nurses, electricians, drivers, cooks, construction workers. But zero exposure did not mean growth: 57% of those occupations also shrank between 2019 and 2025, the same share as among the most exposed. Safety from AI and job security are different things.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Will AI replace software developers?</h3>
+            <p>Software developers are among the most AI-exposed occupations (31% of tasks show LLM use), yet US employment of software developers rose 33% between May 2019 and May 2025, close to its pre-ChatGPT growth rate of 30%. The related but much smaller occupation of computer programmers fell 54%, continuing a decline that began years earlier as the same work was reclassified.</p>
+        </div>
+
+        <h2 id="sources">Sources and data statement</h2>
+
+        <ol class="sources">
+            <li>Anthropic. <em>Anthropic Economic Index</em>: <code>job_exposure.csv</code> and <code>task_penetration.csv</code>, Hugging Face dataset <a href="https://huggingface.co/datasets/Anthropic/EconomicIndex">Anthropic/EconomicIndex</a>, CC BY 4.0. Method described in <a href="https://www.anthropic.com/research/labor-market-impacts">"Labor market impacts of AI: a new measure"</a> and the <a href="https://www.anthropic.com/research/economic-index-march-2026-report">March 2026</a> and <a href="https://www.anthropic.com/research/economic-index-june-2026-report">June 2026</a> Economic Index reports.</li>
+            <li>US Bureau of Labor Statistics. <em>Occupational Employment and Wage Statistics</em>, national files for May 2015, May 2019 and May 2025 (<code>oesm15nat</code>, <code>oesm19nat</code>, <code>oesm25nat</code>). <a href="https://www.bls.gov/oes/">bls.gov/oes</a>. Employment estimates are subject to sampling error; OEWS is not designed as a time series and BLS advises caution when comparing years.</li>
+            <li>US Bureau of Labor Statistics, on behalf of OMB and the SOC Policy Committee. <em>2010 SOC to 2018 SOC crosswalk</em>, November 2017. <a href="https://www.bls.gov/soc/2018/crosswalks_used_by_agencies.htm">bls.gov/soc</a>.</li>
+            <li>Felten, E., Raj, M. and Seamans, R. (2021). "Occupational, industry, and geographic exposure to artificial intelligence: A novel dataset and its potential uses." <em>Strategic Management Journal</em>, 42(12), 2195&ndash;2217. <a href="https://doi.org/10.1002/smj.3286">doi:10.1002/smj.3286</a>. Data: <a href="https://github.com/AIOE-Data/AIOE">github.com/AIOE-Data/AIOE</a>.</li>
+            <li>Dingel, J. I. and Neiman, B. (2020). "How many jobs can be done at home?" <em>Journal of Public Economics</em>, 189, 104235. Data: <a href="https://github.com/jdingel/DingelNeiman-workathome">github.com/jdingel/DingelNeiman-workathome</a>.</li>
+            <li>National Center for O*NET Development. <em>O*NET 31.0 Database</em>: Task Statements and Sample of Reported Titles. <a href="https://www.onetcenter.org/database.html">onetcenter.org</a>. CC BY 4.0.</li>
+            <li>Office for National Statistics. <em>VACS02: Vacancies by industry</em>, September 2026 release; <em>Online job advert estimates</em> (Adzuna), 24 October 2024 release; <em>SOC 2020 Volume 1</em> methodology tables. <a href="https://www.ons.gov.uk">ons.gov.uk</a>. Contains public sector information licensed under the Open Government Licence v3.0.</li>
+            <li>Indeed Hiring Lab. <em>Posted wage growth by country</em> and <em>by US sector</em>, data to July 2026. <a href="https://github.com/hiring-lab/job_postings_tracker">github.com/hiring-lab</a>.</li>
+        </ol>
+
+        <p class="sources">
+            <strong>Data statement.</strong> All figures in this article were computed by the author from the sources above between 15 and 17 September 2026; no statistic is quoted from a secondary source. The cleaned datasets (<a href="../data/ai-exposure-employment-change-by-occupation.csv">occupation panel</a>, <a href="../data/ai-exposure-employment-change-2015-2019-2025-coarse.csv">coarse 2015&ndash;2025 panel</a>) are released under CC BY 4.0 and may be reused with attribution to Truth with Data and to the original data providers. Employment counts are BLS estimates with sampling error; exposure scores are Anthropic's and reflect usage of Claude specifically. Derived classifications ("shrank and slowed", exposure bands) are the author's. Nothing here is careers, financial or legal advice. Corrections are welcome at the contact address on the home page; material corrections will be noted on this page with a date.
+        </p>
+
+        <blockquote>
+            Working on a question your organisation needs answered with data rather than opinion? Our <a href='/#services'>data consultancy services</a> cover exactly this kind of analysis, from data sourcing to publication-ready charts. Or explore our <a href='/#tools'>free statistical calculators</a>.
+        </blockquote>
+    </article>
+
+    <!-- Back to Blog Link -->
+    <div style="text-align: center; margin: 40px 0;">
+        <a class='btn btn-outline' href='/blog'>
+            <i class="fas fa-arrow-left"></i> Back to All Articles
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="../js/navigation.js?v=1.11"></script>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(evt, tabName) {
+            // Get all tab contents and hide them
+            var tabcontents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove("active");
+            }
+
+            // Get all tabs and remove active class
+            var tabs = evt.currentTarget.parentElement.getElementsByClassName("code-tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            // Show current tab and mark button as active
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeContainer = button.closest('.code-container');
+            const codeElement = codeContainer.querySelector('code');
+            const textToCopy = codeElement.textContent;
+
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                // Change button text and style
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.classList.add('copied');
+
+                // Reset after 2 seconds
+                setTimeout(function() {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy code: ', err);
+                alert('Failed to copy code to clipboard');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Is renting dead money? We modelled renting vs buying the same home in every UK region and 316 local authorities, with a 2005-2026 backtest. Buying wins in 1.4-4.1 years if prices keep rising 3% a year; 11 to 30+ years if they don't.">
+    <meta name="keywords" content="is renting dead money, rent vs buy UK, renting vs buying break even UK, is it better to rent or buy UK 2026, rent or buy calculator UK, is mortgage interest dead money">
+    <meta name="author" content="Vishal Sharma">
+    <meta property="og:title" content="Is Renting Really 'Dead Money' in the UK? What the Data Shows">
+    <meta property="og:description" content="Mortgage interest is dead money too. We compared renting and buying the same home across the UK: buying wins only when house prices rise, and how fast depends on where you live and how long you stay.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://truthwithdata.com/blog/is-renting-dead-money-uk.html">
+    <meta property="og:image" content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Is renting really dead money in the UK? Break-even years by region.">
+    <meta property="og:site_name" content="Truth with Data">
+    <meta property="article:published_time" content="2026-10-23">
+    <meta property="article:section" content="Data Journalism">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Is Renting Really 'Dead Money' in the UK? What the Data Shows">
+    <meta name="twitter:description" content="Original analysis of 12 UK regions and 316 local authorities, with a 2005-2026 backtest, Python and R code, data downloads and a free calculator.">
+    <meta name="twitter:image" content="https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png">
+    <link rel="canonical" href="https://truthwithdata.com/blog/is-renting-dead-money-uk.html">
+    <title>Is Renting Really 'Dead Money' in the UK? What the Data Shows</title>
+
+    <!-- Fonts -->
+    <link rel="icon" href="../favicon.ico?v=2" sizes="any">
+    <link rel="icon" type="image/png" href="../favicon-48x48.png?v=2" sizes="48x48">
+    <link rel="icon" type="image/png" href="../favicon-192x192.png?v=2" sizes="192x192">
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+    <!-- AdSense:start -->
+    <meta name="google-adsense-account" content="ca-pub-2836545666986892">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2836545666986892" crossorigin="anonymous"></script>
+    <!-- AdSense:end -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../css/main.css?v=1.11">
+    <link rel="stylesheet" href="../css/navigation.css?v=1.11">
+    <link rel="stylesheet" href="../css/blog.css?v=1.11">
+    <link rel="stylesheet" href="../css/footer.css?v=1.11">
+
+    <!-- JSON-LD Schema for SEO -->
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://truthwithdata.com/blog/is-renting-dead-money-uk.html#article",
+      "headline": "Is Renting Really 'Dead Money' in the UK? What the Data Shows",
+      "alternativeHeadline": "Rent vs buy break-even by UK region and local authority, with a 2005-2026 backtest",
+      "description": "Original analysis comparing the full cost of renting and buying the same home in 12 UK regions and 316 local authorities, using HM Land Registry, ONS and Bank of England data, with a historical backtest and sensitivity tables.",
+      "image": [
+        "https://truthwithdata.com/blog/charts/rent-vs-buy-og-1200x630.png",
+        "https://truthwithdata.com/blog/charts/rent-vs-buy-breakeven-years-by-region-uk-2026.svg"
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://truthwithdata.com/about.html#vishal-sharma",
+        "name": "Vishal Sharma",
+        "url": "https://truthwithdata.com/about.html"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Truth with Data",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://truthwithdata.com/TWD_Logo.png"
+        }
+      },
+      "datePublished": "2026-10-23",
+      "dateModified": "2026-10-23",
+      "mainEntityOfPage": "https://truthwithdata.com/blog/is-renting-dead-money-uk.html",
+      "articleSection": "Data Journalism",
+      "keywords": [
+        "is renting dead money",
+        "rent vs buy UK",
+        "renting vs buying break even UK",
+        "is mortgage interest dead money"
+      ],
+      "isBasedOn": [
+        "https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-july-2026",
+        "https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/priceindexofprivaterentsukmonthlypricestatistics",
+        "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate"
+      ],
+      "about": [
+        {
+          "@type": "Thing",
+          "name": "Housing tenure"
+        },
+        {
+          "@type": "Thing",
+          "name": "Personal finance"
+        }
+      ]
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://truthwithdata.com/data/uk-rent-vs-buy-breakeven-by-region-2026.csv",
+      "name": "UK rent vs buy break-even by region and local authority, 2026, with 2005-2026 backtest",
+      "description": "Break-even years for buying versus renting the average home in 12 UK regions (by property type) and 316 local authorities in England and Wales, July 2026 prices and rents, plus a monthly 2005-2026 backtest and sensitivity tables.",
+      "url": "https://truthwithdata.com/blog/is-renting-dead-money-uk.html",
+      "license": "https://creativecommons.org/licenses/by/4.0/",
+      "creator": {
+        "@type": "Organization",
+        "name": "Truth with Data"
+      },
+      "temporalCoverage": "2005-01/2026-07",
+      "spatialCoverage": "United Kingdom",
+      "distribution": [
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-breakeven-by-region-2026.csv"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-breakeven-by-local-authority-2026.csv"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-backtest-2005-2026.csv"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-sensitivity-2026.csv"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-monthly-panel-2005-2026.csv"
+        },
+        {
+          "@type": "DataDownload",
+          "encodingFormat": "text/csv",
+          "contentUrl": "https://truthwithdata.com/data/uk-rent-vs-buy-first-year-costs-2026.csv"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is renting dead money?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No more than mortgage interest is. At September 2026 rates, first-year mortgage interest on a 90% mortgage for the average UK home is 77% to 107% of the rent on the same home, and once maintenance, insurance and the return a deposit could have earned are added, owning costs more than renting in every UK region. Buying comes out ahead through house-price growth: if prices rise 3% a year it beats renting within 1.4 to 4.1 years, depending on the region; if prices stay flat it takes 11 years to more than 30."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long do you need to stay for buying to beat renting in the UK?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "At September 2026 mortgage rates and with house prices rising 3% a year, buying the average home beats renting after 1.4 years in Scotland and up to 4.1 years in the South East, with a median of 2.8 years across 12 regions. History is less tidy: in our 2005 to 2026 backtest, buyers were ahead of an equivalent renter in 60% of two-year holds, 79% of five-year holds and 86% of ten-year holds."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is mortgage interest dead money?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "In the same sense as rent, yes: it pays for the use of money and is never returned. In the first year of a 90% mortgage at 5.37%, interest on the average home is larger than the rent on that home in the East Midlands, West Midlands, East of England, South East and Wales, and 77% to 98% of the rent in the other regions. Capital repayments are different: they come back as equity."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it better to rent or buy in London?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "For the average London home, buying beats renting after 3.5 years if prices rise 3% a year, but stamp duty of about £17,500 on a £550,000 home makes selling within two years costly: after two years the buyer is about £14,400 behind. Flats break even in 1.8 years and detached houses not within 30 years. By borough, break-even ranges from 1.3 years in Tower Hamlets to almost 30 years in Richmond upon Thames."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if house prices stay flat or fall?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "With flat prices and today's mortgage rates, the median UK region needs 26 years for buying to beat renting, and in five regions (East Midlands, West Midlands, East of England, South East and Wales) the buyer is still behind after 30 years. Falling prices are worse: people who bought in July 2007 were behind an equivalent renter for between 6 years (London) and 19 years (North East)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does a bigger deposit make buying better value?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Only a little in our model. Moving from a 10% to a 25% deposit, with the lower 75% loan-to-value mortgage rate, shortens break-even by 0.1 to 1.0 years. In practice a larger deposit matters more because it unlocks cheaper mortgage deals and smaller monthly payments, and many lenders will not lend with less than 10%."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <style>
+        /* Code Block Styling */
+        .code-container {
+            position: relative;
+            margin: 25px 0;
+            background: #1e293b;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #0f172a;
+            border-bottom: 1px solid #334155;
+        }
+
+        .code-language {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .copy-button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .copy-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .copy-button.copied {
+            background: #059669;
+        }
+
+        .code-container pre {
+            margin: 0;
+            padding: 20px;
+            overflow-x: auto;
+            background: transparent;
+        }
+
+        .code-container code {
+            color: #e2e8f0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Tab styling for code examples */
+        .code-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 25px 0 0 0;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .code-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #64748b;
+            transition: all 0.2s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .code-tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .code-tab:hover {
+            color: #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info boxes */
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-left: 4px solid #2563eb;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-box h4 {
+            margin: 0 0 10px 0;
+            color: #1e40af;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1e3a8a;
+            line-height: 1.6;
+        }
+
+        .info-box p + p { margin-top: 10px; }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .warning-box h4 {
+            margin: 0 0 10px 0;
+            color: #92400e;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .warning-box p {
+            margin: 0;
+            color: #78350f;
+            line-height: 1.6;
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-left: 4px solid #059669;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .success-box h4 {
+            margin: 0 0 10px 0;
+            color: #065f46;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .success-box p {
+            margin: 0;
+            color: #064e3b;
+            line-height: 1.6;
+        }
+
+        /* Comparison table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        .comparison-table td.num, .comparison-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        /* Article extras */
+        .answer-box {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 28px 30px;
+            margin: 30px 0;
+            box-shadow: var(--shadow-lg);
+        }
+        .answer-box .answer-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: #93c5fd; font-weight: 700; margin-bottom: 8px; }
+        .answer-box .answer-big { font-size: 2rem; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .answer-box p { color: #dbeafe; margin: 0; font-size: 1.02rem; }
+        .answer-box a { color: white; font-weight: 600; }
+
+        .key-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; margin: 25px 0; }
+        .key-stat { background: var(--light-color); border-radius: 10px; padding: 16px 18px; border-left: 4px solid var(--primary-color); }
+        .key-stat .ks-value { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); line-height: 1.1; }
+        .key-stat .ks-label { font-size: 0.85rem; color: var(--gray-color); margin-top: 6px; line-height: 1.4; }
+
+        .article-content figure { margin: 30px 0; }
+        .article-content figure img { width: 100%; height: auto; margin: 0; }
+        .article-content figcaption { font-size: 0.88rem; color: var(--gray-color); margin-top: 10px; line-height: 1.5; }
+
+        .toc { background: var(--light-color); border-radius: 10px; padding: 20px 26px; margin: 25px 0; font-size: 0.98rem; }
+        .toc h4 { margin: 0 0 8px; color: var(--darker-color); font-size: 1rem; }
+        .toc ol { margin: 0; padding-left: 22px; }
+        .toc li { margin-bottom: 4px; }
+        .toc a { color: var(--primary-color); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+
+        .tool-cta {
+            display: flex; gap: 20px; align-items: center; background: white; border: 2px solid var(--primary-color);
+            border-radius: 12px; padding: 22px 26px; margin: 30px 0; flex-wrap: wrap;
+        }
+        .tool-cta .tool-cta-icon {
+            width: 60px; height: 60px; flex: 0 0 60px; background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: white;
+        }
+        .tool-cta .tool-cta-text { flex: 1 1 300px; }
+        .tool-cta h4 { margin: 0 0 6px; color: var(--darker-color); font-size: 1.15rem; }
+        .tool-cta p { margin: 0; color: var(--gray-color); font-size: 0.95rem; }
+
+        .faq-item { border-bottom: 1px solid #e2e8f0; padding: 18px 0; }
+        .faq-item h3 { margin: 0 0 8px; font-size: 1.15rem; }
+        .faq-item p { margin: 0; }
+
+        .sources { font-size: 0.9rem; color: var(--gray-color); }
+        .sources li { margin-bottom: 8px; }
+        .sources a { color: var(--primary-color); word-break: break-word; }
+
+        .article-content .callout-num { font-weight: 700; color: var(--darker-color); }
+
+        @media (max-width: 768px) {
+            .answer-box .answer-big { font-size: 1.5rem; }
+            .comparison-table { font-size: 0.85rem; }
+            .comparison-table th, .comparison-table td { padding: 8px 10px; }
+        }
+    </style>
+
+    <style>
+        .affiliate-slot { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 18px 20px; margin: 25px 0; color: var(--gray-color); font-size: 0.95rem; }
+        .affiliate-slot p { margin: 0 0 6px; }
+        .affiliate-disclosure { font-size: 0.85rem; font-style: italic; color: var(--gray-color); }
+        details.full-script { margin: 10px 0 25px; }
+        details.full-script summary { cursor: pointer; font-weight: 600; color: var(--primary-color); margin: 10px 0; }
+        details.full-script .code-container pre { max-height: 640px; }
+        .assumption-table td:first-child { font-weight: 600; color: var(--darker-color); white-space: nowrap; }
+        .comparison-table td.na { color: var(--gray-color); }
+        .comparison-table td.hl { font-weight: 700; color: var(--darker-color); }
+        .comparison-table td.num { white-space: nowrap; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href='/'>
+                    <img src="../TWD_Logo.png?v=2" alt="Truth with Data Logo">
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a class='nav-link' href='/#home'>Home</a></li>
+                <li><a class='nav-link active' href='/blog'>Blog</a></li>
+                <li><a class='nav-link' href='/case-studies'>Case Studies</a></li>
+                <li><a class='nav-link' href='/#services'>Services</a></li>
+                <li><a class='nav-link' href='/#products'>Digital Products</a></li>
+                <li><a class='nav-link' href='/#tools'>Tools</a></li>
+                <li><a class='nav-link' href='/#contact'>Contact</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Header -->
+    <div class="article-header">
+        <h1 class="article-title">Is Renting Really 'Dead Money' in the UK? What the Data Shows</h1>
+
+        <div class="article-meta">
+            <span class="blog-tag">Data Journalism</span>
+            <span class="blog-date">
+                <i class="far fa-calendar"></i>
+                October 23, 2026
+            </span>
+            <span class="blog-date">
+                <i class="far fa-clock"></i>
+                18 min read
+            </span>
+        </div>
+    </div>
+
+    <!-- Article Content -->
+    <article class="article-content">
+        <div class="answer-box">
+            <div class="answer-label">The short answer</div>
+            <div class="answer-big">Mortgage interest is dead money too. Buying wins only if house prices rise.</div>
+            <p>At September 2026 rates, the first-year interest on a 90% mortgage for the average home is 77&ndash;107% of the rent on that home, and once maintenance, insurance and the return the deposit could have earned are added, owning costs more than renting in all 12 UK regions. Buying comes out ahead through house-price growth: if prices keep rising at their 2005&ndash;2026 pace of 3.0% a year, buying beats renting after 1.4 years (Scotland) to 4.1 years (South East); if prices stay flat, it takes 11 years in Scotland, 18&ndash;27 years in six other regions and more than 30 years in the other five. Mortgage rates matter almost as much: one percentage point higher stretches the baseline to 2.3&ndash;12.2 years. In our 2005&ndash;2026 backtest, buyers who sold after five years were ahead of an equivalent renter in 79% of cases, but most who bought in 2006&ndash;08 were still behind after five years, and most 2022&ndash;24 buyers were behind by 2026. To run your own numbers, <a href='/tools/rent-vs-buy-calculator'>use the calculator</a>.</p>
+        </div>
+
+        <p>
+            "Renting is dead money" is the most repeated piece of financial advice in Britain. It is half right. Rent buys you nothing you can sell later. But a mortgage is not a savings account either: most of the early payments are interest, and stamp duty, solicitors, surveys, estate agents, repairs and insurance are just as unrecoverable as rent. The honest question is not "rent or own?" but "which set of unrecoverable costs is smaller, for the same home, over the time I will live in it?" We answered it with official data for every UK region and 316 local authorities, and tested the answer against what actually happened to buyers and renters from 2005 to 2026.
+        </p>
+
+        <div class="toc">
+            <h4>In this analysis</h4>
+            <ol>
+                <li><a href="#question">What "dead money" leaves out</a></li>
+                <li><a href="#method">How we compared renting and buying</a></li>
+                <li><a href="#year-one">Year one: interest versus rent</a></li>
+                <li><a href="#regions">Findings by region and property type</a></li>
+                <li><a href="#local">Findings by local authority</a></li>
+                <li><a href="#backtest">Historical backtest, 2005&ndash;2026</a></li>
+                <li><a href="#sensitivity">Sensitivity: interest rates, house prices, years held</a></li>
+                <li><a href="#deciding">What this means if you are deciding</a></li>
+                <li><a href="#limitations">Limitations</a></li>
+                <li><a href="#code">Reproducible code (Python and R)</a></li>
+                <li><a href="#downloads">Data downloads</a></li>
+                <li><a href="#faq">Frequently asked questions</a></li>
+            </ol>
+        </div>
+
+        <h2 id="question">1. What "dead money" leaves out</h2>
+
+        <p>
+            The phrase compares the whole of a rent payment with the whole of a mortgage payment and notices that only one of them leaves you owning something. That comparison makes three mistakes. It counts capital repayment as a benefit of buying while ignoring that the deposit used to get the mortgage could have been earning a return instead. It ignores the costs only owners pay: stamp duty (or LBTT in Scotland and LTT in Wales), conveyancing, a survey, mortgage product fees, maintenance, buildings insurance, service charges on flats and, eventually, an estate agent. And it quietly assumes the home will be worth more when you sell it, which is the one part of the calculation nobody can know in advance.
+        </p>
+
+        <p>
+            The fair comparison takes one home and two households. One buys it. The other rents the same home and invests the money the buyer put into the deposit and buying costs. Each month, whichever household has the lower housing bill invests the difference, so both spend exactly the same. At any point we can ask who is wealthier: the buyer, with the home's value minus the mortgage still owed and the cost of selling, or the renter, with their investments. The month from which the buyer stays ahead is the <strong>break-even point</strong>. That is the number this article is about.
+        </p>
+
+        <h2 id="method">2. How we compared renting and buying</h2>
+
+        <p>
+            <strong>The homes.</strong> For each of the 12 UK regions and nations we take the average price from the HM Land Registry UK House Price Index for July 2026 (the latest month available) and the average monthly private rent for the same month from the ONS Price Index of Private Rents (PIPR). Both series are published by property type, so we also compare like with like: terraced with terraced, flats with flats. Both are published for local authorities in England and Wales, which gives us 316 local comparisons. We do not report a single "UK average" comparison: the UK average rent is weighted towards the rental stock, which is concentrated in London and cities, while the UK average price is weighted by sales, so their ratio describes no real home.
+        </p>
+
+        <p>
+            <strong>The money.</strong> All amounts are nominal pounds. The main scenario is a first-time buyer with a 10% deposit, paying the Bank of England's average quoted rate for a two-year fixed mortgage at 90% loan-to-value in September 2026 (5.37%), re-fixed every two years with a new product fee, on a 25-year repayment mortgage. We also run a 25% deposit at the 75% LTV rate (5.13%). The renter invests at 5% a year, the Financial Conduct Authority's intermediate projection rate for tax-advantaged products such as ISAs. House prices and rents grow at England's average over July 2005 to July 2026: <span class="callout-num">3.0% a year for prices</span> and <span class="callout-num">3.0% a year for rents</span>. That window is the longest both series cover, and it contains a crash, a decade of near-zero interest rates, a pandemic boom and the 2022&ndash;23 rate shock. Every one of these assumptions is varied in <a href="#sensitivity">section 7</a>.
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table assumption-table">
+            <thead><tr><th>Assumption</th><th>Value</th><th>Source</th></tr></thead>
+            <tbody>
+                <tr><td>Purchase price</td><td>Average by region and type, July 2026</td><td>HM Land Registry UK HPI full file</td></tr>
+                <tr><td>Rent</td><td>Average monthly private rent, July 2026; reset once a year</td><td>ONS PIPR, 21 October 2026 release</td></tr>
+                <tr><td>Mortgage rate</td><td>5.37% (90% LTV) / 5.13% (75% LTV), 2-year fixed, Sep 2026</td><td>Bank of England IUMB482 / IUMBV34</td></tr>
+                <tr><td>Transaction tax</td><td>SDLT (England, NI), LBTT (Scotland), LTT (Wales) at October 2026 rates, with first-time buyer relief where it exists</td><td>GOV.UK, Revenue Scotland, Welsh Government</td></tr>
+                <tr><td>Conveyancing (buying)</td><td>&pound;1,420 freehold house; &pound;1,825 leasehold flat</td><td>ClearScore solicitor fees guide, 2026</td></tr>
+                <tr><td>Survey</td><td>&pound;400 at &pound;150k rising to &pound;1,200 at &pound;750k</td><td>ClearScore solicitor fees guide, 2026</td></tr>
+                <tr><td>Mortgage product fee</td><td>&pound;1,141 at purchase and every 2-year re-fix</td><td>Moneyfacts average fixed-rate fee (Feb 2024 data)</td></tr>
+                <tr><td>Selling costs</td><td>Estate agent 1.42% inc. VAT; legal &pound;950</td><td>HomeOwners Alliance, 2026</td></tr>
+                <tr><td>Maintenance</td><td>1% of value a year (houses); 0.5% (flats)</td><td>Common 1% rule of thumb; flats figure is our assumption because the service charge covers communal repairs</td></tr>
+                <tr><td>Buildings insurance</td><td>&pound;306 a year (houses)</td><td>ABI average buildings-only premium, Q1 2026</td></tr>
+                <tr><td>Service charge (flats)</td><td>&pound;2,405 a year; London &pound;2,801</td><td>Hamptons 2025 Service Charge Index (England &amp; Wales)</td></tr>
+                <tr><td>Fixed costs inflation</td><td>2% a year</td><td>Bank of England inflation target</td></tr>
+                <tr><td>Renter's return</td><td>5% a year, tax-free (ISA)</td><td>FCA COBS 13 Annex 2 intermediate rate</td></tr>
+                <tr><td>Price and rent growth</td><td>3.0% and 3.0% a year</td><td>England, July 2005&ndash;July 2026, UK HPI and PIPR</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h2 id="year-one">3. Year one: interest versus rent</h2>
+
+        <p>
+            Start with the simplest version of the question: in the first year, what does owning cost that you will never get back, and how does it compare with rent? Figure 1 stacks the unrecoverable costs of owning the average home in each region with a 10% deposit: mortgage interest, maintenance and insurance, and the 5% return forgone on the deposit and buying costs. Capital repayment is left out because it comes back as equity.
+        </p>
+
+        <figure>
+            <img src="charts/first-year-cost-of-owning-vs-rent-by-region-uk-2026.svg" alt="Stacked bars of monthly first-year owning costs by region: mortgage interest alone is 77% to 107% of rent, and interest plus maintenance, insurance and forgone returns exceeds rent everywhere; after expected price growth owning is cheaper than rent." loading="lazy" width="893" height="547">
+            <figcaption>Figure 1. Monthly unrecoverable costs of owning in the first year (bars) against rent on the same average home (diamonds). The black tick shows the owner's cost after expected house-price growth of 3.0% a year.</figcaption>
+        </figure>
+
+        <p>
+            Mortgage interest alone is between <span class="callout-num">77% of the rent</span> (Scotland) and <span class="callout-num">107%</span> (South East). In five regions, the East Midlands, West Midlands, East of England, South East and Wales, a first-time buyer's interest bill in year one is larger than the rent they would have paid. Add maintenance, insurance and the forgone return on the deposit and owning costs 5% (Scotland) to 45% (South East) more than renting, everywhere. On these numbers rent is no more "dead" than mortgage interest; it is somewhat less.
+        </p>
+
+        <p>
+            What turns the comparison around is the black tick. If the home gains 3.0% in value over the year, that gain, worth more than a year's maintenance and forgone return combined, brings the owner's net cost down to 56&ndash;77% of the rent. Buying wins on the expectation of price growth, and on nothing else. Before that growth, it is the more expensive way to live in the same home.
+        </p>
+
+        <h2 id="regions">4. Findings by region and property type</h2>
+
+        <p>
+            A snapshot of one year ignores the upfront costs (which favour renting) and the compounding of price growth on a leveraged asset (which favours buying). The full monthly model handles both. Figure 2 shows the break-even point for the average home in each region under three futures: prices keep rising at 3.0% a year, prices rise at 3.0% but mortgage rates are a point higher (6.37%), and prices stay flat.
+        </p>
+
+        <figure>
+            <img src="charts/rent-vs-buy-breakeven-years-by-region-uk-2026.svg" alt="Dot plot of break-even years by UK region under three scenarios: 1.4 to 4.1 years if prices keep rising 3% a year, 2.3 to 12.2 years if mortgage rates are a point higher, and 11 years to more than 30 if prices are flat." loading="lazy" width="893" height="533">
+            <figcaption>Figure 2. Years until buying the average home beats renting it and investing the difference. First-time buyer, 10% deposit. "30+" means the buyer is still behind after 30 years.</figcaption>
+        </figure>
+
+        <div class="key-stats">
+            <div class="key-stat"><div class="ks-value">2.8 yrs</div><div class="ks-label">Median break-even across 12 regions if prices keep rising 3.0% a year (range 1.4 to 4.1)</div></div>
+            <div class="key-stat"><div class="ks-value">26 yrs</div><div class="ks-label">Median break-even if house prices stay flat; 5 regions never break even within 30 years</div></div>
+            <div class="key-stat"><div class="ks-value">2.3&ndash;12.2</div><div class="ks-label">Break-even range in years if mortgage rates are 1 point higher (6.37%)</div></div>
+            <div class="key-stat"><div class="ks-value">0.1&ndash;1.0</div><div class="ks-label">Years cut from break-even by a 25% deposit (at the lower 75% LTV rate) instead of 10%</div></div>
+        </div>
+
+        <p>
+            If the next few years look like the last twenty, buying is clearly the better deal in every region for anyone who stays more than about four years, and in most regions after two or three. Scotland is quickest at 1.4 years, because its rents are high relative to prices (a gross yield of 6.2%) and LBTT is low; the South East is slowest at 4.1 years. London's high prices are offset by high rents, putting it at 3.5 years, though its &pound;17,500 stamp duty bill (above the first-time buyer threshold) makes early sale expensive.
+        </p>
+
+        <p>
+            The flat-price column is the other half of the story. With no price growth the buyer is relying on equity built by repayments and on rent rising faster than their own costs, and at a 5.37% mortgage rate that takes 11 years in Scotland and 18&ndash;27 years in six other regions. In the East Midlands, West Midlands, East of England, South East and Wales, the buyer is still behind after 30 years. The table has the full figures, including the wealth gap after five and ten years.
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>Region</th><th class="num">Avg price</th><th class="num">Rent / month</th><th class="num">Gross yield</th><th class="num">Tax (FTB)</th><th class="num">Break-even: prices +3.0%</th><th class="num">Rates +1 pt</th><th class="num">Flat prices</th><th class="num">Buyer vs renter, 5 yrs</th><th class="num">10 yrs</th></tr></thead>
+            <tbody>
+                <tr><td>Scotland</td><td class="num">&pound;196,349</td><td class="num">&pound;1,016</td><td class="num">6.2%</td><td class="num">&pound;427</td><td class="num hl">1.4</td><td class="num">2.3</td><td class="num">10.8</td><td class="num">+&pound;20,691</td><td class="num">+&pound;61,038</td></tr>
+                <tr><td>North East</td><td class="num">&pound;166,943</td><td class="num">&pound;783</td><td class="num">5.6%</td><td class="num">&pound;0</td><td class="num hl">2.2</td><td class="num">4.1</td><td class="num">18.3</td><td class="num">+&pound;10,915</td><td class="num">+&pound;35,715</td></tr>
+                <tr><td>South West</td><td class="num">&pound;302,298</td><td class="num">&pound;1,236</td><td class="num">4.9%</td><td class="num">&pound;115</td><td class="num hl">2.2</td><td class="num">5.3</td><td class="num">25.2</td><td class="num">+&pound;13,851</td><td class="num">+&pound;47,068</td></tr>
+                <tr><td>North West</td><td class="num">&pound;221,445</td><td class="num">&pound;965</td><td class="num">5.2%</td><td class="num">&pound;0</td><td class="num hl">2.2</td><td class="num">4.6</td><td class="num">21.8</td><td class="num">+&pound;12,109</td><td class="num">+&pound;40,268</td></tr>
+                <tr><td>Northern Ireland</td><td class="num">&pound;202,487</td><td class="num">&pound;879</td><td class="num">5.2%</td><td class="num">&pound;0</td><td class="num hl">2.3</td><td class="num">5.0</td><td class="num">22.8</td><td class="num">+&pound;10,065</td><td class="num">+&pound;34,718</td></tr>
+                <tr><td>Yorkshire &amp; Humber</td><td class="num">&pound;209,116</td><td class="num">&pound;864</td><td class="num">5.0%</td><td class="num">&pound;0</td><td class="num hl">2.7</td><td class="num">6.8</td><td class="num">26.6</td><td class="num">+&pound;7,544</td><td class="num">+&pound;28,780</td></tr>
+                <tr><td>West Midlands</td><td class="num">&pound;250,880</td><td class="num">&pound;974</td><td class="num">4.7%</td><td class="num">&pound;0</td><td class="num hl">3.0</td><td class="num">9.3</td><td class="num na">30+</td><td class="num">+&pound;6,345</td><td class="num">+&pound;27,120</td></tr>
+                <tr><td>East of England</td><td class="num">&pound;337,518</td><td class="num">&pound;1,285</td><td class="num">4.6%</td><td class="num">&pound;1,876</td><td class="num hl">3.2</td><td class="num">10.2</td><td class="num na">30+</td><td class="num">+&pound;7,480</td><td class="num">+&pound;35,187</td></tr>
+                <tr><td>Wales</td><td class="num">&pound;215,037</td><td class="num">&pound;843</td><td class="num">4.7%</td><td class="num">&pound;0</td><td class="num hl">3.2</td><td class="num">10.2</td><td class="num na">30+</td><td class="num">+&pound;4,747</td><td class="num">+&pound;22,149</td></tr>
+                <tr><td>East Midlands</td><td class="num">&pound;242,274</td><td class="num">&pound;918</td><td class="num">4.5%</td><td class="num">&pound;0</td><td class="num hl">3.3</td><td class="num">12.2</td><td class="num na">30+</td><td class="num">+&pound;4,199</td><td class="num">+&pound;21,635</td></tr>
+                <tr><td>London</td><td class="num">&pound;550,037</td><td class="num">&pound;2,317</td><td class="num">5.0%</td><td class="num">&pound;17,502</td><td class="num hl">3.5</td><td class="num">6.9</td><td class="num">23.2</td><td class="num">+&pound;15,548</td><td class="num">+&pound;84,104</td></tr>
+                <tr><td>South East</td><td class="num">&pound;380,878</td><td class="num">&pound;1,419</td><td class="num">4.5%</td><td class="num">&pound;4,044</td><td class="num hl">4.1</td><td class="num">12.2</td><td class="num na">30+</td><td class="num">+&pound;4,925</td><td class="num">+&pound;33,438</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="sources" style="margin-top:-12px">Average home, all property types, July 2026. First-time buyer, 10% deposit, 5.37%. Break-even in years. Tax = SDLT/LBTT/LTT with first-time buyer relief where available. Positive gaps mean the buyer is wealthier.</p>
+
+        <p>
+            The regional averages also hide a large difference between property types (table below). Terraced houses break even fastest in every region (median 1.6 years), because they rent for almost as much as semis while costing less to buy. Detached houses are the worst case for buying: a median of 6.8 years, more than 10 years in four regions, and no break-even within 30 years in London or the South East, where detached homes cost &pound;1.17m and &pound;688k but rent for gross yields of 3.0% and 3.4%. Flats come out well despite our service-charge assumption, with a median of 2.3 years.
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>Region</th><th class="num">Terraced</th><th class="num">Semi-detached</th><th class="num">Flat</th><th class="num">Detached</th><th class="num">All types</th></tr></thead>
+            <tbody>
+                <tr><td>Scotland</td><td class="num">1.2</td><td class="num">1.7</td><td class="num">1.8</td><td class="num">3.2</td><td class="num">1.4</td></tr>
+                <tr><td>North East</td><td class="num">1.3</td><td class="num">2.1</td><td class="num">2.8</td><td class="num">3.2</td><td class="num">2.2</td></tr>
+                <tr><td>South West</td><td class="num">1.3</td><td class="num">2.2</td><td class="num">1.6</td><td class="num">10.6</td><td class="num">2.2</td></tr>
+                <tr><td>North West</td><td class="num">1.2</td><td class="num">2.1</td><td class="num">2.2</td><td class="num">6.4</td><td class="num">2.2</td></tr>
+                <tr><td>Northern Ireland</td><td class="num">1.3</td><td class="num">2.2</td><td class="num">3.0</td><td class="num">4.8</td><td class="num">2.3</td></tr>
+                <tr><td>Yorkshire &amp; Humber</td><td class="num">1.6</td><td class="num">2.4</td><td class="num">3.1</td><td class="num">7.0</td><td class="num">2.7</td></tr>
+                <tr><td>West Midlands</td><td class="num">1.7</td><td class="num">2.6</td><td class="num">2.4</td><td class="num">15.2</td><td class="num">3.0</td></tr>
+                <tr><td>East of England</td><td class="num">1.7</td><td class="num">2.8</td><td class="num">1.7</td><td class="num">10.2</td><td class="num">3.2</td></tr>
+                <tr><td>Wales</td><td class="num">1.7</td><td class="num">2.8</td><td class="num">3.1</td><td class="num">13.4</td><td class="num">3.2</td></tr>
+                <tr><td>East Midlands</td><td class="num">1.7</td><td class="num">2.5</td><td class="num">2.6</td><td class="num">6.7</td><td class="num">3.3</td></tr>
+                <tr><td>London</td><td class="num">3.2</td><td class="num">4.2</td><td class="num">1.8</td><td class="num na">30+</td><td class="num">3.5</td></tr>
+                <tr><td>South East</td><td class="num">1.8</td><td class="num">4.1</td><td class="num">1.4</td><td class="num na">30+</td><td class="num">4.1</td></tr>
+                <tr><td><strong>Median of regions</strong></td><td class="num">1.6</td><td class="num">2.5</td><td class="num">2.3</td><td class="num">8.6</td><td class="num">2.8</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="sources" style="margin-top:-12px">Break-even in years by property type, baseline assumptions, 10% deposit. Flats include a service charge and 0.5% maintenance; houses 1% maintenance and buildings insurance.</p>
+
+        <p>
+            Using each region's <em>own</em> 2005&ndash;2026 price and rent growth instead of England's, the break-even ranges from 0.8 years in Northern Ireland, where prices have risen 5.6% a year since 2015, to 5.3 years in the North East, where prices rose only 1.8% a year from 2005 while rents rose 2.5%. Regional history is not a forecast, which is why we use one common assumption in the main results.
+        </p>
+
+        <!-- ADSENSE: in-article unit 1 (after section 4) -->
+        <!-- <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX"></ins> -->
+        <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        <!-- END ADSENSE 1 -->
+
+        <h2 id="local">5. Findings by local authority</h2>
+
+        <p>
+            Regional averages blend cities and countryside with very different rent-to-price ratios. Figure 3 repeats the baseline calculation for the 316 local authorities in England and Wales for which both HM Land Registry and ONS publish July 2026 figures.
+        </p>
+
+        <figure>
+            <img src="charts/rent-vs-buy-breakeven-by-local-authority-england-wales-2026.svg" alt="Strip plot of break-even years for 316 local authorities grouped by region. Most cities break even within 1 to 3 years; 15 high-priced rural and commuter authorities such as Elmbridge and Powys do not break even within 30 years." loading="lazy" width="893" height="547">
+            <figcaption>Figure 3. Break-even years for the average home in each local authority, baseline assumptions. Each dot is one authority; the bar marks the regional median; the right-hand column is the share of authorities breaking even within five years.</figcaption>
+        </figure>
+
+        <p>
+            The pattern is driven almost entirely by the gross rental yield, rent as a share of price: across authorities the correlation between yield and break-even is &minus;0.77. In 181 authorities (57%) buying the average home beats renting within five years. In 55 it takes more than ten, and in 15 the buyer is still behind after 30 years. The fastest are cities where rents are high relative to prices: Newcastle upon Tyne (1.0 years, yield 7.0%), Manchester, Portsmouth, Bristol and Southampton (1.1&ndash;1.2 years). The 15 that never break even are expensive rural and commuter districts with yields of 2.7&ndash;3.5%, including Elmbridge, Waverley and Mole Valley in Surrey, the Derbyshire Dales, South Hams, Malvern Hills and Powys. London spans almost the whole range, from Tower Hamlets (1.3 years) and Newham (1.5) to Kingston upon Thames (19), Kensington and Chelsea (27.5) and Richmond upon Thames (29.75).
+        </p>
+
+        <div class="warning-box">
+            <h4><i class="fas fa-triangle-exclamation"></i> Local averages compare different homes</h4>
+            <p>At local authority level the "average home" for sale and the "average home" for rent can be quite different: rented stock in a city is mostly flats and terraces, while sales in a rural district include many detached houses. Comparing like with like reduces the gap. Using terraced houses only, the median break-even across authorities falls from 4.25 to 2.25 years; using flats, also 2.25. The ranking of authorities is similar (rank correlation 0.74), but the all-types figures, especially the "never" cases, are probably biased towards renting.</p>
+        </div>
+
+        <h2 id="backtest">6. Historical backtest, 2005&ndash;2026</h2>
+
+        <p>
+            A forecast with one assumed growth rate cannot show what happens when prices fall, rates jump or rents surge. So we replayed history. For every region and every July from 2005 (2009 for Wales, 2011 for Scotland, 2015 for Northern Ireland, when their rent series start) we simulated a buyer and a renter of the region's average home, using the actual monthly prices, actual rents, and the actual 2-year fixed rate at each re-fix. The buyer has a 25% deposit, because the 75% LTV rate series is the only one complete back to 2005. The renter invests either at 5% a year or at Bank Rate, a proxy for the best cash savings rate. That gives 232 purchase dates and 2,418 buy-and-sell pairs in each version.
+        </p>
+
+        <figure>
+            <img src="charts/rent-vs-buy-historical-backtest-buy-year-years-held-2005-2026.svg" alt="Heatmap of buyer-minus-renter wealth by purchase year and years held, 2005 to 2026. Buyers in 2006 to 2008 were behind for up to a decade; buyers from 2009 to 2021 were mostly well ahead after five years; buyers in 2022 to 2024 were behind after two years." loading="lazy" width="893" height="576">
+            <figcaption>Figure 4. Buyer's net wealth minus the renter's at the point of sale, as a percentage of the purchase price; median across regions. Blue: buying came out ahead. Amber: renting did. Renter invests at 5% a year.</figcaption>
+        </figure>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>Years held</th><th class="num">Cases</th><th class="num">Buyer ahead (renter earns 5%)</th><th class="num">Buyer ahead (renter earns Bank Rate)</th><th class="num">Median gap, % of price (5%)</th></tr></thead>
+            <tbody>
+                <tr><td>1 year</td><td class="num">232</td><td class="num">47%</td><td class="num">54%</td><td class="num">-0.3%</td></tr>
+                <tr><td>2 years</td><td class="num">220</td><td class="num">60%</td><td class="num">64%</td><td class="num">+2.4%</td></tr>
+                <tr><td>3 years</td><td class="num">208</td><td class="num">68%</td><td class="num">71%</td><td class="num">+7.0%</td></tr>
+                <tr><td>5 years</td><td class="num">184</td><td class="num">79%</td><td class="num">83%</td><td class="num">+17.9%</td></tr>
+                <tr><td>7 years</td><td class="num">160</td><td class="num">80%</td><td class="num">87%</td><td class="num">+28.1%</td></tr>
+                <tr><td>10 years</td><td class="num">124</td><td class="num">86%</td><td class="num">98%</td><td class="num">+42.6%</td></tr>
+                <tr><td>15 years</td><td class="num">67</td><td class="num">96%</td><td class="num">100%</td><td class="num">+51.9%</td></tr>
+                <tr><td>20 years</td><td class="num">18</td><td class="num">100%</td><td class="num">100%</td><td class="num">+52.7%</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="sources" style="margin-top:-12px">Every region and July purchase date from 2005 to 2025, sold in July of each later year to 2026. 25% deposit, actual prices, rents and 2-year fixed rates (75% LTV).</p>
+
+        <p>
+            Three findings stand out. <strong>First, buying usually won, and won big over long holds.</strong> Holding for five years, the buyer finished ahead in 79% of cases; holding for ten, 86%; and every 20-year hold in the data (18 of them, all England) ended with the buyer ahead. When the renter's alternative is cash at Bank Rate, which was 0.1&ndash;0.75% from 2009 to 2021, buying wins even more often: 83% of five-year holds and 98% of ten-year holds.
+        </p>
+
+        <p>
+            <strong>Second, timing can override everything.</strong> A buyer in July 2007 who sold five years later was behind the renter by between 4% of the purchase price (London) and 29% (North East); it took them 6 years (London) to 19 years (North East) to get ahead. Buyers in July 2022, 2023 and 2024 were behind an equivalent renter in 8 of 12 regions by July 2026, by a median of 2&ndash;5% of the price: they bought near a price peak, just as mortgage rates jumped.
+        </p>
+
+        <p>
+            <strong>Third, short holds are close to a coin toss.</strong> Selling after one year, the buyer was ahead in 47% of cases, and after two years in 60%. Stamp duty, fees and the estate agent take most of the first year's equity, so short-term outcomes depend on whether prices happened to rise in that particular year.
+        </p>
+
+        <div class="info-box">
+            <h4><i class="fas fa-lightbulb"></i> The backtest flatters buyers in one way</h4>
+            <p>A renter who put the deposit into a global equity fund from 2009 to 2021 would probably have earned considerably more than our 5% assumption, which would shrink the buyer's lead in those years. We do not have a licensed equity index history to test this directly, so we show the 5% and cash versions and say so. Use the calculator to try 7% or 8%.</p>
+        </div>
+
+        <h2 id="sensitivity">7. Sensitivity: interest rates, house prices, years held</h2>
+
+        <p>
+            Every number above rests on assumptions, so we varied each one, running all 12 regions for every combination and reporting the median break-even. Figure 5 crosses the two assumptions that matter most: the mortgage rate and house-price growth.
+        </p>
+
+        <figure>
+            <img src="charts/rent-vs-buy-breakeven-sensitivity-mortgage-rate-price-growth.svg" alt="Heatmap of median break-even years by mortgage rate (3% to 7%) and house-price growth (0% to 5%). At today's rate it is 2.8 years with 3% price growth, 8.0 years with 2%, 19 years with 1% and 26 years with flat prices." loading="lazy" width="763" height="518">
+            <figcaption>Figure 5. Median break-even in years across 12 regions. The outlined cell is the baseline: today's 5.37% rate and 3.0% price growth.</figcaption>
+        </figure>
+
+        <p>
+            <strong>House-price growth dominates.</strong> At today's rate, the median break-even goes from 2.8 years with 3.0% growth to 8.0 years with 2%, 19 years with 1% and 26 years with none. No other input moves the answer that much. <strong>Interest rates come second.</strong> With 3.0% growth, a 4% mortgage rate gives a median break-even of 1.3 years; 6% gives 4.9 years; 7% gives 13. The reason is leverage: with a 10% deposit, the interest rate applies to a loan nine times the size of the buyer's stake.
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>Renter's return</th><th class="num">Prices 0.0%</th><th class="num">Prices 1.0%</th><th class="num">Prices 2.0%</th><th class="num">Prices 3.0%</th><th class="num">Prices 4.0%</th><th class="num">Prices 5.0%</th></tr></thead>
+            <tbody>
+                <tr><td>2%</td><td class="num">15.3</td><td class="num">9.1</td><td class="num">4.5</td><td class="num">2.2</td><td class="num">1.2</td><td class="num">0.9</td></tr>
+                <tr><td>3%</td><td class="num">17.9</td><td class="num">11.1</td><td class="num">5.1</td><td class="num">2.3</td><td class="num">1.3</td><td class="num">1.0</td></tr>
+                <tr><td>4%</td><td class="num">21.2</td><td class="num">14.1</td><td class="num">6.3</td><td class="num">2.6</td><td class="num">1.4</td><td class="num">1.0</td></tr>
+                <tr><td>5% (FCA intermediate)</td><td class="num">25.9</td><td class="num">18.7</td><td class="num">8.0</td><td class="num">2.8</td><td class="num">1.5</td><td class="num">1.1</td></tr>
+                <tr><td>6%</td><td class="num na">30+</td><td class="num">27.5</td><td class="num">11.8</td><td class="num">3.2</td><td class="num">1.6</td><td class="num">1.1</td></tr>
+                <tr><td>7%</td><td class="num na">30+</td><td class="num na">30+</td><td class="num na">30+</td><td class="num">4.1</td><td class="num">1.7</td><td class="num">1.2</td></tr>
+                <tr><td>8%</td><td class="num na">30+</td><td class="num na">30+</td><td class="num na">30+</td><td class="num na">30+</td><td class="num">2.5</td><td class="num">1.2</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="sources" style="margin-top:-12px">Median break-even in years across 12 regions, by the renter's investment return and house-price growth; mortgage rate 5.37%, rents +3.0% a year.</p>
+
+        <p>
+            <strong>The renter's return matters more than people expect.</strong> At 2% (roughly a good cash rate in real terms), the median break-even is 2.2 years; at 8% (the FCA's higher projection rate) the median buyer never stays ahead within 30 years, because the renter's compounding catches up in the later decades. <strong>Rent growth matters less</strong> when prices are rising: from 1% to 5% a year, the baseline break-even moves only from 3.0 to 2.7 years. It matters a great deal when prices are not rising: with 2% price growth, rents rising 1% a year mean the buyer never catches up, and 5% a year brings break-even down to 5.8 years.
+        </p>
+
+        <p>
+            <strong>Maintenance and deposit size are secondary.</strong> Halving maintenance to 0.5% of value cuts the median break-even from 2.8 to 2.0 years; raising it to 1.5% lifts it to 4.9 (8.3 in the slowest region). A bigger deposit barely matters in the model: 5% gives 2.9 years and 40% gives 2.6. In real life a bigger deposit matters more than this, because it unlocks cheaper rates and smaller monthly payments, and below a 10% deposit many buyers cannot borrow at all.
+        </p>
+
+        <p>
+            <strong>Years held is the decision you control.</strong> The next table shows how much better or worse off the buyer is than the renter after 2, 5, 10 and 20 years in each region, at baseline assumptions. After two years the buyer is behind in 11 of 12 regions, mostly by a few thousand pounds and by &pound;14,400 in London, where stamp duty is largest. After five years the buyer is ahead everywhere; after 20, by &pound;90,000 to &pound;334,000.
+        </p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>Region</th><th class="num">After 2 years</th><th class="num">After 5 years</th><th class="num">After 10 years</th><th class="num">After 20 years</th></tr></thead>
+            <tbody>
+                <tr><td>Scotland</td><td class="num">+&pound;2,313</td><td class="num">+&pound;20,691</td><td class="num">+&pound;61,038</td><td class="num">+&pound;204,965</td></tr>
+                <tr><td>North East</td><td class="num">&minus;&pound;560</td><td class="num">+&pound;10,915</td><td class="num">+&pound;35,715</td><td class="num">+&pound;126,793</td></tr>
+                <tr><td>South West</td><td class="num">&minus;&pound;1,070</td><td class="num">+&pound;13,851</td><td class="num">+&pound;47,068</td><td class="num">+&pound;169,880</td></tr>
+                <tr><td>North West</td><td class="num">&minus;&pound;740</td><td class="num">+&pound;12,109</td><td class="num">+&pound;40,268</td><td class="num">+&pound;144,018</td></tr>
+                <tr><td>Northern Ireland</td><td class="num">&minus;&pound;1,256</td><td class="num">+&pound;10,065</td><td class="num">+&pound;34,718</td><td class="num">+&pound;126,240</td></tr>
+                <tr><td>Yorkshire &amp; Humber</td><td class="num">&minus;&pound;2,226</td><td class="num">+&pound;7,544</td><td class="num">+&pound;28,780</td><td class="num">+&pound;109,048</td></tr>
+                <tr><td>West Midlands</td><td class="num">&minus;&pound;3,116</td><td class="num">+&pound;6,345</td><td class="num">+&pound;27,120</td><td class="num">+&pound;106,947</td></tr>
+                <tr><td>East of England</td><td class="num">&minus;&pound;4,853</td><td class="num">+&pound;7,480</td><td class="num">+&pound;35,187</td><td class="num">+&pound;140,767</td></tr>
+                <tr><td>Wales</td><td class="num">&minus;&pound;3,287</td><td class="num">+&pound;4,747</td><td class="num">+&pound;22,149</td><td class="num">+&pound;89,744</td></tr>
+                <tr><td>East Midlands</td><td class="num">&minus;&pound;3,784</td><td class="num">+&pound;4,199</td><td class="num">+&pound;21,635</td><td class="num">+&pound;90,067</td></tr>
+                <tr><td>London</td><td class="num">&minus;&pound;14,368</td><td class="num">+&pound;15,548</td><td class="num">+&pound;84,104</td><td class="num">+&pound;334,328</td></tr>
+                <tr><td>South East</td><td class="num">&minus;&pound;7,631</td><td class="num">+&pound;4,925</td><td class="num">+&pound;33,438</td><td class="num">+&pound;143,190</td></tr>
+            </tbody>
+        </table>
+        </div>
+        <p class="sources" style="margin-top:-12px">Buyer's net wealth minus renter's, nominal pounds, baseline assumptions, average home, 10% deposit. Negative = the renter is ahead.</p>
+
+        <figure>
+            <img src="charts/rent-vs-buy-net-wealth-over-time-west-midlands.svg" alt="Line chart of buyer and renter net wealth over 30 years for the average West Midlands home. With 3% price growth the buyer overtakes after 3 years and ends far ahead; with flat prices the buyer stays behind the renter for the whole 30 years." loading="lazy" width="893" height="504">
+            <figcaption>Figure 6. The model for one home, the average in the West Midlands, a region close to the national median break-even. Solid lines: prices and rents rise 3.0% a year. Dashed lines: prices flat. Nominal pounds.</figcaption>
+        </figure>
+
+        <p>
+            Figure 6 shows why a single break-even figure can mislead. With 3.0% growth the buyer overtakes after three years and, after 30, is worth &pound;720,000 against the renter's &pound;445,000. With flat prices the same purchase leaves the buyer slightly behind the renter for all 30 years, ending at &pound;397,000 against &pound;405,000. The renter's outcome barely changes between the two scenarios; the buyer's depends almost entirely on prices.
+        </p>
+
+        <!-- ADSENSE: in-article unit 2 (after section 7) -->
+        <!-- <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-2836545666986892" data-ad-slot="XXXXXXXXXX"></ins> -->
+        <!-- <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        <!-- END ADSENSE 2 -->
+
+        <h2 id="deciding">8. What this means if you are deciding</h2>
+
+        <p>
+            <strong>Rent is not dead money, and neither is buying a sure thing.</strong> Rent pays for somewhere to live with no maintenance bills, no transaction costs and the freedom to move. Mortgage interest pays for the same thing plus a leveraged bet on house prices. Over the last 20 years that bet mostly paid off. Whether it pays off for you depends on three things, in this order:
+        </p>
+
+        <ul>
+            <li><strong>How long you will stay.</strong> Under two years, buying usually loses: our backtest gives the buyer roughly a coin-toss chance over one to two years, and the forward model has the buyer behind after two years in 11 of 12 regions. Beyond five years, buying won in 79% of historical cases and wins in every region at baseline assumptions.</li>
+            <li><strong>What happens to house prices.</strong> If you think prices will roughly track the last 20 years, buying wins quickly almost everywhere. If you think they will stagnate, buying takes decades to win, or never does, at today's rates.</li>
+            <li><strong>The local rent-to-price ratio.</strong> Where rents are high relative to prices, in most cities and for terraced houses and flats, buying wins faster. In expensive rural and commuter areas and for detached houses, renting is often the cheaper way to live in the same home.</li>
+        </ul>
+
+        <p>
+            One part of the "dead money" argument is right, and it is behavioural: the model assumes the renter actually invests the deposit and every month's saving. A renter who spends that money instead ends up with nothing, and a mortgage is a form of forced saving. If you rent, the comparison only holds if you automate the investing.
+        </p>
+
+        <div class="tool-cta">
+            <div class="tool-cta-icon"><i class="fas fa-house-circle-check"></i></div>
+            <div class="tool-cta-text">
+                <h4>Run the numbers for your own home</h4>
+                <p>Our free <a href='/tools/rent-vs-buy-calculator'>Rent vs Buy Calculator</a> starts from the July 2026 average price and rent for your region and property type, applies the right stamp duty, LBTT or LTT, and lets you change every assumption. It shows your break-even year, net wealth over 30 years and a plain-English verdict. It runs entirely in your browser.</p>
+                <p>Want the full picture for your numbers? The <a href='/tools/rent-vs-buy-calculator#report'>personalised Rent vs Buy Report</a> (&pound;5.99) adds your tipping points, stress tests, what happened to buyers in your region since 2005 and a checklist for your broker, as a 9-page PDF. <a href="../reports/samples/rent-vs-buy-sample-report.pdf">See a sample</a>.</p>
+            </div>
+            <a class='btn btn-primary' href='/tools/rent-vs-buy-calculator'>Open the calculator</a>
+        </div>
+
+        <!-- AFFILIATE PLACEHOLDER 1 (after section 8): e.g. whole-of-market mortgage broker. Keep the disclosure line visible when filled in. -->
+        <div class="affiliate-slot" id="affiliate-slot-1">
+            <p><strong>Affiliate placeholder 1</strong> &mdash; partner link to be added (for example, a mortgage broker).</p>
+            <p class="affiliate-disclosure">Disclosure: some links on this page may be affiliate links. If you use them we may earn a commission, at no extra cost to you. It never affects our analysis, which was finished before any partner was chosen.</p>
+        </div>
+        <!-- END AFFILIATE PLACEHOLDER 1 -->
+
+        <!-- AFFILIATE PLACEHOLDER 2 (after section 8): e.g. Stocks and Shares ISA platform for renters investing the deposit. -->
+        <div class="affiliate-slot" id="affiliate-slot-2">
+            <p><strong>Affiliate placeholder 2</strong> &mdash; partner link to be added (for example, a Stocks and Shares ISA platform).</p>
+            <p class="affiliate-disclosure">Disclosure: affiliate link. Capital at risk; investments can fall as well as rise.</p>
+        </div>
+        <!-- END AFFILIATE PLACEHOLDER 2 -->
+
+        <h2 id="limitations">9. Limitations</h2>
+
+        <ul>
+            <li><strong>Averages are not homes.</strong> Our prices are averages of homes sold and our rents averages of homes let. The two populations differ in size, age and location, most of all at local authority level. Comparing by property type narrows the gap but does not close it.</li>
+            <li><strong>The forward model uses one constant growth rate.</strong> Real prices move in cycles, and the backtest shows that the year you buy can matter more than the average. The constant mortgage rate is equally unrealistic; it is a scenario, not a forecast.</li>
+            <li><strong>Tax is simplified.</strong> We assume the renter's investments sit in an ISA and are tax-free. The ISA allowance is &pound;20,000 a year, so a London deposit (&pound;55,000) would take three tax years to shelter; outside an ISA, taxes on returns would favour buying. The backtest applies today's stamp duty rules to past purchases, which understates the stamp duty most buyers actually paid before 2014.</li>
+            <li><strong>Some assumptions are thinly sourced.</strong> The 1%-of-value maintenance rule is a rule of thumb, not a measured average, and it may overstate maintenance where land is a large share of value (London). Service charges come from one estate agency's index for England and Wales and are applied to Scotland and Northern Ireland too. The product fee figure dates from February 2024. Each is varied or editable in the calculator.</li>
+            <li><strong>Mortgage rates.</strong> Bank of England quoted rates are averages of advertised rates, not what any individual is offered. The 90% LTV series starts only in 2008 and has gaps, so the backtest uses 75% LTV. We had only 2-year fixed rates; many buyers choose 5-year fixes.</li>
+            <li><strong>Not included:</strong> moving costs, furnishing, ground rent, leasehold extensions, the cost of a renter being asked to leave, rent controls, government schemes, mortgage-free years after the 25-year term (they fall outside most horizons) and anything non-financial: security, control over the home, flexibility. The model counts money, not wellbeing.</li>
+            <li><strong>Northern Ireland</strong> prices are quarterly and its rents lag by two months; Scotland's rents are not published at council level, so it is missing from the local analysis.</li>
+        </ul>
+
+        <h2 id="code">10. Reproducible code (Python and R)</h2>
+
+        <p>
+            The analysis was done in Python and independently re-implemented in R from the published CSVs. The R script reproduces every regional break-even exactly (all 120 region &times; property type &times; deposit cases agree to the month) and every backtest share. The calculator's JavaScript was checked against the same 120 cases. The Python script reads the four source files exactly as downloaded; the R script needs only base R.
+        </p>
+
+        <div class="code-tabs">
+            <button class="code-tab active" onclick="switchTab(event, 'python-full')">Python</button>
+            <button class="code-tab" onclick="switchTab(event, 'r-full')">R</button>
+        </div>
+
+        <div id="python-full" class="tab-content active">
+            <p>Download: <a href="../data/uk-rent-vs-buy-analysis.py?v=1.7">uk-rent-vs-buy-analysis.py</a> (analysis) and <a href="../data/uk-rent-vs-buy-charts.py?v=1.7">uk-rent-vs-buy-charts.py</a> (charts). Run with <code>python uk-rent-vs-buy-analysis.py RAW_DIR OUT_DIR</code>.</p>
+            <details class="full-script">
+                <summary>Show the full Python analysis script</summary>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-language"><i class="fab fa-python"></i> Python</span>
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy Code</button>
+                    </div>
+                    <pre><code>#!/usr/bin/env python3
+&quot;&quot;&quot;
+Is renting really &#x27;dead money&#x27; in the UK?  Truth with Data, October 2026.
+Rent-versus-buy model: break-even years by region and local authority,
+a historical backtest (2005-2026) and sensitivity tables.
+
+Usage:
+    pip install pandas numpy openpyxl
+    python uk-rent-vs-buy-analysis.py RAW_DIR OUT_DIR
+
+RAW_DIR must contain the four source files exactly as downloaded:
+    UK-HPI-full-file-2026-07.csv                          HM Land Registry, UK HPI (July 2026 data)
+    priceindexofprivaterentsukmonthlypricestatistics.xlsx ONS PIPR, 21 October 2026 edition
+    priceindexofprivaterentsukhistoricalseries.xlsx       ONS PIPR historical series, 26 March 2025
+    Bank_of_England__Database.xlsx                        BoE quoted 2-year fixed mortgage rates
+                                                          (IUMBV34, IUMB482, ...), monthly, 1995-2026
+
+The model (identical in the R script):
+  * The buyer pays a deposit plus buying costs. The renter keeps that same cash
+    invested instead.
+  * Every month, whoever has the lower housing outgoings invests the difference.
+    Buyer outgoings: mortgage payment (interest + capital), maintenance,
+    buildings insurance, service charge (flats), a product fee at each 2-year re-fix.
+    Renter outgoings: rent, re-set once a year.
+  * Buyer net wealth = home value - mortgage balance - selling costs + buyer&#x27;s investments.
+    Renter net wealth = renter&#x27;s investments.
+  * Break-even = first month from which the buyer&#x27;s net wealth stays ahead of the renter&#x27;s.
+Capital repayment is not a cost: it reappears as equity. What the buyer loses is
+interest, maintenance, insurance, fees, taxes and the return the cash would
+have earned; what the buyer gains is house-price growth.
+&quot;&quot;&quot;
+import sys, os, json
+import numpy as np
+import pandas as pd
+
+RAW = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;raw&quot;
+OUT = sys.argv[2] if len(sys.argv) &gt; 2 else &quot;out&quot;
+os.makedirs(OUT, exist_ok=True)
+
+# ---------------------------------------------------------------------------
+# 1. Assumptions (every number has a source; see the article&#x27;s methodology)
+# ---------------------------------------------------------------------------
+A = dict(
+    ref_month=&quot;2026-07-01&quot;,          # latest UK HPI month; PIPR rents for the same month
+    rate_month=&quot;2026-09-30&quot;,         # latest BoE quoted rate (what a buyer pays today)
+    term_years=25,                   # repayment mortgage term
+    fix_months=24,                   # 2-year fixes, re-fixed at the same rate in the forward model
+    product_fee=1141.0,              # Moneyfacts average fixed-rate product fee (Feb 2024)
+    conveyancing_house=1420.0,       # ClearScore 2026 guide: freehold purchase, fees + disbursements
+    conveyancing_flat=1825.0,        # same guide: leasehold flat £1,550-£2,100 (midpoint)
+    survey_points=[(150000, 400), (250000, 600), (400000, 800), (750000, 1200)],  # same guide
+    agent_fee_pct=1.42,              # HomeOwners Alliance 2026 average, inc. VAT
+    conveyancing_sell=950.0,         # HomeOwners Alliance: £610-£950 to sell (upper end)
+    maintenance_house_pct=1.0,       # widely used 1%-of-value rule of thumb (sensitivity 0.5-1.5%)
+    maintenance_flat_pct=0.5,        # our assumption: the service charge covers communal repairs
+    buildings_insurance=306.0,       # ABI average buildings-only premium, Q1 2026 (houses only)
+    service_charge_ew=2405.0,        # Hamptons 2025 Service Charge Index, England &amp; Wales average
+    service_charge_london=2801.0,    # Hamptons 2025, London
+    cost_inflation_pct=2.0,          # fixed £ costs grow at the Bank of England&#x27;s 2% CPI target
+    invest_return_pct=5.0,           # FCA COBS 13 Annex 2 intermediate projection rate (ISA wrapper)
+    invest_low_pct=2.0, invest_high_pct=8.0,
+    horizon_years=30,
+)
+
+REGIONS = [  # (display name, ONS/HMLR code, nation for transaction tax)
+    (&quot;North East&quot;, &quot;E12000001&quot;, &quot;england&quot;), (&quot;North West&quot;, &quot;E12000002&quot;, &quot;england&quot;),
+    (&quot;Yorkshire and The Humber&quot;, &quot;E12000003&quot;, &quot;england&quot;), (&quot;East Midlands&quot;, &quot;E12000004&quot;, &quot;england&quot;),
+    (&quot;West Midlands&quot;, &quot;E12000005&quot;, &quot;england&quot;), (&quot;East of England&quot;, &quot;E12000006&quot;, &quot;england&quot;),
+    (&quot;London&quot;, &quot;E12000007&quot;, &quot;england&quot;), (&quot;South East&quot;, &quot;E12000008&quot;, &quot;england&quot;),
+    (&quot;South West&quot;, &quot;E12000009&quot;, &quot;england&quot;), (&quot;Wales&quot;, &quot;W92000004&quot;, &quot;wales&quot;),
+    (&quot;Scotland&quot;, &quot;S92000003&quot;, &quot;scotland&quot;), (&quot;Northern Ireland&quot;, &quot;N92000002&quot;, &quot;ni&quot;),
+]
+# No &quot;UK average&quot; row: the UK average rent is weighted by the rental stock (London-heavy) and the
+# UK average price by sales, so their ratio describes no real home. We compare like with like by region.
+TYPES = {  # model type: (HPI price column, PIPR rent column)
+    &quot;all&quot;: (&quot;AveragePrice&quot;, &quot;Rental price&quot;),
+    &quot;detached&quot;: (&quot;DetachedPrice&quot;, &quot;Rental price detached&quot;),
+    &quot;semi&quot;: (&quot;SemiDetachedPrice&quot;, &quot;Rental price semidetached&quot;),
+    &quot;terraced&quot;: (&quot;TerracedPrice&quot;, &quot;Rental price terraced&quot;),
+    &quot;flat&quot;: (&quot;FlatPrice&quot;, &quot;Rental price flat maisonette&quot;),
+}
+
+# Bank Rate changes since 2004 (Bank of England, &quot;Official Bank Rate history&quot;).
+BANK_RATE = [(&quot;2004-02-05&quot;, 4.00), (&quot;2004-05-06&quot;, 4.25), (&quot;2004-06-10&quot;, 4.50), (&quot;2004-08-05&quot;, 4.75),
+             (&quot;2005-08-04&quot;, 4.50), (&quot;2006-08-03&quot;, 4.75), (&quot;2006-11-09&quot;, 5.00), (&quot;2007-01-11&quot;, 5.25),
+             (&quot;2007-05-10&quot;, 5.50), (&quot;2007-07-05&quot;, 5.75), (&quot;2007-12-06&quot;, 5.50), (&quot;2008-02-07&quot;, 5.25),
+             (&quot;2008-04-10&quot;, 5.00), (&quot;2008-10-08&quot;, 4.50), (&quot;2008-11-06&quot;, 3.00), (&quot;2008-12-04&quot;, 2.00),
+             (&quot;2009-01-08&quot;, 1.50), (&quot;2009-02-05&quot;, 1.00), (&quot;2009-03-05&quot;, 0.50), (&quot;2016-08-04&quot;, 0.25),
+             (&quot;2017-11-02&quot;, 0.50), (&quot;2018-08-02&quot;, 0.75), (&quot;2020-03-11&quot;, 0.25), (&quot;2020-03-19&quot;, 0.10),
+             (&quot;2021-12-16&quot;, 0.25), (&quot;2022-02-03&quot;, 0.50), (&quot;2022-03-17&quot;, 0.75), (&quot;2022-05-05&quot;, 1.00),
+             (&quot;2022-06-16&quot;, 1.25), (&quot;2022-08-04&quot;, 1.75), (&quot;2022-09-22&quot;, 2.25), (&quot;2022-11-03&quot;, 3.00),
+             (&quot;2022-12-15&quot;, 3.50), (&quot;2023-02-02&quot;, 4.00), (&quot;2023-03-23&quot;, 4.25), (&quot;2023-05-11&quot;, 4.50),
+             (&quot;2023-06-22&quot;, 5.00), (&quot;2023-08-03&quot;, 5.25), (&quot;2024-08-01&quot;, 5.00), (&quot;2024-11-07&quot;, 4.75),
+             (&quot;2025-02-06&quot;, 4.50), (&quot;2025-05-08&quot;, 4.25), (&quot;2025-08-07&quot;, 4.00), (&quot;2025-12-18&quot;, 3.75)]
+
+# ---------------------------------------------------------------------------
+# 2. Transaction taxes in force in October 2026
+# ---------------------------------------------------------------------------
+def banded(price, bands):
+    &quot;&quot;&quot;bands: list of (upper threshold, rate %) applied to the slice below each threshold.&quot;&quot;&quot;
+    tax, lower = 0.0, 0.0
+    for upper, rate in bands:
+        if price &gt; lower:
+            tax += (min(price, upper) - lower) * rate / 100
+        lower = upper
+    return tax
+
+INF = float(&quot;inf&quot;)
+SDLT = [(125000, 0), (250000, 2), (925000, 5), (1500000, 10), (INF, 12)]           # England &amp; NI
+SDLT_FTB = [(300000, 0), (500000, 5)]                                                 # price &lt;= £500k
+LBTT = [(145000, 0), (250000, 2), (325000, 5), (750000, 10), (INF, 12)]               # Scotland
+LBTT_FTB = [(175000, 0), (250000, 2), (325000, 5), (750000, 10), (INF, 12)]
+LTT = [(225000, 0), (400000, 6), (750000, 7.5), (1500000, 10), (INF, 12)]             # Wales, no FTB relief
+
+def transaction_tax(price, nation, first_time_buyer=True):
+    if nation in (&quot;england&quot;, &quot;ni&quot;):
+        if first_time_buyer and price &lt;= 500000:
+            return banded(price, SDLT_FTB)
+        return banded(price, SDLT)
+    if nation == &quot;scotland&quot;:
+        return banded(price, LBTT_FTB if first_time_buyer else LBTT)
+    if nation == &quot;wales&quot;:
+        return banded(price, LTT)
+    raise ValueError(nation)
+
+def survey_cost(price):
+    xs, ys = zip(*A[&quot;survey_points&quot;])
+    return float(np.interp(price, xs, ys))
+
+# ---------------------------------------------------------------------------
+# 3. The model: one monthly simulation gives buyer and renter wealth at every horizon
+# ---------------------------------------------------------------------------
+def simulate(value, rent, mrate, ret, cidx, deposit_pct, nation, is_flat, region_code,
+             ftb=True, maint_pct=None):
+    &quot;&quot;&quot;value[m], cidx[m] for m = 0..M; rent[m], ret[m] for m = 1..M (rent[0], ret[0] unused);
+    mrate[m] = quoted 2-year fixed rate (%) available at the end of month m.
+    Returns (buyer_wealth, renter_wealth) arrays of length M+1.&quot;&quot;&quot;
+    M = len(value) - 1
+    P = value[0]
+    if maint_pct is None:
+        maint_pct = A[&quot;maintenance_flat_pct&quot;] if is_flat else A[&quot;maintenance_house_pct&quot;]
+    sc = 0.0
+    if is_flat:
+        sc = A[&quot;service_charge_london&quot;] if region_code == &quot;E12000007&quot; else A[&quot;service_charge_ew&quot;]
+    ins = 0.0 if is_flat else A[&quot;buildings_insurance&quot;]
+    conv = A[&quot;conveyancing_flat&quot;] if is_flat else A[&quot;conveyancing_house&quot;]
+
+    deposit = P * deposit_pct / 100
+    loan = P - deposit
+    buy_costs = transaction_tax(P, nation, ftb) + (conv + A[&quot;product_fee&quot;]) * cidx[0] + survey_cost(P)
+    renter = deposit + buy_costs          # the renter invests the cash the buyer spends up front
+    buyer = 0.0                           # buyer&#x27;s side pot (invested when owning is cheaper)
+    bal, n_left = loan, A[&quot;term_years&quot;] * 12
+    i = mrate[0] / 1200
+    pmt = bal * i / (1 - (1 + i) ** -n_left)
+
+    def sell_cost(v, c):
+        return v * A[&quot;agent_fee_pct&quot;] / 100 + A[&quot;conveyancing_sell&quot;] * c
+
+    bw = np.empty(M + 1); rw = np.empty(M + 1)
+    bw[0] = value[0] - bal - sell_cost(value[0], cidx[0]); rw[0] = renter
+    for m in range(1, M + 1):
+        g = (1 + ret[m] / 100) ** (1 / 12)
+        renter *= g; buyer *= g
+        pay = 0.0
+        if bal &gt; 0:
+            interest = bal * i
+            principal = min(pmt - interest, bal)
+            pay = interest + principal
+            bal -= principal; n_left -= 1
+            if bal &lt; 1e-6:
+                bal = 0.0
+        out = pay + maint_pct / 100 * value[m - 1] / 12 + (ins + sc) / 12 * cidx[m]
+        if m % A[&quot;fix_months&quot;] == 0 and bal &gt; 0 and m &lt; M:   # re-fix: new rate, product fee
+            i = mrate[m] / 1200
+            pmt = bal * i / (1 - (1 + i) ** -n_left)
+            out += A[&quot;product_fee&quot;] * cidx[m]
+        diff = out - rent[m]
+        if diff &gt; 0:
+            renter += diff
+        else:
+            buyer -= diff
+        bw[m] = value[m] - bal - sell_cost(value[m], cidx[m]) + buyer
+        rw[m] = renter
+    return bw, rw
+
+def breakeven_years(bw, rw):
+    &quot;&quot;&quot;Break-even in years: the first month from which the buyer stays ahead of the renter for the
+    rest of the horizon (NaN if the buyer is behind at the end). Using the last crossing rather than
+    the first stops a brief lead (e.g. just before a re-fix fee or a price fall) counting as break-even.&quot;&quot;&quot;
+    behind = np.nonzero(bw[1:] &lt; rw[1:])[0]
+    if len(behind) == 0:
+        return 1 / 12
+    if behind[-1] == len(bw) - 2:
+        return np.nan
+    return (behind[-1] + 2) / 12
+
+def forward_paths(P, R0, rate_pct, g_price, g_rent, r_inv, years=None):
+    years = years or A[&quot;horizon_years&quot;]
+    M = years * 12
+    m = np.arange(M + 1)
+    value = P * (1 + g_price / 100) ** (m / 12)
+    rent = R0 * (1 + g_rent / 100) ** ((m - 1) // 12)          # tenancy re-set once a year
+    mrate = np.full(M + 1, rate_pct)
+    ret = np.full(M + 1, r_inv)
+    cidx = (1 + A[&quot;cost_inflation_pct&quot;] / 100) ** (m / 12)
+    return value, rent, mrate, ret, cidx
+
+def run_forward(P, R0, rate_pct, g_price, g_rent, r_inv, deposit_pct, nation, is_flat, code, **kw):
+    v, r, mr, rt, c = forward_paths(P, R0, rate_pct, g_price, g_rent, r_inv)
+    return simulate(v, r, mr, rt, c, deposit_pct, nation, is_flat, code, **kw)
+
+# ---------------------------------------------------------------------------
+# 4. Load data
+# ---------------------------------------------------------------------------
+hpi = pd.read_csv(os.path.join(RAW, &quot;UK-HPI-full-file-2026-07.csv&quot;), low_memory=False)
+hpi[&quot;Date&quot;] = pd.to_datetime(hpi[&quot;Date&quot;], dayfirst=True)
+
+pipr = pd.read_excel(os.path.join(RAW, &quot;priceindexofprivaterentsukmonthlypricestatistics.xlsx&quot;),
+                     sheet_name=&quot;Table 1&quot;, header=2)
+pipr[&quot;Time period&quot;] = pd.to_datetime(pipr[&quot;Time period&quot;])
+for c in pipr.columns[4:]:
+    pipr[c] = pd.to_numeric(pipr[c], errors=&quot;coerce&quot;)       # &#x27;[x]&#x27; (not available) -&gt; NaN
+
+hist = pd.read_excel(os.path.join(RAW, &quot;priceindexofprivaterentsukhistoricalseries.xlsx&quot;),
+                     sheet_name=&quot;Table 1&quot;, header=2)
+hist = hist[hist.iloc[:, 0] != &quot;Region Code&quot;].copy()
+hist.columns = [&quot;date&quot;] + list(hist.columns[1:])
+hist[&quot;date&quot;] = pd.to_datetime(hist[&quot;date&quot;])
+hist_codes = {&quot;North East&quot;: &quot;E12000001&quot;, &quot;North West&quot;: &quot;E12000002&quot;, &quot;Yorkshire and The Humber&quot;: &quot;E12000003&quot;,
+              &quot;East Midlands&quot;: &quot;E12000004&quot;, &quot;West Midlands&quot;: &quot;E12000005&quot;, &quot;East &quot;: &quot;E12000006&quot;,
+              &quot;London&quot;: &quot;E12000007&quot;, &quot;South East&quot;: &quot;E12000008&quot;, &quot;South West&quot;: &quot;E12000009&quot;,
+              &quot;Wales&quot;: &quot;W92000004&quot;, &quot;Scotland&quot;: &quot;S92000003&quot;, &quot;Northern Ireland&quot;: &quot;N92000002&quot;,
+              &quot;England&quot;: &quot;E92000001&quot;, &quot;United Kingdom&quot;: &quot;K02000001&quot;}
+
+boe = pd.read_excel(os.path.join(RAW, &quot;Bank_of_England__Database.xlsx&quot;), header=1)
+boe.columns = [&quot;date&quot;] + [str(c).split()[-1] for c in boe.columns[1:]]   # series codes
+boe[&quot;date&quot;] = pd.to_datetime(boe[&quot;date&quot;], format=&quot;%d %b %y&quot;)
+for c in boe.columns[1:]:
+    boe[c] = pd.to_numeric(boe[c], errors=&quot;coerce&quot;)
+boe = boe.sort_values(&quot;date&quot;)
+boe[&quot;month&quot;] = boe[&quot;date&quot;].dt.to_period(&quot;M&quot;).dt.to_timestamp()
+rate_row = boe[boe[&quot;date&quot;] == A[&quot;rate_month&quot;]].iloc[0]
+RATE90, RATE75 = float(rate_row[&quot;IUMB482&quot;]), float(rate_row[&quot;IUMBV34&quot;])
+
+ref = pd.Timestamp(A[&quot;ref_month&quot;])
+
+def rent_index(code):
+    &quot;&quot;&quot;PIPR index (Jan 2023 = 100): historical series before 2015, monthly series from Jan 2015.
+    The two are identical where they overlap (checked: 2015-01 to 2025-02).&quot;&quot;&quot;
+    mon = pipr[pipr[&quot;Area code&quot;] == code].set_index(&quot;Time period&quot;)[&quot;Index&quot;].dropna()
+    name = [k for k, v in hist_codes.items() if v == code]
+    if name:
+        h = pd.to_numeric(hist.set_index(&quot;date&quot;)[name[0]], errors=&quot;coerce&quot;).dropna()
+        return pd.concat([h[h.index &lt; mon.index.min()], mon])
+    return mon
+
+# Baseline forward growth: England, July 2005 -&gt; July 2026 (the longest window both series cover)
+eng_p = hpi[hpi.AreaCode == &quot;E92000001&quot;].set_index(&quot;Date&quot;)[&quot;AveragePrice&quot;]
+eng_r = rent_index(&quot;E92000001&quot;)
+yrs = 21
+G_PRICE = float(((eng_p[ref] / eng_p[pd.Timestamp(&quot;2005-07-01&quot;)]) ** (1 / yrs) - 1) * 100)
+G_RENT = float(((eng_r[ref] / eng_r[pd.Timestamp(&quot;2005-07-01&quot;)]) ** (1 / yrs) - 1) * 100)
+uk_p = hpi[hpi.AreaCode == &quot;K02000001&quot;].set_index(&quot;Date&quot;)[&quot;AveragePrice&quot;]
+G_PRICE_1995 = float(((uk_p[ref] / uk_p[pd.Timestamp(&quot;1995-07-01&quot;)]) ** (1 / 31) - 1) * 100)
+
+# ---------------------------------------------------------------------------
+# 5. Inputs and break-even by region x property type x deposit
+# ---------------------------------------------------------------------------
+def region_own_growth(code):
+    &quot;&quot;&quot;Region&#x27;s own annualised price and rent growth over the longest common window to July 2026.&quot;&quot;&quot;
+    ri = rent_index(code)
+    p = hpi[hpi.AreaCode == code].set_index(&quot;Date&quot;)[&quot;AveragePrice&quot;]
+    start = max(pd.Timestamp(&quot;2005-07-01&quot;), ri.index.min())
+    start = pd.Timestamp(year=start.year + (start.month &gt; 7), month=7, day=1)
+    n = (ref.year - start.year)
+    return (float(((p[ref] / p[start]) ** (1 / n) - 1) * 100),
+            float(((ri[ref] / ri[start]) ** (1 / n) - 1) * 100), start.year)
+
+rows = []
+for name, code, nation in REGIONS:
+    hrow = hpi[(hpi.AreaCode == code) &amp; (hpi.Date == ref)].iloc[0]
+    prow = pipr[(pipr[&quot;Area code&quot;] == code) &amp; (pipr[&quot;Time period&quot;] == ref)].iloc[0]
+    gp_own, gr_own, gstart = region_own_growth(code)
+    for t, (pc, rc) in TYPES.items():
+        P, R0 = float(hrow[pc]), float(prow[rc])
+        is_flat = t == &quot;flat&quot;
+        for dep, rate in ((10, RATE90), (25, RATE75)):
+            bw, rw = run_forward(P, R0, rate, G_PRICE, G_RENT, A[&quot;invest_return_pct&quot;], dep, nation, is_flat, code)
+            bwo, rwo = run_forward(P, R0, rate, gp_own, gr_own, A[&quot;invest_return_pct&quot;], dep, nation, is_flat, code)
+            bwf, rwf = run_forward(P, R0, rate, 0.0, G_RENT, A[&quot;invest_return_pct&quot;], dep, nation, is_flat, code)
+            bwr, rwr = run_forward(P, R0, rate + 1, G_PRICE, G_RENT, A[&quot;invest_return_pct&quot;], dep, nation, is_flat, code)
+            rows.append(dict(
+                region=name, area_code=code, nation=nation, property_type=t, deposit_pct=dep,
+                mortgage_rate_pct=rate, price_jul2026=P, monthly_rent_jul2026=R0,
+                gross_rental_yield_pct=round(12 * R0 / P * 100, 2),
+                price_to_annual_rent=round(P / (12 * R0), 1),
+                transaction_tax=round(transaction_tax(P, nation, True)),
+                breakeven_years=breakeven_years(bw, rw),
+                gap_after_2y=bw[24] - rw[24], gap_after_5y=bw[60] - rw[60],
+                gap_after_10y=bw[120] - rw[120], gap_after_20y=bw[240] - rw[240],
+                own_growth_price_pct=round(gp_own, 2), own_growth_rent_pct=round(gr_own, 2),
+                own_growth_from=gstart, breakeven_years_own_growth=breakeven_years(bwo, rwo),
+                breakeven_years_flat_prices=breakeven_years(bwf, rwf),
+                breakeven_years_rate_plus_1pt=breakeven_years(bwr, rwr),
+            ))
+reg = pd.DataFrame(rows)
+
+# First-year snapshot of the unrecoverable cost of owning vs renting (all property types, 10% deposit)
+snap = []
+for name, code, nation in REGIONS:
+    r = reg[(reg.region == name) &amp; (reg.property_type == &quot;all&quot;) &amp; (reg.deposit_pct == 10)].iloc[0]
+    P, R0 = r.price_jul2026, r.monthly_rent_jul2026
+    loan = 0.9 * P; i = RATE90 / 1200; n = A[&quot;term_years&quot;] * 12
+    pmt = loan * i / (1 - (1 + i) ** -n)
+    bal, interest = loan, 0.0
+    for _ in range(12):
+        it = bal * i; interest += it; bal -= pmt - it
+    cash_in = 0.1 * P + r.transaction_tax + A[&quot;conveyancing_house&quot;] + A[&quot;product_fee&quot;] + survey_cost(P)
+    snap.append(dict(region=name, rent_year1=12 * R0, interest=interest,
+                     maintenance=A[&quot;maintenance_house_pct&quot;] / 100 * P, insurance=A[&quot;buildings_insurance&quot;],
+                     opportunity_cost=cash_in * A[&quot;invest_return_pct&quot;] / 100,
+                     expected_price_gain=P * G_PRICE / 100,
+                     one_off_buy_and_sell_costs=cash_in - 0.1 * P + P * A[&quot;agent_fee_pct&quot;] / 100 + A[&quot;conveyancing_sell&quot;]))
+snap = pd.DataFrame(snap)
+snap[&quot;net_cost_of_owning&quot;] = snap[[&quot;interest&quot;, &quot;maintenance&quot;, &quot;insurance&quot;, &quot;opportunity_cost&quot;]].sum(axis=1) - snap[&quot;expected_price_gain&quot;]
+
+# ---------------------------------------------------------------------------
+# 6. Sensitivity: each cell is run for all 12 regions (average home, 10% deposit unless
+#    stated); we report the median break-even across regions and the fastest/slowest region.
+# ---------------------------------------------------------------------------
+base = reg[(reg.property_type == &quot;all&quot;) &amp; (reg.deposit_pct == 10)]
+sens = []
+def add(table, **kw):
+    args = dict(rate=RATE90, gp=G_PRICE, gr=G_RENT, ret=A[&quot;invest_return_pct&quot;], dep=10, maint=None)
+    args.update(kw)
+    be, g10 = [], []
+    for _, r in base.iterrows():
+        bw, rw = run_forward(r.price_jul2026, r.monthly_rent_jul2026, args[&quot;rate&quot;], args[&quot;gp&quot;], args[&quot;gr&quot;],
+                             args[&quot;ret&quot;], args[&quot;dep&quot;], r.nation, False, r.area_code, maint_pct=args[&quot;maint&quot;])
+        be.append(breakeven_years(bw, rw)); g10.append(bw[120] - rw[120])
+    be = np.array(be)
+    sens.append(dict(table=table, mortgage_rate_pct=args[&quot;rate&quot;], price_growth_pct=args[&quot;gp&quot;],
+                     rent_growth_pct=args[&quot;gr&quot;], invest_return_pct=args[&quot;ret&quot;], deposit_pct=args[&quot;dep&quot;],
+                     maintenance_pct=args[&quot;maint&quot;] if args[&quot;maint&quot;] is not None else A[&quot;maintenance_house_pct&quot;],
+                     median_breakeven_years=float(np.median(np.where(np.isnan(be), np.inf, be))),
+                     fastest_region_years=float(np.nanmin(be)) if np.isfinite(be).any() else np.nan,
+                     slowest_region_years=float(np.max(np.where(np.isnan(be), np.inf, be))),
+                     regions_not_breaking_even_in_30y=int(np.isnan(be).sum()),
+                     median_gap_after_10y=float(np.median(g10))))
+GP_GRID = [0.0, 1.0, 2.0, round(G_PRICE, 2), 4.0, 5.0]       # 3% replaced by the 2005-2026 baseline
+for rate in [3.0, 3.5, 4.0, 4.5, 5.0, RATE90, 6.0, 6.5, 7.0]:  # 5.5% replaced by today&#x27;s 90% LTV rate
+    for gp in GP_GRID:
+        add(&quot;rate_x_price_growth&quot;, rate=rate, gp=gp)
+for ret in [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]:
+    for gp in GP_GRID:
+        add(&quot;return_x_price_growth&quot;, ret=ret, gp=gp)
+for gr in [1.0, 2.0, round(G_RENT, 2), 4.0, 5.0]:
+    for gp in GP_GRID:
+        add(&quot;rent_growth_x_price_growth&quot;, gr=gr, gp=gp)
+for maint in [0.5, 1.0, 1.5]:
+    add(&quot;maintenance&quot;, maint=maint)
+for dep in [5, 10, 15, 20, 25, 40]:
+    add(&quot;deposit&quot;, dep=dep)
+sens = pd.DataFrame(sens).replace(np.inf, np.nan)
+
+# ---------------------------------------------------------------------------
+# 7. Local authorities (England and Wales: PIPR and UK HPI share LA codes)
+# ---------------------------------------------------------------------------
+la_rent = pipr[(pipr[&quot;Time period&quot;] == ref) &amp; pipr[&quot;Area code&quot;].str.match(r&quot;^(E06|E07|E08|E09|W06)&quot;)]
+la_rows = []
+for _, pr in la_rent.iterrows():
+    h = hpi[(hpi.AreaCode == pr[&quot;Area code&quot;]) &amp; (hpi.Date == ref)]
+    if h.empty or pd.isna(pr[&quot;Rental price&quot;]):
+        continue
+    P, R0 = float(h.iloc[0][&quot;AveragePrice&quot;]), float(pr[&quot;Rental price&quot;])
+    nation = &quot;wales&quot; if pr[&quot;Area code&quot;].startswith(&quot;W&quot;) else &quot;england&quot;
+    bw, rw = run_forward(P, R0, RATE90, G_PRICE, G_RENT, A[&quot;invest_return_pct&quot;], 10, nation, False, pr[&quot;Area code&quot;])
+    row = dict(area_code=pr[&quot;Area code&quot;], local_authority=pr[&quot;Area name&quot;],
+               region=pr[&quot;Region or country name&quot;], price_jul2026=P, monthly_rent_jul2026=R0,
+               gross_rental_yield_pct=round(12 * R0 / P * 100, 2),
+               breakeven_years=breakeven_years(bw, rw),
+               gap_after_5y=round(bw[60] - rw[60]), gap_after_10y=round(bw[120] - rw[120]))
+    # Robustness: like-for-like by property type (terraced houses, flats) where both series exist
+    for t in (&quot;terraced&quot;, &quot;flat&quot;):
+        pc, rc = TYPES[t]
+        Pt, Rt = h.iloc[0][pc], pr[rc]
+        if pd.notna(Pt) and pd.notna(Rt):
+            bt_, rt_ = run_forward(float(Pt), float(Rt), RATE90, G_PRICE, G_RENT, A[&quot;invest_return_pct&quot;], 10,
+                                   nation, t == &quot;flat&quot;, pr[&quot;Area code&quot;])
+            row[f&quot;breakeven_years_{t}&quot;] = breakeven_years(bt_, rt_)
+        else:
+            row[f&quot;breakeven_years_{t}&quot;] = np.nan
+    la_rows.append(row)
+la = pd.DataFrame(la_rows).sort_values(&quot;breakeven_years&quot;)
+
+# ---------------------------------------------------------------------------
+# 8. Historical backtest: bought in July of year X, sold in July of year Y (all property types)
+# ---------------------------------------------------------------------------
+months = pd.date_range(&quot;2005-01-01&quot;, A[&quot;ref_month&quot;], freq=&quot;MS&quot;)
+br = pd.Series([r for _, r in BANK_RATE], index=pd.to_datetime([d for d, _ in BANK_RATE]))
+bank_monthly = pd.Series([br[br.index &lt;= d + pd.Timedelta(days=14)].iloc[-1] for d in months], index=months)
+r75 = boe.set_index(&quot;month&quot;)[&quot;IUMBV34&quot;].reindex(months)
+
+panel_rows, bt_rows = [], []
+for name, code, nation in REGIONS + [(&quot;England&quot;, &quot;E92000001&quot;, &quot;england&quot;)]:
+    price = hpi[hpi.AreaCode == code].set_index(&quot;Date&quot;)[&quot;AveragePrice&quot;].reindex(months)
+    ri = rent_index(code).reindex(months)
+    rent_level = ri / ri[ref] * float(pipr[(pipr[&quot;Area code&quot;] == code) &amp; (pipr[&quot;Time period&quot;] == ref)][&quot;Rental price&quot;].iloc[0])
+    for d in months:
+        panel_rows.append(dict(region=name, area_code=code, nation=nation, month=d.strftime(&quot;%Y-%m&quot;),
+                               avg_price=price[d], rent_index=ri[d], monthly_rent=rent_level[d],
+                               rate_2y_fixed_75ltv=r75[d], bank_rate=bank_monthly[d]))
+    if code == &quot;E92000001&quot;:
+        continue                      # England is in the panel only for the baseline growth rates
+    first = ri.dropna().index.min()
+    start_year = first.year + (first.month &gt; 7)
+    for x in range(start_year, ref.year):
+        d0 = pd.Timestamp(year=x, month=7, day=1)
+        sl = months[months &gt;= d0]
+        M = len(sl) - 1
+        m = np.arange(M + 1)
+        value = price[sl].to_numpy(float)
+        anniv = sl[((m - 1) // 12) * 12]                      # rent re-set each July
+        rent = rent_level[anniv].to_numpy(float)
+        mrate = r75[sl].to_numpy(float)
+        cidx = (1 + A[&quot;cost_inflation_pct&quot;] / 100) ** ((m + (x - ref.year) * 12) / 12)
+        for label, ret in ((&quot;bank_rate&quot;, bank_monthly[sl].to_numpy(float)), (&quot;fixed_5pct&quot;, np.full(M + 1, 5.0))):
+            bw, rw = simulate(value, rent, mrate, ret, cidx, 25, nation, False, code)
+            be = breakeven_years(bw, rw)
+            for y in range(x + 1, ref.year + 1):
+                k = (y - x) * 12
+                bt_rows.append(dict(region=name, area_code=code, return_assumption=label, buy_year=x,
+                                    sell_year=y, years_held=y - x, price_bought=value[0],
+                                    buyer_wealth=round(bw[k]), renter_wealth=round(rw[k]),
+                                    buyer_minus_renter=round(bw[k] - rw[k]),
+                                    gap_pct_of_price=round((bw[k] - rw[k]) / value[0] * 100, 2),
+                                    breakeven_years=be))
+panel = pd.DataFrame(panel_rows)
+bt = pd.DataFrame(bt_rows)
+
+# ---------------------------------------------------------------------------
+# 9. Write outputs
+# ---------------------------------------------------------------------------
+def r2(df):
+    out = df.copy()
+    for c in out.columns:
+        if out[c].dtype.kind == &quot;f&quot;:
+            out[c] = out[c].round(2)
+    return out
+
+r2(reg).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-breakeven-by-region-2026.csv&quot;), index=False)
+r2(la).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-breakeven-by-local-authority-2026.csv&quot;), index=False)
+r2(bt).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-backtest-2005-2026.csv&quot;), index=False)
+r2(sens).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-sensitivity-2026.csv&quot;), index=False)
+panel.round(6).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-monthly-panel-2005-2026.csv&quot;), index=False)
+r2(snap).round(0).to_csv(os.path.join(OUT, &quot;uk-rent-vs-buy-first-year-costs-2026.csv&quot;), index=False)
+
+summary = dict(assumptions=A, rate90=RATE90, rate75=RATE75, g_price=G_PRICE, g_rent=G_RENT,
+               g_price_uk_1995=G_PRICE_1995, n_la=len(la))
+with open(os.path.join(OUT, &quot;summary.json&quot;), &quot;w&quot;) as f:
+    json.dump(summary, f, indent=1, default=str)
+
+# Key numbers (also printed by the R script; they should agree)
+print(f&quot;Rates Sep 2026: 90% LTV {RATE90:.2f}%, 75% LTV {RATE75:.2f}%&quot;)
+print(f&quot;Baseline growth, England Jul 2005-Jul 2026: prices {G_PRICE:.2f}%/yr, rents {G_RENT:.2f}%/yr&quot;)
+show = reg[(reg.property_type == &quot;all&quot;)].pivot(index=&quot;region&quot;, columns=&quot;deposit_pct&quot;, values=&quot;breakeven_years&quot;)
+print(&quot;Break-even years, all property types:\n&quot;, show.round(2).to_string())
+t = sens[sens.table == &quot;rate_x_price_growth&quot;].pivot(index=&quot;mortgage_rate_pct&quot;, columns=&quot;price_growth_pct&quot;,
+                                                     values=&quot;median_breakeven_years&quot;)
+print(&quot;Median break-even (years) by mortgage rate x price growth:\n&quot;, t.round(2).to_string())
+print(&quot;LA break-even quartiles:&quot;, la.breakeven_years.quantile([0, .25, .5, .75, 1]).round(2).tolist(),
+      &quot;never within 30y:&quot;, int(la.breakeven_years.isna().sum()))
+rk = la[[&quot;breakeven_years&quot;, &quot;breakeven_years_terraced&quot;]].replace(np.nan, 99).rank()
+print(&quot;LA rank correlation, all types vs terraced:&quot;, round(rk.corr().iloc[0, 1], 2))
+b5 = bt[(bt.return_assumption == &quot;fixed_5pct&quot;)]
+for h in (2, 5, 10):
+    s = b5[b5.years_held == h]
+    print(f&quot;Backtest (5% return), held {h}y: buying ahead in {(s.buyer_minus_renter &gt; 0).mean()*100:.0f}% of {len(s)} cases&quot;)
+bb = bt[(bt.return_assumption == &quot;bank_rate&quot;)]
+for h in (2, 5, 10):
+    s = bb[bb.years_held == h]
+    print(f&quot;Backtest (Bank Rate cash), held {h}y: buying ahead in {(s.buyer_minus_renter &gt; 0).mean()*100:.0f}% of {len(s)} cases&quot;)
+
+# ---------------------------------------------------------------------------
+# 10. Presets for the Rent vs Buy Calculator (js/rent-vs-buy-data.js)
+# ---------------------------------------------------------------------------
+presets = []
+for name, code, nation in REGIONS:
+    d = reg[(reg.area_code == code) &amp; (reg.deposit_pct == 10)]
+    presets.append(dict(name=name, code=code, nation=nation, types={
+        t: dict(price=int(d[d.property_type == t].price_jul2026.iloc[0]),
+                rent=int(d[d.property_type == t].monthly_rent_jul2026.iloc[0]))
+        for t in [&quot;all&quot;, &quot;terraced&quot;, &quot;semi&quot;, &quot;detached&quot;, &quot;flat&quot;]}))
+calc = dict(
+    asOf=&quot;Prices and rents: July 2026 (HM Land Registry UK HPI; ONS PIPR). Mortgage rates: September 2026 (Bank of England).&quot;,
+    rate90=RATE90, rate75=RATE75, priceGrowth=round(G_PRICE, 2), rentGrowth=round(G_RENT, 2),
+    assumptions=dict(term=A[&quot;term_years&quot;], fixMonths=A[&quot;fix_months&quot;], productFee=A[&quot;product_fee&quot;],
+                     conveyancingHouse=A[&quot;conveyancing_house&quot;], conveyancingFlat=A[&quot;conveyancing_flat&quot;],
+                     surveyPoints=A[&quot;survey_points&quot;], agentFeePct=A[&quot;agent_fee_pct&quot;],
+                     conveyancingSell=A[&quot;conveyancing_sell&quot;], maintenanceHousePct=A[&quot;maintenance_house_pct&quot;],
+                     maintenanceFlatPct=A[&quot;maintenance_flat_pct&quot;], buildingsInsurance=A[&quot;buildings_insurance&quot;],
+                     serviceChargeEW=A[&quot;service_charge_ew&quot;], serviceChargeLondon=A[&quot;service_charge_london&quot;],
+                     costInflationPct=A[&quot;cost_inflation_pct&quot;], investReturnPct=A[&quot;invest_return_pct&quot;]),
+    regions=presets)
+with open(os.path.join(OUT, &quot;rent-vs-buy-data.js&quot;), &quot;w&quot;) as f:
+    f.write(&quot;/* Rent vs Buy Calculator presets, generated by data/uk-rent-vs-buy-analysis.py (Truth with Data, Oct 2026).\n&quot;
+            &quot;   Average prices and rents by region and property type; sources in blog/is-renting-dead-money-uk.html. */\n&quot;
+            &quot;var RVB_DATA = &quot; + json.dumps(calc, separators=(&quot;,&quot;, &quot;:&quot;)) + &quot;;\n&quot;)
+</code></pre>
+                </div>
+            </details>
+        </div>
+
+        <div id="r-full" class="tab-content">
+            <p>Download: <a href="../data/uk-rent-vs-buy-analysis.R?v=1.7">uk-rent-vs-buy-analysis.R</a>. Run with <code>Rscript uk-rent-vs-buy-analysis.R DATA_DIR</code>, where DATA_DIR holds the region and monthly panel CSVs below.</p>
+            <details class="full-script">
+                <summary>Show the full R script</summary>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="code-language"><i class="fab fa-r-project"></i> R</span>
+                        <button class="copy-button" onclick="copyCode(this)"><i class="far fa-copy"></i> Copy Code</button>
+                    </div>
+                    <pre><code># Is renting really &#x27;dead money&#x27; in the UK?  Truth with Data, October 2026.
+# Independent R re-implementation of the rent-vs-buy model. It reads only the
+# published CSVs (no Python output beyond the data), rebuilds the baseline growth
+# rates, re-runs every regional break-even and the historical backtest, and
+# prints the same key numbers as uk-rent-vs-buy-analysis.py.
+#
+# Usage: Rscript uk-rent-vs-buy-analysis.R DATA_DIR
+# DATA_DIR holds uk-rent-vs-buy-breakeven-by-region-2026.csv and
+# uk-rent-vs-buy-monthly-panel-2005-2026.csv (from truthwithdata.com/data/).
+# Base R only; no packages needed.
+
+args &lt;- commandArgs(trailingOnly = TRUE)
+dir &lt;- if (length(args)) args[1] else &quot;.&quot;
+
+A &lt;- list(term_years = 25, fix_months = 24, product_fee = 1141, conveyancing_house = 1420,
+          conveyancing_flat = 1825, agent_fee_pct = 1.42, conveyancing_sell = 950,
+          maintenance_house_pct = 1.0, maintenance_flat_pct = 0.5, buildings_insurance = 306,
+          service_charge_ew = 2405, service_charge_london = 2801, cost_inflation_pct = 2.0,
+          invest_return_pct = 5.0, horizon_years = 30)
+survey_x &lt;- c(150000, 250000, 400000, 750000); survey_y &lt;- c(400, 600, 800, 1200)
+
+# --- Transaction taxes in force in October 2026 -------------------------------
+banded &lt;- function(price, upper, rate) {
+  lower &lt;- c(0, head(upper, -1))
+  sum(pmax(0, pmin(price, upper) - lower) * rate / 100)
+}
+transaction_tax &lt;- function(price, nation, ftb = TRUE) {
+  if (nation %in% c(&quot;england&quot;, &quot;ni&quot;)) {
+    if (ftb &amp;&amp; price &lt;= 500000) return(banded(price, c(300000, 500000), c(0, 5)))
+    return(banded(price, c(125000, 250000, 925000, 1500000, Inf), c(0, 2, 5, 10, 12)))
+  }
+  if (nation == &quot;scotland&quot;) {
+    nil &lt;- if (ftb) 175000 else 145000
+    return(banded(price, c(nil, 250000, 325000, 750000, Inf), c(0, 2, 5, 10, 12)))
+  }
+  if (nation == &quot;wales&quot;) return(banded(price, c(225000, 400000, 750000, 1500000, Inf), c(0, 6, 7.5, 10, 12)))
+  stop(nation)
+}
+survey_cost &lt;- function(p) approx(survey_x, survey_y, xout = p, rule = 2)$y
+
+# --- The model ------------------------------------------------------------------
+# value, cidx: months 0..M (R index 1..M+1); rent, ret: month m stored at index m+1
+simulate &lt;- function(value, rent, mrate, ret, cidx, deposit_pct, nation, is_flat, code) {
+  M &lt;- length(value) - 1; P &lt;- value[1]
+  maint &lt;- if (is_flat) A$maintenance_flat_pct else A$maintenance_house_pct
+  sc &lt;- if (is_flat) (if (code == &quot;E12000007&quot;) A$service_charge_london else A$service_charge_ew) else 0
+  ins &lt;- if (is_flat) 0 else A$buildings_insurance
+  conv &lt;- if (is_flat) A$conveyancing_flat else A$conveyancing_house
+  deposit &lt;- P * deposit_pct / 100; bal &lt;- P - deposit
+  buy_costs &lt;- transaction_tax(P, nation) + (conv + A$product_fee) * cidx[1] + survey_cost(P)
+  renter &lt;- deposit + buy_costs; buyer &lt;- 0
+  n_left &lt;- A$term_years * 12; i &lt;- mrate[1] / 1200
+  pmt &lt;- bal * i / (1 - (1 + i)^-n_left)
+  sell_cost &lt;- function(v, c) v * A$agent_fee_pct / 100 + A$conveyancing_sell * c
+  bw &lt;- rw &lt;- numeric(M + 1)
+  bw[1] &lt;- value[1] - bal - sell_cost(value[1], cidx[1]); rw[1] &lt;- renter
+  for (m in 1:M) {
+    g &lt;- (1 + ret[m + 1] / 100)^(1 / 12); renter &lt;- renter * g; buyer &lt;- buyer * g
+    pay &lt;- 0
+    if (bal &gt; 0) {
+      interest &lt;- bal * i; principal &lt;- min(pmt - interest, bal)
+      pay &lt;- interest + principal; bal &lt;- bal - principal; n_left &lt;- n_left - 1
+      if (bal &lt; 1e-6) bal &lt;- 0
+    }
+    out &lt;- pay + maint / 100 * value[m] / 12 + (ins + sc) / 12 * cidx[m + 1]
+    if (m %% A$fix_months == 0 &amp;&amp; bal &gt; 0 &amp;&amp; m &lt; M) {
+      i &lt;- mrate[m + 1] / 1200; pmt &lt;- bal * i / (1 - (1 + i)^-n_left)
+      out &lt;- out + A$product_fee * cidx[m + 1]
+    }
+    d &lt;- out - rent[m + 1]
+    if (d &gt; 0) renter &lt;- renter + d else buyer &lt;- buyer - d
+    bw[m + 1] &lt;- value[m + 1] - bal - sell_cost(value[m + 1], cidx[m + 1]) + buyer
+    rw[m + 1] &lt;- renter
+  }
+  list(bw = bw, rw = rw)
+}
+breakeven_years &lt;- function(s) {           # first month from which the buyer stays ahead
+  behind &lt;- which(s$bw[-1] &lt; s$rw[-1]); n &lt;- length(s$bw) - 1
+  if (!length(behind)) return(1 / 12)
+  if (max(behind) == n) return(NA)
+  (max(behind) + 1) / 12
+}
+run_forward &lt;- function(P, R0, rate, gp, gr, r_inv, dep, nation, is_flat, code) {
+  M &lt;- A$horizon_years * 12; m &lt;- 0:M
+  simulate(P * (1 + gp / 100)^(m / 12), R0 * (1 + gr / 100)^((m - 1) %/% 12), rep(rate, M + 1),
+           rep(r_inv, M + 1), (1 + A$cost_inflation_pct / 100)^(m / 12), dep, nation, is_flat, code)
+}
+
+# --- Baseline growth: England, July 2005 -&gt; July 2026 ---------------------------
+panel &lt;- read.csv(file.path(dir, &quot;uk-rent-vs-buy-monthly-panel-2005-2026.csv&quot;))
+eng &lt;- panel[panel$area_code == &quot;E92000001&quot;, ]
+ratio &lt;- function(col) eng[eng$month == &quot;2026-07&quot;, col] / eng[eng$month == &quot;2005-07&quot;, col]
+G_PRICE &lt;- (ratio(&quot;avg_price&quot;)^(1 / 21) - 1) * 100
+G_RENT &lt;- (ratio(&quot;rent_index&quot;)^(1 / 21) - 1) * 100
+cat(sprintf(&quot;Baseline growth, England Jul 2005-Jul 2026: prices %.2f%%/yr, rents %.2f%%/yr\n&quot;, G_PRICE, G_RENT))
+
+# --- Regional break-even ----------------------------------------------------------
+reg &lt;- read.csv(file.path(dir, &quot;uk-rent-vs-buy-breakeven-by-region-2026.csv&quot;))
+reg$be_R &lt;- mapply(function(P, R0, rate, dep, nation, type, code)
+  breakeven_years(run_forward(P, R0, rate, G_PRICE, G_RENT, A$invest_return_pct, dep, nation, type == &quot;flat&quot;, code)),
+  reg$price_jul2026, reg$monthly_rent_jul2026, reg$mortgage_rate_pct, reg$deposit_pct,
+  reg$nation, reg$property_type, reg$area_code)
+allt &lt;- reg[reg$property_type == &quot;all&quot;, ]
+cat(&quot;Break-even years, all property types (10% and 25% deposit):\n&quot;)
+print(reshape(allt[, c(&quot;region&quot;, &quot;deposit_pct&quot;, &quot;be_R&quot;)], idvar = &quot;region&quot;, timevar = &quot;deposit_pct&quot;,
+              direction = &quot;wide&quot;), row.names = FALSE)
+cat(sprintf(&quot;Largest |R - Python| difference across %d region x type x deposit cases: %.4f years\n&quot;,
+            nrow(reg), max(abs(round(reg$be_R, 2) - reg$breakeven_years), na.rm = TRUE)))
+cat(&quot;Cases with no break-even in 30 years agree:&quot;, identical(is.na(reg$be_R), is.na(reg$breakeven_years)), &quot;\n&quot;)
+
+# One sensitivity cell: flat house prices at today&#x27;s 90% LTV rate, median across regions
+b10 &lt;- allt[allt$deposit_pct == 10, ]
+flat &lt;- mapply(function(P, R0, rate, nation, code)
+  breakeven_years(run_forward(P, R0, rate, 0, G_RENT, A$invest_return_pct, 10, nation, FALSE, code)),
+  b10$price_jul2026, b10$monthly_rent_jul2026, b10$mortgage_rate_pct, b10$nation, b10$area_code)
+cat(&quot;Break-even with flat house prices, by region:&quot;, paste(round(flat, 2), collapse = &quot;, &quot;), &quot;\n&quot;)
+
+# --- Historical backtest: buy in July of year X, sell in July of year Y, 25% deposit --
+bt &lt;- list()
+for (code in setdiff(unique(panel$area_code), &quot;E92000001&quot;)) {
+  d &lt;- panel[panel$area_code == code, ]
+  d$year &lt;- as.integer(substr(d$month, 1, 4)); d$mon &lt;- as.integer(substr(d$month, 6, 7))
+  first &lt;- d[!is.na(d$rent_index), ][1, ]
+  start &lt;- first$year + (first$mon &gt; 7)
+  for (x in start:2025) {
+    s &lt;- d[which(d$year == x &amp; d$mon == 7):nrow(d), ]
+    M &lt;- nrow(s) - 1; m &lt;- 0:M
+    rent &lt;- s$monthly_rent[pmax(1, ((m - 1) %/% 12) * 12 + 1)]
+    cidx &lt;- (1 + A$cost_inflation_pct / 100)^((m + (x - 2026) * 12) / 12)
+    for (ra in c(&quot;bank_rate&quot;, &quot;fixed_5pct&quot;)) {
+      ret &lt;- if (ra == &quot;bank_rate&quot;) s$bank_rate else rep(5, M + 1)
+      sim &lt;- simulate(s$avg_price, rent, s$rate_2y_fixed_75ltv, ret, cidx, 25, s$nation[1], FALSE, code)
+      for (y in (x + 1):2026) {
+        k &lt;- (y - x) * 12 + 1
+        bt[[length(bt) + 1]] &lt;- data.frame(area_code = code, ra = ra, buy = x, held = y - x,
+                                           gap = sim$bw[k] - sim$rw[k])
+      }
+    }
+  }
+}
+bt &lt;- do.call(rbind, bt)
+for (h in c(2, 5, 10)) {
+  s &lt;- bt[bt$ra == &quot;fixed_5pct&quot; &amp; bt$held == h, ]
+  cat(sprintf(&quot;Backtest (5%% return), held %dy: buying ahead in %.0f%% of %d cases\n&quot;, h, 100 * mean(s$gap &gt; 0), nrow(s)))
+}
+for (h in c(2, 5, 10)) {
+  s &lt;- bt[bt$ra == &quot;bank_rate&quot; &amp; bt$held == h, ]
+  cat(sprintf(&quot;Backtest (Bank Rate cash), held %dy: buying ahead in %.0f%% of %d cases\n&quot;, h, 100 * mean(s$gap &gt; 0), nrow(s)))
+}
+</code></pre>
+                </div>
+            </details>
+        </div>
+
+        <p>Output of the R script, which matches the Python output line for line:</p>
+        <div class="code-container">
+            <div class="code-header"><span class="code-language">Console</span></div>
+            <pre><code>Baseline growth, England Jul 2005-Jul 2026: prices 3.04%/yr, rents 2.99%/yr
+Break-even years, all property types (10% and 25% deposit):
+                   region  be_R.10  be_R.25
+               North East 2.166667 1.666667
+               North West 2.250000 1.666667
+ Yorkshire and The Humber 2.666667 2.333333
+            East Midlands 3.333333 2.750000
+            West Midlands 3.000000 2.500000
+          East of England 3.166667 2.666667
+                   London 3.500000 3.083333
+               South East 4.083333 3.083333
+               South West 2.250000 1.750000
+                    Wales 3.166667 2.666667
+                 Scotland 1.416667 1.333333
+         Northern Ireland 2.333333 2.083333
+Largest |R - Python| difference across 120 region x type x deposit cases: 0.0000 years
+Cases with no break-even in 30 years agree: TRUE 
+Break-even with flat house prices, by region: 18.33, 21.75, 26.58, NA, NA, NA, 23.25, NA, 25.25, NA, 10.75, 22.83 
+Backtest (5% return), held 2y: buying ahead in 60% of 220 cases
+Backtest (5% return), held 5y: buying ahead in 79% of 184 cases
+Backtest (5% return), held 10y: buying ahead in 86% of 124 cases
+Backtest (Bank Rate cash), held 2y: buying ahead in 64% of 220 cases
+Backtest (Bank Rate cash), held 5y: buying ahead in 83% of 184 cases
+Backtest (Bank Rate cash), held 10y: buying ahead in 98% of 124 cases</code></pre>
+        </div>
+
+        <h2 id="downloads">11. Data downloads</h2>
+
+        <p>All files are CSV, released under CC BY 4.0 (with the source data under the Open Government Licence v3.0). Please credit Truth with Data and the original publishers.</p>
+
+        <div class="table-wrap">
+        <table class="comparison-table">
+            <thead><tr><th>File</th><th class="num">Rows</th><th>Contents</th></tr></thead>
+            <tbody>
+                <tr><td><a href="../data/uk-rent-vs-buy-breakeven-by-region-2026.csv?v=1.7">breakeven-by-region-2026.csv</a></td><td class="num">120</td><td>12 regions &times; 5 property types &times; 2 deposits: price, rent, yield, stamp duty, break-even under baseline, flat prices, rates +1 point and own-region growth; wealth gap after 2, 5, 10, 20 years</td></tr>
+                <tr><td><a href="../data/uk-rent-vs-buy-breakeven-by-local-authority-2026.csv?v=1.7">breakeven-by-local-authority-2026.csv</a></td><td class="num">316</td><td>Local authorities in England and Wales: price, rent, yield, break-even (all types, terraced, flats), wealth gap after 5 and 10 years</td></tr>
+                <tr><td><a href="../data/uk-rent-vs-buy-backtest-2005-2026.csv?v=1.7">backtest-2005-2026.csv</a></td><td class="num">4,836</td><td>Every region &times; buy year &times; sell year &times; return assumption: buyer and renter wealth, gap in &pound; and % of price</td></tr>
+                <tr><td><a href="../data/uk-rent-vs-buy-sensitivity-2026.csv?v=1.7">sensitivity-2026.csv</a></td><td class="num">135</td><td>Median, fastest and slowest regional break-even for each combination of rate, price growth, rent growth, return, maintenance and deposit</td></tr>
+                <tr><td><a href="../data/uk-rent-vs-buy-monthly-panel-2005-2026.csv?v=1.7">monthly-panel-2005-2026.csv</a></td><td class="num">3,367</td><td>Monthly average price, rent index, rent level, 2-year fixed rate (75% LTV) and Bank Rate by region, Jan 2005 to Jul 2026 (input to the R script)</td></tr>
+                <tr><td><a href="../data/uk-rent-vs-buy-first-year-costs-2026.csv?v=1.7">first-year-costs-2026.csv</a></td><td class="num">12</td><td>First-year interest, maintenance, insurance, forgone return, expected price gain and one-off costs by region (Figure 1)</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h2 id="conclusion">Conclusion: is renting dead money?</h2>
+
+        <p>
+            <strong>No more than mortgage interest is.</strong> For the average UK home at today's rates, the unrecoverable costs of owning in year one are higher than the rent in every region. Buying wins because house prices have tended to rise, and when they do, a buyer with a mortgage captures that rise on the whole value of the home. Over 2005&ndash;2026 that made buying the better financial choice in four out of five five-year holds.
+        </p>
+
+        <p>
+            <strong>But the answer depends on how long you stay, where you live and what prices do next.</strong> If prices keep rising 3% a year, buying the average home pays off within 1.4 to 4.1 years in every region. If prices go nowhere, it takes one to three decades or never pays off. Anyone who tells you renting is always dead money is assuming the second scenario can't happen; 2007&ndash;2012 and 2022&ndash;2026 say it can.
+        </p>
+
+        <div class="info-box">
+            <h4><i class="fas fa-graduation-cap"></i> Key takeaways</h4>
+            <p>Mortgage interest alone is 77&ndash;107% of the rent on the same home at September 2026 rates. Buying beats renting after 1.4&ndash;4.1 years if prices rise 3% a year, after 11 years to never if they are flat. Short stays favour renting; over five years, buyers came out ahead in 79% of historical cases. Terraced houses and city flats favour buying; detached homes and expensive rural districts favour renting. Try your own numbers in the <a href='/tools/rent-vs-buy-calculator'>Rent vs Buy Calculator</a>.</p>
+            <p>How the model was built, backtested and checked: <a href='/case-studies/rent-vs-buy-decision-model'>rent vs buy decision model case study</a>.</p>
+        </div>
+
+        <h2 id="faq">Frequently asked questions</h2>
+
+        <div class="faq-item">
+            <h3>Is renting dead money?</h3>
+            <p>No more than mortgage interest is. At September 2026 rates, first-year mortgage interest on a 90% mortgage for the average UK home is 77% to 107% of the rent on the same home, and once maintenance, insurance and the return a deposit could have earned are added, owning costs more than renting in every UK region. Buying comes out ahead through house-price growth: if prices rise 3% a year it beats renting within 1.4 to 4.1 years, depending on the region; if prices stay flat it takes 11 years to more than 30.</p>
+        </div>
+        <div class="faq-item">
+            <h3>How long do you need to stay for buying to beat renting in the UK?</h3>
+            <p>At September 2026 mortgage rates and with house prices rising 3% a year, buying the average home beats renting after 1.4 years in Scotland and up to 4.1 years in the South East, with a median of 2.8 years across 12 regions. History is less tidy: in our 2005 to 2026 backtest, buyers were ahead of an equivalent renter in 60% of two-year holds, 79% of five-year holds and 86% of ten-year holds.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is mortgage interest dead money?</h3>
+            <p>In the same sense as rent, yes: it pays for the use of money and is never returned. In the first year of a 90% mortgage at 5.37%, interest on the average home is larger than the rent on that home in the East Midlands, West Midlands, East of England, South East and Wales, and 77% to 98% of the rent in the other regions. Capital repayments are different: they come back as equity.</p>
+        </div>
+        <div class="faq-item">
+            <h3>Is it better to rent or buy in London?</h3>
+            <p>For the average London home, buying beats renting after 3.5 years if prices rise 3% a year, but stamp duty of about &pound;17,500 on a &pound;550,000 home makes selling within two years costly: after two years the buyer is about &pound;14,400 behind. Flats break even in 1.8 years and detached houses not within 30 years. By borough, break-even ranges from 1.3 years in Tower Hamlets to almost 30 years in Richmond upon Thames.</p>
+        </div>
+        <div class="faq-item">
+            <h3>What happens if house prices stay flat or fall?</h3>
+            <p>With flat prices and today&#x27;s mortgage rates, the median UK region needs 26 years for buying to beat renting, and in five regions (East Midlands, West Midlands, East of England, South East and Wales) the buyer is still behind after 30 years. Falling prices are worse: people who bought in July 2007 were behind an equivalent renter for between 6 years (London) and 19 years (North East).</p>
+        </div>
+        <div class="faq-item">
+            <h3>Does a bigger deposit make buying better value?</h3>
+            <p>Only a little in our model. Moving from a 10% to a 25% deposit, with the lower 75% loan-to-value mortgage rate, shortens break-even by 0.1 to 1.0 years. In practice a larger deposit matters more because it unlocks cheaper mortgage deals and smaller monthly payments, and many lenders will not lend with less than 10%.</p>
+        </div>
+
+        <h2 id="sources">Sources and data statement</h2>
+
+        <ol class="sources">
+            <li>HM Land Registry. <em>UK House Price Index</em>, full file for July 2026 data (<code>UK-HPI-full-file-2026-07.csv</code>), published September 2026. <a href="https://www.gov.uk/government/statistical-data-sets/uk-house-price-index-data-downloads-july-2026">gov.uk UK HPI data downloads</a>. Contains HM Land Registry data &copy; Crown copyright and database right 2026, licensed under the Open Government Licence v3.0.</li>
+            <li>Office for National Statistics. <em>Price Index of Private Rents, UK: monthly price statistics</em>, 21 October 2026 edition, and <em>Price Index of Private Rents, UK: historical series</em>, 26 March 2025 edition. <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/priceindexofprivaterentsukmonthlypricestatistics">ons.gov.uk</a>. Open Government Licence v3.0.</li>
+            <li>Bank of England. <em>Quoted household interest rates</em>: 2-year fixed rate mortgages at 60%, 75%, 85%, 90% and 95% LTV (IUMZICQ, IUMBV34, IUMZICR, IUMB482, IUM2WTL), monthly, January 1995 to September 2026; and <em>Official Bank Rate history</em>. <a href="https://www.bankofengland.co.uk/boeapps/database/Bank-Rate">bankofengland.co.uk</a>.</li>
+            <li>HM Revenue &amp; Customs. <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates">Stamp Duty Land Tax: residential property rates</a>. Revenue Scotland. <a href="https://revenue.scot/node/1017">LBTT residential rates and first-time buyer relief</a>. Welsh Government. <a href="https://www.gov.wales/land-transaction-tax-rates-and-bands">Land Transaction Tax rates and bands</a> and <a href="https://www.gov.wales/land-transaction-tax-overview">overview</a> (no first-time buyer relief). All checked 23 October 2026.</li>
+            <li>Financial Conduct Authority. <a href="https://handbook.fca.org.uk/handbook/COBS/13/Annex2.html">COBS 13 Annex 2</a>: projection rates for tax-advantaged products (2%, 5%, 8%).</li>
+            <li>Association of British Insurers. <a href="https://www.abi.org.uk/news/news-articles/2026/5/home-insurers-pay-out-846-million-to-support-households/">Average home insurance premiums, Q1 2026</a> (6 May 2026).</li>
+            <li>HomeOwners Alliance. <a href="https://hoa.org.uk/advice/guides-for-homeowners/i-am-selling/how-do-i-lower-my-estate-agent-fees-use-online-agents/">Estate agent fees</a>, 2026. ClearScore. <a href="https://www.clearscore.com/learn/mortgages/solicitor-fees-buying-house">Solicitors' fees for buying a house</a>, 2026. Moneyfacts. <a href="https://moneyfacts.co.uk/news/mortgages/average-mortgage-product-fees-rise/">Average mortgage product fees</a> (data to February 2024). Hamptons. <a href="https://www.hamptons.co.uk/articles/2025-service-charge-index">2025 Service Charge Index</a>. Property Reporter. <a href="https://www.propertyreporter.co.uk/at-home/majority-of-brits-not-spending-enough-on-home-maintenance.html">Home maintenance spending and the 1% rule</a> (2021).</li>
+        </ol>
+
+        <p class="sources">
+            <strong>Data statement.</strong> All figures in this article were computed by the author from the sources above on 23 October 2026; no statistic is taken from a secondary source except the cost assumptions listed in section 2, each cited. Prices and rents are official averages; costs and returns are assumptions, stated and varied. The derived datasets are released under CC BY 4.0. Nothing here is financial, mortgage or tax advice: the analysis describes averages and scenarios, not your circumstances. Corrections are welcome at the contact address on the home page; material corrections will be noted on this page with a date.
+        </p>
+
+        <blockquote>
+            Working on a question your organisation needs answered with data rather than opinion? Our <a href='/#services'>data consultancy services</a> cover exactly this kind of analysis, from data sourcing to publication-ready charts. Or explore our <a href='/#tools'>free calculators</a>.
+        </blockquote>
+    </article>
+
+    <!-- Back to Blog Link -->
+    <div style="text-align: center; margin: 40px 0;">
+        <a class='btn btn-outline' href='/blog'>
+            <i class="fas fa-arrow-left"></i> Back to All Articles
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <!-- Newsletter:start -->
+    <section class="newsletter-band" aria-labelledby="nl-title">
+        <div class="container newsletter-inner">
+            <div class="newsletter-copy">
+                <h2 id="nl-title">One chart a week, with the working shown</h2>
+                <p>A question people argue about, answered with public data. Every Sunday, free. Unsubscribe any time.</p>
+            </div>
+            <form class="newsletter-form" action="https://app.kit.com/forms/10112206/subscriptions" method="post">
+                <label for="nl-email" class="visually-hidden">Email address</label>
+                <input id="nl-email" type="email" name="email_address" placeholder="Your email address" required autocomplete="email">
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+                <p class="newsletter-note">By subscribing you agree to our <a href='/privacy#newsletter'>privacy policy</a>.</p>
+            </form>
+        </div>
+    </section>
+    <!-- Newsletter:end -->
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <img src="../TWD_Logo_white.png?v=2" alt="Truth with Data" class="footer-logo">
+                    <p>Discovering truth through data-driven analysis and insights.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href='/blog'>Blog</a></li>
+                        <li><a href='/case-studies'>Case Studies</a></li>
+                        <li><a href='/#services'>Services</a></li>
+                        <li><a href='/#products'>Products</a></li>
+                        <li><a href='/#tools'>Tools</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/truthwithdata" class="social-link" aria-label="Truth with Data on LinkedIn" rel="me noopener"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://x.com/truthwdata" class="social-link" aria-label="Truth with Data on X (Twitter)" rel="me noopener"><i class="fab fa-x-twitter"></i></a>
+                        <a href="https://www.instagram.com/truthwithdata/" class="social-link" aria-label="Truth with Data on Instagram" rel="me noopener"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/truthwithdata/analysis" class="social-link" aria-label="Truth with Data on GitHub" rel="me noopener"><i class="fab fa-github"></i></a>
+                    </div>
+                    <!-- Booking:footer:start --><a href="https://calendly.com/truthwithdata/30min" class="footer-book" rel="noopener">Book a 30-minute call</a><!-- Booking:footer:end -->
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <ul class="footer-legal">
+                    <li><a href='/about'>About</a></li>
+                    <li><a href='/privacy'>Privacy &amp; cookies</a></li>
+                    <li><a href='/disclosure'>Advertising &amp; affiliate disclosure</a></li>
+                    <li><a href='/#contact'>Contact</a></li>
+                </ul>
+                <p>&copy; 2025&ndash;2026 Truth with Data. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="../js/navigation.js?v=1.11"></script>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(evt, tabName) {
+            var tabcontents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabcontents.length; i++) {
+                tabcontents[i].classList.remove("active");
+            }
+            var tabs = evt.currentTarget.parentElement.getElementsByClassName("code-tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeContainer = button.closest('.code-container');
+            const codeElement = codeContainer.querySelector('code');
+            const textToCopy = codeElement.textContent;
+            navigator.clipboard.writeText(textToCopy).then(function() {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.classList.add('copied');
+                setTimeout(function() {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy code: ', err);
+                alert('Failed to copy code to clipboard');
+            });
+        }
+    </script>
+</body>
+</html>

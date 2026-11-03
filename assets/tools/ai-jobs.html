@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="Free AI job exposure checker: look up any of 787 US occupations and see its AI exposure score, what happened to its employment from 2019 to 2025, and how similar jobs fared. Client-side, no data leaves your browser." name="description"/>
+<meta content="AI job exposure checker, will AI take my job, AI exposure score by job, AI job displacement by occupation, is my job safe from AI" name="keywords"/>
+<meta content="Truth with Data" name="author"/>
+<meta content="AI Job Exposure Checker - Will AI Replace My Job? | Truth with Data" property="og:title"/>
+<meta content="Look up your occupation's AI exposure score and see what actually happened to its employment between 2019 and 2025." property="og:description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://truthwithdata.com/tools/ai-job-exposure-checker.html" property="og:url"/>
+<meta content="https://truthwithdata.com/blog/charts/ai-jobs-og-1200x630.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Truth with Data" property="og:site_name"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="https://truthwithdata.com/blog/charts/ai-jobs-og-1200x630.png" name="twitter:image"/>
+<link href="https://truthwithdata.com/tools/ai-job-exposure-checker.html" rel="canonical"/>
+<title>AI Job Exposure Checker: Will AI Replace My Job? | Truth with Data</title>
+<!-- Fonts -->
+<link href="../favicon.ico?v=2" rel="icon" sizes="any"/>
+<link href="../favicon-48x48.png?v=2" rel="icon" sizes="48x48" type="image/png"/>
+<link href="../favicon-192x192.png?v=2" rel="icon" sizes="192x192" type="image/png"/>
+<link href="../apple-touch-icon.png?v=2" rel="apple-touch-icon"/>
+<!-- AdSense:start -->
+<meta content="ca-pub-2836545666986892" name="google-adsense-account"/>
+
+<!-- AdSense:end -->
+
+<!-- Font Awesome for icons -->
+
+<!-- CSS Files -->
+
+
+
+
+
+<!-- JSON-LD Schema for SEO -->
+
+<style>
+        .tool-page { padding-top: 100px; min-height: 100vh; }
+        .tool-hero {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            padding: 60px 20px 50px; text-align: center; position: relative; overflow: hidden;
+        }
+        .tool-hero::before {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+        }
+        .tool-hero-content { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+        .tool-hero h1 {
+            font-size: 2.6rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2;
+            background: linear-gradient(135deg, var(--darker-color) 0%, var(--primary-color) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .tool-hero p { font-size: 1.15rem; color: var(--gray-color); line-height: 1.6; }
+        .tool-body { max-width: 900px; margin: 0 auto; padding: 50px 20px 60px; }
+        .tool-panel { background: white; border-radius: 12px; padding: 30px; box-shadow: var(--shadow-md); margin-bottom: 30px; }
+        .search-wrap { position: relative; }
+        .search-wrap input { padding-right: 46px; }
+        .search-wrap .search-icon { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--gray-color); }
+        .suggestions {
+            position: absolute; left: 0; right: 0; top: calc(100% + 4px); background: white; border: 2px solid #e2e8f0;
+            border-radius: 8px; box-shadow: var(--shadow-lg); max-height: 320px; overflow-y: auto; z-index: 50; display: none;
+        }
+        .suggestions.open { display: block; }
+        .suggestion { padding: 10px 14px; cursor: pointer; border-bottom: 1px solid #f1f5f9; }
+        .suggestion:last-child { border-bottom: none; }
+        .suggestion:hover, .suggestion.active { background: #eff6ff; }
+        .suggestion .s-title { font-weight: 600; color: var(--darker-color); }
+        .suggestion .s-meta { font-size: 0.82rem; color: var(--gray-color); }
+        .suggestion .s-meta em { font-style: normal; color: var(--primary-color); }
+        .help-text { color: var(--gray-color); font-size: 0.9rem; margin-top: 8px; }
+        .error-text { color: var(--error-color); font-weight: 600; margin-top: 10px; display: none; }
+        .example-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .chip {
+            padding: 6px 14px; border-radius: 20px; background: rgba(37, 99, 235, 0.08); color: var(--primary-color);
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; border: none; transition: var(--transition-smooth);
+        }
+        .chip:hover { background: var(--primary-color); color: white; }
+
+        /* Result */
+        #result { display: none; }
+        .result-head h2 { font-size: 1.6rem; color: var(--darker-color); margin-bottom: 6px; line-height: 1.3; }
+        .result-head .codes { color: var(--gray-color); font-size: 0.9rem; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px; margin: 24px 0; }
+        .metric { background: var(--light-color); border-radius: 10px; padding: 18px; border-left: 4px solid var(--primary-color); }
+        .metric .m-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-color); font-weight: 600; }
+        .metric .m-value { font-size: 1.9rem; font-weight: 800; color: var(--primary-color); margin: 6px 0 2px; line-height: 1.1; }
+        .metric .m-sub { font-size: 0.85rem; color: var(--gray-color); }
+        .metric.neutral { border-left-color: #94a3b8; }
+        .metric.neutral .m-value { color: var(--dark-color); }
+        .verdict-box { border-radius: 10px; padding: 20px 22px; margin: 10px 0 24px; border-left: 4px solid; }
+        .verdict-box h3 { font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .verdict-box p { margin: 0; line-height: 1.6; }
+        .verdict-box.v-none { background: #f1f5f9; border-color: #94a3b8; color: #334155; }
+        .verdict-box.v-grow { background: linear-gradient(135deg, #d1fae5 0%, #ecfdf5 100%); border-color: #059669; color: #064e3b; }
+        .verdict-box.v-flat { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-color: #2563eb; color: #1e3a8a; }
+        .verdict-box.v-pre  { background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color: #f59e0b; color: #78350f; }
+        .verdict-box.v-fall { background: linear-gradient(135deg, #fee2e2 0%, #fef2f2 100%); border-color: #ef4444; color: #7f1d1d; }
+
+        .bar-compare { margin: 8px 0 22px; }
+        .bar-row { display: grid; grid-template-columns: 220px 1fr 70px; align-items: center; gap: 10px; margin: 8px 0; font-size: 0.9rem; }
+        .bar-row .bar-label { color: var(--dark-color); }
+        .bar-track { position: relative; height: 14px; background: #f1f5f9; border-radius: 7px; overflow: hidden; }
+        .bar-track .zero { position: absolute; top: 0; bottom: 0; width: 1px; background: #94a3b8; left: 50%; }
+        .bar-fill { position: absolute; top: 2px; bottom: 2px; border-radius: 5px; background: var(--primary-color); }
+        .bar-fill.neg { background: #ef4444; }
+        .bar-fill.ref { background: #94a3b8; }
+        .bar-row .bar-val { text-align: right; font-weight: 600; color: var(--dark-color); }
+
+        .similar-box { background: white; border: 2px solid #e2e8f0; border-radius: 10px; padding: 20px 22px; margin: 10px 0 24px; }
+        .similar-box h3 { font-size: 1.05rem; color: var(--darker-color); margin-bottom: 10px; }
+        .similar-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+        .similar-stats .s-val { font-size: 1.5rem; font-weight: 800; color: var(--darker-color); }
+        .similar-stats .s-lab { font-size: 0.85rem; color: var(--gray-color); line-height: 1.4; }
+        .detail-table { width: 100%; border-collapse: collapse; margin: 10px 0 20px; font-size: 0.95rem; }
+        .detail-table td { padding: 9px 6px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        .detail-table td:first-child { color: var(--gray-color); width: 46%; }
+        .detail-table td:last-child { font-weight: 600; color: var(--dark-color); }
+        .fine-print { font-size: 0.85rem; color: var(--gray-color); line-height: 1.6; }
+
+        .info-box {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-left: 4px solid #2563eb;
+            padding: 20px; margin: 25px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .info-box h4 { margin: 0 0 10px 0; color: #1e40af; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .info-box p, .info-box li { color: #1e3a8a; line-height: 1.6; }
+        .info-box p { margin: 0 0 10px; }
+        .info-box ul { margin: 0; padding-left: 20px; }
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b;
+            padding: 20px; margin: 25px 0; border-radius: 8px;
+        }
+        .warning-box h4 { margin: 0 0 10px 0; color: #92400e; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .warning-box p { margin: 0; color: #78350f; line-height: 1.6; }
+        .rank-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+        .rank-table th { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: white; padding: 10px; text-align: left; font-weight: 600; }
+        .rank-table td { padding: 9px 10px; border-bottom: 1px solid #e2e8f0; }
+        .rank-table tr:hover { background: #f8fafc; }
+        .rank-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .rank-table a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .rank-toggle { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .btn-small { padding: 8px 18px; font-size: 0.9rem; }
+        .rank-btn.active { background: var(--primary-color); color: white; }
+        .article-cta { text-align: center; margin: 30px 0 10px; }
+        .floating-back-button {
+            position: fixed; bottom: 30px; left: 30px; width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none; border-radius: 50%;
+            font-size: 1.5rem; cursor: pointer; box-shadow: var(--shadow-xl); transition: var(--transition-smooth); z-index: 999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .floating-back-button:hover { transform: scale(1.1); }
+        @media (max-width: 768px) {
+            .tool-hero h1 { font-size: 1.9rem; }
+            .tool-panel { padding: 20px; }
+            .bar-row { grid-template-columns: 1fr; gap: 4px; }
+            .bar-row .bar-val { text-align: left; }
+            .floating-back-button { width: 50px; height: 50px; bottom: 20px; left: 20px; font-size: 1.3rem; }
+        }
+    </style>
+<style>*{box-sizing:border-box}html,body{height:auto!important;min-height:0!important;margin:0!important;padding:0!important;background:white!important;color:#15202c;font-family:Arial,sans-serif;line-height:1.65}body{overflow-x:hidden}h1{font-size:25px!important;line-height:1.3!important;letter-spacing:-.035em}h2{font-size:21px!important;line-height:1.4}h3{font-size:17px!important}p{font-size:14px}.tool-page{min-height:0!important;height:auto!important;max-width:none!important;margin:0!important;padding:0!important}.tool-container{max-width:none!important;margin:0!important;padding:0!important;box-shadow:none!important;border:0!important}.tool-page>h1,.tool-page>.tool-subtitle{display:none}input,textarea,select{max-width:100%;font:inherit;border-radius:0!important;border:1px solid #c6d0df;padding:12px!important}textarea{width:100%;min-height:125px}button,.calculate-btn,.btn{font:inherit;border-radius:0!important;background:#2055eb!important;color:#fff!important;padding:11px 18px!important;border:0!important;cursor:pointer}table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:10px;border-bottom:1px solid #e0e6ef}img,canvas,svg{max-width:100%}.tool-actions,.tool-header,.breadcrumb,.newsletter-band,.tool-related,.report-panel{display:none!important}a{color:#2055eb}label{font-size:13px;font-weight:600}#dependency-status{background:#fff7e5;border:1px solid #e6ce99;padding:15px;font-size:13px;margin-bottom:20px}.tool-layout{grid-template-columns:1fr!important}.tool-grid{gap:20px!important}.info-box,.result-card,.stat-card{border-radius:0!important;box-shadow:none!important}.rvb-results{min-width:0}@media(max-width:600px){.calculator-grid,.input-grid,.tool-columns,.results-grid{grid-template-columns:1fr!important}}</style></head>
+<body><p hidden="" id="dependency-status">This tool needs its original model/data scripts. Connect to the internet and reload to load them.</p>
+<!-- Navigation -->
+
+<div class="tool-page">
+<button class="floating-back-button" onclick="window.history.back()" title="Go Back">
+<i class="fas fa-arrow-left"></i>
+</button>
+<section class="tool-hero">
+<div class="tool-hero-content">
+<h1>AI Job Exposure Checker</h1>
+<p>Type your job title. See how much of its work is already being done with AI, what actually happened to its employment between 2019 and 2025, and how similar occupations fared. Everything runs in your browser; nothing you type is sent anywhere.</p>
+</div>
+</section>
+<div class="tool-body">
+<div class="tool-panel">
+<div class="tool-input-group">
+<label for="occInput">Your occupation or job title</label>
+<div class="search-wrap">
+<input aria-autocomplete="list" aria-controls="suggestions" aria-expanded="false" autocomplete="off" id="occInput" placeholder="e.g. paralegal, customer service, software developer, nurse..." type="text"/>
+<i class="fas fa-search search-icon"></i>
+<div class="suggestions" id="suggestions" role="listbox"></div>
+</div>
+<div class="help-text">Searches 787 US occupations (BLS SOC 2018) and about 3,000 alternative job titles from O*NET. Start typing and pick a match, then press Check.</div>
+<div class="error-text" id="errorText" role="alert"></div>
+<div aria-label="Examples" class="example-chips">
+<span style="font-size:0.85rem;color:var(--gray-color);align-self:center">Try:</span>
+<button class="chip" data-id="43-4051">Customer service representative</button>
+<button class="chip" data-id="15-1252">Software developer</button>
+<button class="chip" data-id="23-2011">Paralegal</button>
+<button class="chip" data-id="13-2011">Accountant</button>
+<button class="chip" data-id="29-1141">Registered nurse</button>
+<button class="chip" data-id="27-1024">Graphic designer</button>
+</div>
+</div>
+<button class="tool-button" id="checkBtn"><i class="fas fa-magnifying-glass-chart"></i> Check my occupation</button>
+</div>
+<div aria-live="polite" class="tool-panel" id="result">
+<div class="result-head">
+<h2 id="rTitle"></h2>
+<div class="codes" id="rCodes"></div>
+</div>
+<div class="metric-grid">
+<div class="metric">
+<div class="m-label">AI observed exposure</div>
+<div class="m-value" id="rAei"></div>
+<div class="m-sub" id="rAeiSub"></div>
+</div>
+<div class="metric neutral">
+<div class="m-label">Employment 2019 → 2025</div>
+<div class="m-value" id="rChange"></div>
+<div class="m-sub" id="rChangeSub"></div>
+</div>
+<div class="metric neutral">
+<div class="m-label">Trend before ChatGPT (2015–19)</div>
+<div class="m-value" id="rPre"></div>
+<div class="m-sub" id="rPreSub"></div>
+</div>
+</div>
+<div class="verdict-box" id="rVerdict">
+<h3 id="rVerdictTitle"></h3>
+<p id="rVerdictText"></p>
+</div>
+<div class="bar-compare" id="rBars"></div>
+<div class="similar-box" id="rSimilar">
+<h3><i class="fas fa-people-group"></i> What happened to occupations with similar exposure?</h3>
+<div class="similar-stats" id="rSimilarStats"></div>
+<p class="fine-print" id="rSimilarNote" style="margin-top:12px"></p>
+</div>
+<h3 style="font-size:1.05rem;color:var(--darker-color);margin:18px 0 6px">Details</h3>
+<table class="detail-table" id="rDetails"></table>
+<p class="fine-print" id="rNote"></p>
+<!-- Free PDF report: js/report-download.js + netlify/functions/report.mjs -->
+<div id="reportMount"></div>
+<div class="article-cta">
+<a class="btn btn-primary" href="https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing" rel="noopener noreferrer" target="_blank"><i class="fas fa-book-open"></i> Read the full analysis: which jobs is AI actually replacing?</a>
+</div>
+</div>
+<div class="info-box">
+<h4><i class="fas fa-circle-info"></i> How to read the numbers</h4>
+<p><strong>AI observed exposure</strong> is Anthropic's Economic Index measure: the share of an occupation's tasks (from O*NET) that are already being done with an LLM in real, work-related usage. It is not a prediction and not a probability. A score of 0.40 means roughly 40% of the occupation's task list shows meaningful automated LLM use, not that 40% of workers will be replaced.</p>
+<p><strong>Employment change</strong> comes from the US Bureau of Labor Statistics' Occupational Employment and Wage Statistics (May 2019 and May 2025). Occupation codes changed between those years; we reconciled them so reclassifications don't show up as job losses. The <strong>pre-ChatGPT trend</strong> (May 2015 to May 2019) tells you whether an occupation was already shrinking before generative AI existed.</p>
+<p><strong>"Occupations with similar exposure"</strong> groups the 722 scored occupations into six bands (zero exposure plus five equal-sized bands of exposed occupations). The percentages shown are simple historical frequencies for 2019–2025, not forecasts.</p>
+<ul>
+<li>There is <strong>no valid "probability AI takes your job"</strong> in this data. Our analysis found that exposure explains about 1% of the variation in employment change across occupations. Anyone quoting a precise probability is making it up.</li>
+<li>The score measures where Claude is used. Occupations with heavy use of other tools (image generators, code assistants inside IDEs, call-centre bots built on other models) may be under-counted.</li>
+<li>US data only. UK readers: occupation structures differ (UK SOC 2020 vs US SOC 2018), so treat the match as indicative.</li>
+</ul>
+</div>
+<div class="tool-panel">
+<h3 style="font-size:1.2rem;color:var(--darker-color);margin-bottom:12px">Explore the rankings</h3>
+<div class="rank-toggle">
+<button class="btn btn-secondary btn-small rank-btn active" data-view="exposed">Most exposed</button>
+<button class="btn btn-secondary btn-small rank-btn" data-view="fell">Exposed &amp; shrank most</button>
+<button class="btn btn-secondary btn-small rank-btn" data-view="grew">Exposed &amp; grew most</button>
+<button class="btn btn-secondary btn-small rank-btn" data-view="largest">Largest occupations</button>
+</div>
+<div style="overflow-x:auto">
+<table class="rank-table" id="rankTable"></table>
+</div>
+<p class="fine-print" style="margin-top:12px">Click a row to load that occupation. "Exposed" tables include occupations with an exposure score of at least 0.30.</p>
+</div>
+<div class="warning-box">
+<h4><i class="fas fa-triangle-exclamation"></i> What this tool cannot tell you</h4>
+<p>It cannot see inside your specific employer, your seniority, or how your tasks differ from the national average for your job title. It also cannot separate AI from everything else that moved employment between 2019 and 2025: the pandemic, interest rates, offshoring, and the 2022 change in US tax treatment of software R&amp;D. Use it to check claims, not to plan your life around a number.</p>
+</div>
+<p class="fine-print" style="text-align:center">Data: BLS OEWS May 2015/2019/2025; Anthropic Economic Index (CC BY 4.0); Felten, Raj &amp; Seamans (2021) AIOE; Dingel &amp; Neiman (2020); O*NET 31.0. Full methodology, code and the downloadable dataset are in <a href="https://truthwithdata.com/blog/which-jobs-is-ai-actually-replacing" rel="noopener noreferrer" target="_blank">the article</a>.</p>
+</div>
+</div>
+<!-- Footer -->
+<!-- Newsletter:start -->
+
+<!-- Newsletter:end -->
+
+<!-- JavaScript Files -->
+
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/ai-exposure-data.js?v=1.11"></script>
+<script onerror="document.getElementById('dependency-status').hidden=false" src="https://truthwithdata.com/js/ai-job-exposure-checker.js?v=1.11"></script>
+
+<script>
+        TWDReport.attach({
+            tool: 'ai-job-exposure', mount: '#reportMount',
+            title: 'Download your free AI Job Exposure Report',
+            text: 'A branded PDF for this occupation: exposure compared with 722 jobs, how similar jobs fared, the most exposed roles in your field and questions to ask about your own work.',
+            sample: '../reports/samples/ai-job-exposure-sample-report.pdf',
+            needInput: 'Check an occupation first, then download its report.',
+            getInput: function () { return window.TWD_AI_SELECTED ? { occ: window.TWD_AI_SELECTED } : null; }
+        });
+    </script>
+<script>let lastSentHeight=0;function notifyHeight(){const height=Math.ceil(document.body.getBoundingClientRect().height);if(Math.abs(height-lastSentHeight)>2){lastSentHeight=height;parent.postMessage({type:'twd-tool-height',height},'*')}}window.addEventListener('load',notifyHeight);if(typeof ResizeObserver!=='undefined')new ResizeObserver(notifyHeight).observe(document.body);</script></body>
+</html>
